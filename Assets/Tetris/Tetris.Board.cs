@@ -27,6 +27,9 @@ namespace Tetris
         public Vector3Int SpawnPosition = new(-1, 6, 0);
         public Player.Manager PlayerManager;
 
+        // Assign in Inspector — drag your NightManager GameObject here
+        public Game.NightManager NightManager;
+
         public void Awake()
         {
             for (int i = 0; i < Tetrominoes.Length; i++)
@@ -65,7 +68,6 @@ namespace Tetris
             {
                 Debug.Log(ActivePiece.Shape.ShapeKey);
                 Debug.Log("You suck! Tetris");
-                //EditorApplication.isPaused = true;
                 BoardTilemap.ClearAllTiles();
                 if (SceneManager.GetActiveScene().name == "Gameplay")
                 {
@@ -134,6 +136,7 @@ namespace Tetris
         {
             RectInt bounds = BoardBounds;
             int row = bounds.yMin;
+            int linesCleared = 0; // Track how many rows we clear this piece
 
             // Clear from bottom to top
             while (row < bounds.yMax)
@@ -142,6 +145,8 @@ namespace Tetris
                 // because the tiles above will fall down when a row is cleared
                 if (IsLineFull(row))
                 {
+                    linesCleared++;
+
                     // Clear all tiles in the row
                     for (int col = bounds.xMin; col < bounds.xMax; col++)
                     {
@@ -150,24 +155,27 @@ namespace Tetris
                     }
 
                     // Shift every row above down one
-                    while (row < bounds.yMax)
+                    for (int shiftRow = row; shiftRow < bounds.yMax; shiftRow++)
                     {
                         for (int col = bounds.xMin; col < bounds.xMax; col++)
                         {
-                            Vector3Int position = new Vector3Int(col, row + 1, 0);
-                            TileBase above = BoardTilemap.GetTile(position);
-
-                            position = new Vector3Int(col, row, 0);
-                            BoardTilemap.SetTile(position, above);
+                            Vector3Int above = new Vector3Int(col, shiftRow + 1, 0);
+                            Vector3Int current = new Vector3Int(col, shiftRow, 0);
+                            BoardTilemap.SetTile(current, BoardTilemap.GetTile(above));
                         }
-
-                        row++;
                     }
+                    // Don't increment row — the row that shifted down needs checking too
                 }
                 else
                 {
                     row++;
                 }
+            }
+
+            // Report cleared lines to NightManager to track win condition
+            if (linesCleared > 0 && NightManager != null)
+            {
+                NightManager.RegisterLineCleared(linesCleared);
             }
         }
     }
