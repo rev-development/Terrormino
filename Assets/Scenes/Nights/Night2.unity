@@ -2000,14 +2000,8 @@ MonoBehaviour:
   - {fileID: 1529996206}
   - {fileID: 1037205622}
   - {fileID: 800838431}
-  GraceTimer:
-    BaseAlarmTime: 30
-    AlarmVarianceLowerBound: 0
-    AlarmVarianceUpperBound: 0
-  SpawnTimer:
-    BaseAlarmTime: 15
-    AlarmVarianceLowerBound: 0
-    AlarmVarianceUpperBound: 0
+  GracePeriod: 30
+  SpawnInterval: 15
 --- !u!4 &1513220028
 Transform:
   m_ObjectHideFlags: 0
