@@ -936,7 +936,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PatrolPointsParent: {fileID: 3296354376763999196, guid: 22c3ae739cfa34f468872a323b79cf5b, type: 3}
   IdleTimeAtSpot: 3
-  PlayerTarget: {fileID: 3736547087375436913, guid: e036cc15b74b7a7449e283cb765f30a8, type: 3}
+  PlayerTarget: {fileID: 6335501348389930210, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+  PlayerObstacle: {fileID: 5418174738491163995, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+  LookRotationSpeed: 20
   MoveSpeed: 1.5
   PatrolDuration: 30
   FreezeOnLitDuration: 2
