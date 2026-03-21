@@ -642,6 +642,7 @@ GameObject:
   - component: {fileID: 6897743570662405377}
   - component: {fileID: 5302959066248061184}
   - component: {fileID: -987652530778114799}
+  - component: {fileID: 9204187416532455389}
   m_Layer: 7
   m_Name: Demon
   m_TagString: Enemy
@@ -694,14 +695,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86e0b20e58597f74b81a4b54b3d01d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 3
+  Health:
+    Max: 3
   Illuminate:
     m_PersistentCalls:
       m_Calls: []
   Banish:
     m_PersistentCalls:
       m_Calls: []
-  PublicHealth: 3
+  InspectorHealth: 3
 --- !u!114 &2249724951939697509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -714,10 +716,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff91181f5561ac42a1f7d86ad7030ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lightFear: {fileID: 0}
-  _animator: {fileID: 0}
-  _scream: {fileID: 0}
-  _playerManager: {fileID: 0}
+  Room: {fileID: 5935996274055977873, guid: d8df0d5072a6c74488121235de2de84c, type: 3}
+  Moonlight: {fileID: 8840678590522763951, guid: 35aa69d4b8868b840a9c3ccd0b3ae726, type: 3}
+  Scream: {fileID: -987652530778114799}
 --- !u!95 &5590108660715602710
 Animator:
   serializedVersion: 5
@@ -818,7 +819,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1303907663855446040}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c44384ae5b05e5a4994d13460dd41a8b, type: 3}
   m_Name: 
@@ -921,6 +922,26 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &9204187416532455389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303907663855446040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4154cdd3885ae6449b51b26b3746a2d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PatrolPointsParent: {fileID: 3296354376763999196, guid: 22c3ae739cfa34f468872a323b79cf5b, type: 3}
+  IdleTimeAtSpot: 3
+  PlayerTarget: {fileID: 6335501348389930210, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+  PlayerObstacle: {fileID: 5418174738491163995, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+  LookRotationSpeed: 20
+  MoveSpeed: 1.5
+  PatrolDuration: 30
+  FreezeOnLitDuration: 2
 --- !u!1 &1587778318579872033
 GameObject:
   m_ObjectHideFlags: 0
