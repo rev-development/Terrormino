@@ -4,19 +4,13 @@ using UnityEngine.AI;
 
 namespace Demon
 {
-    // ── Setup ──────────────────────────────────────────────────────────────
-    // 1. Attach this to your Demon GameObject alongside NavMeshAgent + LightFear.
-    // 2. Assign SpawnDoors  — the 3 door Transforms the demon can enter from.
-    // 3. Assign PatrolPoints — waypoints around the room.
-    // 4. Assign PlayerTarget — the Player Transform (or camera rig root).
-    // 5. NightManager calls ApplyNightConfig() at the start of each night
-    //    to set speed and patrol duration.
+
 
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(LightFear))]
     public class AI : MonoBehaviour
     {
-        // ── Inspector ──────────────────────────────────────────────────────
+
         [Header("Patrol")]
         [Tooltip("The empty parent GameObject whose children are the patrol waypoints.")]
         public Transform PatrolPointsParent;
@@ -38,7 +32,7 @@ namespace Demon
         [Tooltip("Seconds the demon stays frozen when the flashlight hits it.")]
         public float FreezeOnLitDuration = 2f;
 
-        // ── State machine ──────────────────────────────────────────────────
+
         private enum Phase { Patrolling, Chasing, Frozen }
         private Phase _phase = Phase.Patrolling;
         private Phase _phaseBeforeFreeze;
@@ -55,7 +49,7 @@ namespace Demon
 
         private Coroutine _freezeCoroutine;
 
-        // ── Unity ──────────────────────────────────────────────────────────
+
         private void Start()
         {
             _agent = GetComponent<NavMeshAgent>();
@@ -94,7 +88,7 @@ namespace Demon
             }
         }
 
-        // ── Phases ─────────────────────────────────────────────────────────
+
 
         private void UpdatePatrol()
         {
@@ -158,7 +152,7 @@ namespace Demon
             _isMoving = true;
         }
 
-        // ── Light / Freeze ─────────────────────────────────────────────────
+
 
         private void OnIlluminate(bool illuminated)
         {
@@ -191,7 +185,7 @@ namespace Demon
             _freezeCoroutine = null;
         }
 
-        // ── Banish ─────────────────────────────────────────────────────────
+
 
         private void OnBanished(GameObject _)
         {
@@ -209,7 +203,7 @@ namespace Demon
             if (_agent != null) _agent.speed = MoveSpeed;
         }
 
-        // ── Helpers ────────────────────────────────────────────────────────
+
 
         private void ShufflePatrolPoints()
         {
