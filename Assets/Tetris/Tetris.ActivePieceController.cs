@@ -179,7 +179,7 @@ namespace Tetris
             RotationIndex = 0;
 
             _gravityTime = Time.time + Board.Config.GravityDelay;
-            //_moveTime = Time.time + Board.Config.MoveDelay;
+            _moveTime = Time.time;
             _lockTime = 0f;
 
             // This is a Null-coalescing assignment, if the value on the left is null then it assigns the value on the right
@@ -206,6 +206,7 @@ namespace Tetris
                 if (_lockTime >= Board.Config.LockDelay)
                 {
                     LockMovement();
+                    return;
                 }
             }
 

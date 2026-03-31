@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 public class JumpscareTrigger : MonoBehaviour
 {
@@ -13,9 +12,10 @@ public class JumpscareTrigger : MonoBehaviour
     private Player.Manager _playerManager;
     private Demon.Manager _demonManager;
 
-    public Light MoonLight;
 
     public UnityEvent Jumpscare;
+
+    public SceneTransitioner SceneTransitioner;
 
     public void OnJumpscare()
     {
@@ -33,15 +33,10 @@ public class JumpscareTrigger : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         Scream.Stop();
         JumpscareDemon.SetActive(false);
-        SceneManager.LoadScene(_sceneName);
+        SceneTransitioner.FadeAndLoad("N1_Animation");
     }
 
-    //public void AdjustingMoonlight()
-    //{
 
-    //    MoonLight.enabled = false;
-
-    //}
 
     private string _sceneName;
 
@@ -53,13 +48,6 @@ public class JumpscareTrigger : MonoBehaviour
             _playerManager.GameOver.AddListener(OnJumpscare);
         }
         _demonManager = Helpers.Debug.TryFindByTag("DemonManager").GetComponent<Demon.Manager>();
-        if (gameObject.TryGetComponent(out ScenePicker scenePicker))
-        {
-            _sceneName = scenePicker.ScenePath;
-        }
-        else
-        {
-            Debug.Log($"No ScenePicker component found on {gameObject.name}", gameObject);
-        }
+
     }
 }

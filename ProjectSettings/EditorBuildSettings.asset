@@ -23,12 +23,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Between Night Transitions/MainMenu.unity
     guid: 228e194e22721ae409bb0647cbb65793
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Between Night Transitions/Gameplay.unity
     guid: f8e4da671e47a3349a567e54560d4b52
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Between Night Transitions/Living Room.unity
     guid: 991a42247b44d1742b389098c4246c4b
+  - enabled: 1
+    path: Assets/Scenes/3_30_26/Expo_N1_Animation.unity
+    guid: 1d6e7054502ef3d4fbbd2e761a16a6d0
+  - enabled: 1
+    path: Assets/Scenes/3_30_26/Expo_N1.unity
+    guid: 31ff5d10cccdb9b4595832464ecbaafa
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: dc5a169419fa04987b057f65238cf3ba, type: 2}

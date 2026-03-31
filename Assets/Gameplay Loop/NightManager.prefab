@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5597713552139995697
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5442505616838767014}
+  - component: {fileID: 7940560390562850351}
+  - component: {fileID: 4839228890703552459}
+  m_Layer: 0
+  m_Name: NightManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5442505616838767014
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5597713552139995697}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.42, y: -5.6068826, z: 7.06}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7940560390562850351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5597713552139995697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dd285d6ac99ab84bba36183cc72a791, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Board: {fileID: 0}
+  DemonManager: {fileID: 0}
+  PlayerManager: {fileID: 0}
+  OnNightStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAllNightsWon:
+    m_PersistentCalls:
+      m_Calls: []
+  Room: {fileID: 0}
+  SceneTransitioner: {fileID: 0}
+  FadeDuration: 2
+  GameplaySceneName: Night2
+  CutsceneSceneNames:
+  - N1_Animation
+  - N2_Animation
+  - N3_Animation
+  - N4_Animation
+  Nights:
+  - Label: Night 1
+    LinesRequired: 10
+    DemonSpeed: 1
+    DemonPatrolDuration: 40
+    DemonFreezeDuration: 3
+    GravityDelay: 1.2
+  - Label: Night 2
+    LinesRequired: 15
+    DemonSpeed: 1.5
+    DemonPatrolDuration: 30
+    DemonFreezeDuration: 2.5
+    GravityDelay: 1
+  - Label: Night 3
+    LinesRequired: 20
+    DemonSpeed: 2
+    DemonPatrolDuration: 22
+    DemonFreezeDuration: 2
+    GravityDelay: 0.8
+  - Label: Night 4
+    LinesRequired: 25
+    DemonSpeed: 2.5
+    DemonPatrolDuration: 15
+    DemonFreezeDuration: 1.5
+    GravityDelay: 0.6
+  - Label: Night 5
+    LinesRequired: 30
+    DemonSpeed: 3.2
+    DemonPatrolDuration: 8
+    DemonFreezeDuration: 1
+    GravityDelay: 0.4
+--- !u!114 &4839228890703552459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5597713552139995697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec50b3f5c1bb1154196d562871586f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Lights: []
+  DefaultFadeDuration: 2

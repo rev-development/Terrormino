@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 // Sits alongside Player.Manager in the scene.
 // Wire up in Inspector:
 //   - Board            → your Tetris.Board component
-//   - DemonAI          → your Demon.AI component
+//   - DemonManager     → your Demon.Manager component
 //   - PlayerManager    → your Player.Manager component
-//   - OnNightWon       → e.g. load cutscene, show "Night X Complete" UI
 //   - OnAllNightsWon   → e.g. roll credits
 
 namespace Game
@@ -20,24 +20,39 @@ namespace Game
 
         [Header("Events")]
         public UnityEvent<int> OnNightStarted = new();  // passes night number (1-5)
-        public UnityEvent<int> OnNightWon = new();  // passes night number
         public UnityEvent OnAllNightsWon = new();
 
-        // ── Night Configs ──────────────────────────────────────────────────
-        // Each entry maps to Night 1–5.
-        // LinesRequired    — Tetris lines to clear to win the night
-        // DemonSpeed       — NavMeshAgent speed
-        // DemonMaxIdle     — seconds before demon lunges without being checked
-        // GravityDelay     — seconds between automatic piece drops (lower = harder)
+        [Header("Transition")]
+        [Tooltip("The room GameObject to disable when the night ends.")]
+        public GameObject Room;
 
+        [Tooltip("Handles light fading and scene loading.")]
+        public SceneTransitioner SceneTransitioner;
+
+        [Tooltip("How long the fade to black takes in seconds.")]
+        public float FadeDuration = 2f;
+        [Tooltip("Name of the main gameplay scene.")]
+        public string GameplaySceneName = "Gameplay";
+
+        [Tooltip("Cutscene scene names in order — index 0 = after night 1, index 1 = after night 2, etc.")]
+        public string[] CutsceneSceneNames = new string[]
+        {
+            "Cutscene1",
+            "Cutscene2",
+            "Cutscene3",
+            "Cutscene4",
+            // No cutscene after night 5 — use OnAllNightsWon instead
+        };
+
+        // ── Night Configs ──────────────────────────────────────────────────
         [System.Serializable]
         public struct NightConfig
         {
             public string Label;
             public int LinesRequired;
             public float DemonSpeed;
-            public float DemonPatrolDuration; // seconds demon wanders before chasing
-            public float DemonFreezeDuration; // seconds flashlight freezes demon
+            public float DemonPatrolDuration;
+            public float DemonFreezeDuration;
             public float GravityDelay;
         }
 
@@ -51,7 +66,7 @@ namespace Game
         };
 
         // ── State ──────────────────────────────────────────────────────────
-        public int CurrentNight { get; private set; } = 0; // 0-indexed internally
+        public int CurrentNight { get; private set; } = 0;
         public int LinesCleared { get; private set; } = 0;
         public bool NightActive { get; private set; } = false;
 
@@ -61,25 +76,32 @@ namespace Game
             if (PlayerManager != null)
                 PlayerManager.GameOver.AddListener(OnGameOver);
 
-            StartNight(0);
+            // Read which night to start from PlayerPrefs so cutscene
+            // scenes can hand back to gameplay at the correct night
+            int savedNight = PlayerPrefs.GetInt("CurrentNight", 0);
+            StartNight(savedNight);
         }
 
         // ── Public API ─────────────────────────────────────────────────────
 
-        // Call this from your Board when a line is cleared.
-        // Hook it up in the Inspector to Board's line-clear event,
-        // or call it directly from Board.ClearLines().
+        // Called by Board.ClearLines() each time lines are cleared
         public void RegisterLineCleared(int linesJustCleared)
         {
             if (!NightActive) return;
 
             LinesCleared += linesJustCleared;
 
-            int required = Nights[CurrentNight].LinesRequired;
-            if (LinesCleared >= required)
+            if (LinesCleared >= Nights[CurrentNight].LinesRequired)
             {
                 WinNight();
             }
+        }
+
+        // Called by cutscene scene when it finishes — not needed anymore
+        // since cutscenes load Gameplay directly, but kept for flexibility
+        public void AdvanceToNextNight()
+        {
+            StartNight(CurrentNight + 1);
         }
 
         // ── Private ────────────────────────────────────────────────────────
@@ -93,11 +115,9 @@ namespace Game
 
             NightConfig cfg = Nights[nightIndex];
 
-            // Apply demon config
             if (DemonManager != null)
                 DemonManager.ApplyNightConfig(cfg.DemonSpeed, cfg.DemonPatrolDuration, cfg.DemonFreezeDuration);
 
-            // Apply Tetris gravity
             if (Board != null)
                 Board.Config.GravityDelay = cfg.GravityDelay;
 
@@ -111,29 +131,53 @@ namespace Game
             int humanNight = CurrentNight + 1;
 
             Debug.Log($"[NightManager] Night {humanNight} complete!");
-            OnNightWon.Invoke(humanNight);
 
-            if (CurrentNight + 1 >= Nights.Length)
+            if (DemonManager != null)
+                DemonManager.ClearAll();
+
+            bool isLastNight = CurrentNight + 1 >= Nights.Length;
+
+            if (isLastNight)
             {
+                PlayerPrefs.DeleteKey("CurrentNight");
+                PlayerPrefs.Save();
                 Debug.Log("[NightManager] All nights survived — you win!");
                 OnAllNightsWon.Invoke();
             }
             else
             {
+                PlayerPrefs.SetInt("CurrentNight", CurrentNight + 1);
+                PlayerPrefs.Save();
 
-                AdvanceToNextNight(); //temp testing
+                if (CurrentNight < CutsceneSceneNames.Length)
+                    StartCutsceneTransition(CutsceneSceneNames[CurrentNight]);
+                else
+                {
+                    Debug.LogWarning($"[NightManager] No cutscene defined for night {humanNight}, skipping.");
+                    StartNight(CurrentNight + 1);
+                }
             }
         }
 
-        //Used for starting the next night when needed
-        public void AdvanceToNextNight()
+        private void StartCutsceneTransition(string sceneName)
         {
-            StartNight(CurrentNight + 1);
+            if (Room != null) Room.SetActive(false);
+
+            if (SceneTransitioner != null)
+                SceneTransitioner.FadeAndLoad(sceneName, FadeDuration);
+            else
+            {
+                Debug.LogWarning("[NightManager] No SceneTransitioner assigned — loading scene immediately.");
+                SceneManager.LoadScene(sceneName);
+            }
         }
 
         private void OnGameOver()
         {
             NightActive = false;
+            // Clear saved progress on game over so next run starts from night 1
+            PlayerPrefs.DeleteKey("CurrentNight");
+            PlayerPrefs.Save();
             Debug.Log($"[NightManager] Game over on Night {CurrentNight + 1}.");
         }
     }

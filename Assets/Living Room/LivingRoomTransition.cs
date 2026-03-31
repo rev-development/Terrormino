@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class LivingRoomTransition : MonoBehaviour
@@ -21,6 +20,7 @@ public class LivingRoomTransition : MonoBehaviour
     private float _dissolveValue = 0f;
 
     public GameObject GameConsole;
+    public SceneTransitioner SceneTransitioner;
 
     // Start is called before the first frame update
     public void Start()
@@ -60,7 +60,7 @@ public class LivingRoomTransition : MonoBehaviour
 
     public void BeginGame()
     {
-        SceneManager.LoadScene(_scenePicker.ScenePath);
+        SceneTransitioner.FadeAndLoad(_scenePicker.ScenePath);
     }
 
     public UnityEvent<InputAction> OnTitleTransitionGrab = new();

@@ -13,6 +13,7 @@ TagManager:
   - LeftHand
   - RightHand
   - Ambient
+  - PatrolPoints
   layers:
   - Default
   - TransparentFX
