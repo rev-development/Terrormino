@@ -4,13 +4,7 @@ using UnityEngine.AI;
 
 namespace Demon
 {
-    // ── Setup ──────────────────────────────────────────────────────────────
-    // 1. Attach this to your Demon GameObject alongside NavMeshAgent + LightFear.
-    // 2. Assign SpawnDoors  — the 3 door Transforms the demon can enter from.
-    // 3. Assign PatrolPoints — waypoints around the room.
-    // 4. Assign PlayerTarget — the Player Transform (or camera rig root).
-    // 5. NightManager calls ApplyNightConfig() at the start of each night
-    //    to set speed and patrol duration.
+
 
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(LightFear))]
@@ -175,7 +169,8 @@ namespace Demon
         private void UpdateChase()
         {
             if (PlayerTarget == null) return;
-            _agent.speed = MoveSpeed * 1.2f; // slightly faster when chasing
+            _agent.stoppingDistance = 0f; // ← add this
+            _agent.speed = MoveSpeed * 1.2f;
             _agent.SetDestination(PlayerTarget.position);
         }
 
@@ -192,8 +187,8 @@ namespace Demon
                     break;
 
                 case Phase.Chasing:
-                    // Disable carving so demon can walk straight to player
                     if (PlayerObstacle != null) PlayerObstacle.carving = false;
+                    _agent.stoppingDistance = 0f;
                     _agent.isStopped = false;
                     Debug.Log("[Demon] Switching to chase.");
                     break;

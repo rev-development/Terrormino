@@ -1734,10 +1734,10 @@ MonoBehaviour:
   Scream: {fileID: 8189324296709703675}
   JumpscareDemon: {fileID: 3362973462496457122}
   Room: {fileID: 0}
-  MoonLight: {fileID: 0}
   Jumpscare:
     m_PersistentCalls:
       m_Calls: []
+  SceneTransitioner: {fileID: 0}
 --- !u!82 &8189324296709703675
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1849,10 +1849,10 @@ MonoBehaviour:
   Scream: {fileID: 1582981151391762914}
   JumpscareDemon: {fileID: 3362973462496457122}
   Room: {fileID: 0}
-  MoonLight: {fileID: 0}
   Jumpscare:
     m_PersistentCalls:
       m_Calls: []
+  SceneTransitioner: {fileID: 0}
 --- !u!82 &1582981151391762914
 AudioSource:
   m_ObjectHideFlags: 0

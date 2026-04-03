@@ -31,9 +31,6 @@ namespace Game
 
         [Tooltip("How long the fade to black takes in seconds.")]
         public float FadeDuration = 2f;
-        [Tooltip("Name of the main gameplay scene.")]
-        public string GameplaySceneName = "Gameplay";
-
         [Tooltip("Cutscene scene names in order — index 0 = after night 1, index 1 = after night 2, etc.")]
         public string[] CutsceneSceneNames = new string[]
         {
@@ -95,13 +92,6 @@ namespace Game
             {
                 WinNight();
             }
-        }
-
-        // Called by cutscene scene when it finishes — not needed anymore
-        // since cutscenes load Gameplay directly, but kept for flexibility
-        public void AdvanceToNextNight()
-        {
-            StartNight(CurrentNight + 1);
         }
 
         // ── Private ────────────────────────────────────────────────────────

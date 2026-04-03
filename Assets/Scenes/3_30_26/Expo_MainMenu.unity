@@ -2150,7 +2150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6335501348389930210, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.08
+      value: 2.59
       objectReference: {fileID: 0}
     - target: {fileID: 6335501348389930210, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2450,6 +2450,18 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1619281739750020704, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1530854201}
+    - target: {fileID: 1619281739750020704, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TitleToGameplayTransition
+      objectReference: {fileID: 0}
+    - target: {fileID: 1619281739750020704, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TitleScreen, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 3613670900767447395, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
       propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.size
       value: 0
@@ -2498,9 +2510,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Handheld (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 9054547392913361910, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9054547392913361910, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
+      propertyPath: Routes.Array.data[0].Outputs.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1530854201}
     m_RemovedComponents:
     - {fileID: 1386927988402321346, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
-    - {fileID: 9054547392913361910, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
     m_RemovedGameObjects:
     - {fileID: 2945735714405367963, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
     m_AddedGameObjects:
@@ -2541,7 +2560,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: b2302b44f05436a45b12a6377c1f6320, type: 2}
   - {fileID: 2100000, guid: 7eb5119756be3754abaca3b588dc9e3a, type: 2}
   - {fileID: 2100000, guid: b0d94407aad18644db9472cca3a73819, type: 2}
-  GameConsole: {fileID: 0}
+  GameConsole: {fileID: 1530854200}
   OnTitleTransitionGrab:
     m_PersistentCalls:
       m_Calls: []

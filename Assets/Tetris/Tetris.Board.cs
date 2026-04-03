@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 namespace Tetris
@@ -69,10 +68,7 @@ namespace Tetris
                 Debug.Log(ActivePiece.Shape.ShapeKey);
                 Debug.Log("You suck! Tetris");
                 BoardTilemap.ClearAllTiles();
-                if (SceneManager.GetActiveScene().name == "Gameplay")
-                {
-                    PlayerManager.GameOver.Invoke();
-                }
+                PlayerManager.GameOver.Invoke();
             }
         }
 
