@@ -165,9 +165,7 @@ namespace Game
         private void OnGameOver()
         {
             NightActive = false;
-            // Clear saved progress on game over so next run starts from night 1
-            PlayerPrefs.DeleteKey("CurrentNight");
-            PlayerPrefs.Save();
+
             Debug.Log($"[NightManager] Game over on Night {CurrentNight + 1}.");
         }
     }
