@@ -30,10 +30,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Between Night Transitions/Living Room.unity
     guid: 991a42247b44d1742b389098c4246c4b
   - enabled: 1
-    path: Assets/Scenes/3_30_26/Gabe's Expo_N1_Animation.unity
+    path: Assets/Scenes/4_6_26/4_6_26_N1_Animation.unity
     guid: 1d6e7054502ef3d4fbbd2e761a16a6d0
   - enabled: 1
-    path: Assets/Scenes/3_30_26/Gabe's Expo_N1.unity
+    path: Assets/Scenes/4_6_26/4_6_26_N1.unity
     guid: 31ff5d10cccdb9b4595832464ecbaafa
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}

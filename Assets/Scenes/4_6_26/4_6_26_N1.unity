@@ -3982,9 +3982,33 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2080039036}
     - target: {fileID: 3964380473509740317, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+      propertyPath: FallbackSceneName
+      value: 4_6_26_MainMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 3964380473509740317, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
       propertyPath: SceneTransitioner
       value: 
       objectReference: {fileID: 1729017172}
+    - target: {fileID: 3964380473509740317, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+      propertyPath: CutsceneSceneNames.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3964380473509740317, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+      propertyPath: CutsceneSceneNames.Array.data[0]
+      value: 4_6_26_N1_Animation
+      objectReference: {fileID: 0}
+    - target: {fileID: 3964380473509740317, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+      propertyPath: CutsceneSceneNames.Array.data[1]
+      value: 4_6_26_N1_Animation
+      objectReference: {fileID: 0}
+    - target: {fileID: 3964380473509740317, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+      propertyPath: CutsceneSceneNames.Array.data[2]
+      value: Expo_N4_Animation
+      objectReference: {fileID: 0}
+    - target: {fileID: 3964380473509740317, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+      propertyPath: CutsceneSceneNames.Array.data[3]
+      value: Expo_N5_Animation
+      objectReference: {fileID: 0}
     - target: {fileID: 3964380473509740317, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
       propertyPath: Jumpscare.m_PersistentCalls.m_Calls.Array.size
       value: 0

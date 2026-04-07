@@ -2,12 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-// Sits alongside Player.Manager in the scene.
-// Wire up in Inspector:
-//   - Board            → your Tetris.Board component
-//   - DemonManager     → your Demon.Manager component
-//   - PlayerManager    → your Player.Manager component
-//   - OnAllNightsWon   → e.g. roll credits
+
 
 namespace Game
 {
@@ -79,7 +74,7 @@ namespace Game
             StartNight(savedNight);
         }
 
-        // ── Public API ─────────────────────────────────────────────────────
+
 
         // Called by Board.ClearLines() each time lines are cleared
         public void RegisterLineCleared(int linesJustCleared)
@@ -94,7 +89,7 @@ namespace Game
             }
         }
 
-        // ── Private ────────────────────────────────────────────────────────
+       
         private void StartNight(int nightIndex)
         {
             if (nightIndex >= Nights.Length) return;

@@ -53,7 +53,7 @@ namespace Demon
 
         private Coroutine _freezeCoroutine;
 
-        // ── Unity ──────────────────────────────────────────────────────────
+
         private void Start()
         {
             _agent = GetComponent<NavMeshAgent>();

@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// Attach to any persistent GameObject in the scene (e.g. the same one as NightManager).
-// All scripts that need to fade lights and load a scene call FadeAndLoad() on this component.
-// Each script keeps its own unique logic (dissolve, jumpscare, etc.) and delegates
-// only the fade + scene load to this component.
+
 
 public class SceneTransitioner : MonoBehaviour
 {
@@ -18,7 +15,7 @@ public class SceneTransitioner : MonoBehaviour
 
     private Coroutine _activeTransition;
 
-    // ── Public API ─────────────────────────────────────────────────────────
+    
 
     // Fade all lights to black then load the scene.
     // Optionally pass a custom duration, otherwise uses DefaultFadeDuration.
@@ -53,7 +50,7 @@ public class SceneTransitioner : MonoBehaviour
         }
     }
 
-    // ── Private ────────────────────────────────────────────────────────────
+    
 
     // Cache starting intensities on Awake so RestoreLights() always knows original values
     private Dictionary<Light, float> _startIntensities = new();
