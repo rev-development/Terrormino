@@ -83,6 +83,8 @@ namespace Game
 
             LinesCleared += linesJustCleared;
 
+            Debug.Log(LinesCleared);
+
             if (LinesCleared >= Nights[CurrentNight].LinesRequired)
             {
                 WinNight();

@@ -1734,10 +1734,17 @@ MonoBehaviour:
   Scream: {fileID: 8189324296709703675}
   JumpscareDemon: {fileID: 3362973462496457122}
   Room: {fileID: 0}
+  MoonLight: {fileID: 0}
   Jumpscare:
     m_PersistentCalls:
       m_Calls: []
-  SceneTransitioner: {fileID: 0}
+  CutsceneSceneNames:
+  - Expo_N1_Animation
+  - Expo_N2_Animation
+  - Expo_N3_Animation
+  - Expo_N4_Animation
+  - Expo_N5_Animation
+  FallbackSceneName: TitleScreen
 --- !u!82 &8189324296709703675
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1849,10 +1856,17 @@ MonoBehaviour:
   Scream: {fileID: 1582981151391762914}
   JumpscareDemon: {fileID: 3362973462496457122}
   Room: {fileID: 0}
+  MoonLight: {fileID: 0}
   Jumpscare:
     m_PersistentCalls:
       m_Calls: []
-  SceneTransitioner: {fileID: 0}
+  CutsceneSceneNames:
+  - Expo_N1_Animation
+  - Expo_N2_Animation
+  - Expo_N3_Animation
+  - Expo_N4_Animation
+  - Expo_N5_Animation
+  FallbackSceneName: TitleScreen
 --- !u!82 &1582981151391762914
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1961,7 +1975,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 3.915, y: 2.12, z: 5.37}
   m_MoveThreshold: 0.1
-  m_Carve: 1
+  m_Carve: 0
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5

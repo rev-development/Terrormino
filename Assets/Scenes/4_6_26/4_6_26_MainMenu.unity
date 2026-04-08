@@ -2577,7 +2577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1abd902e681f1e4b91f0b7211229abb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScenePath: Assets/Scenes/3_30_26/Expo_N1_Animation.unity
+  ScenePath: Assets/Scenes/4_6_26/4_6_26_N1_Animation.unity
 --- !u!4 &1530854203 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1598019448027757845, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
