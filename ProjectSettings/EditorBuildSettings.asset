@@ -5,36 +5,21 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 55daccc09a3b69647bbab145b54a3ab3
-  - enabled: 0
-    path: Assets/Scenes/TitleScreen.unity
-    guid: a7b39fb009dfe4b479fc0cdec38e3929
-  - enabled: 0
-    path: Assets/Scenes/Tetris Gameplay.unity
-    guid: 3e887b44c8a91814a996d31ed6212417
-  - enabled: 0
-    path: Assets/Scenes/Flashlight and Handheld Grabbing.unity
-    guid: 2b6e329911937514d9e02fd205b7554f
-  - enabled: 0
-    path: Assets/Scenes/Expo.unity
-    guid: 2a0d1538bf9082344b278cee290a302d
   - enabled: 1
-    path: Assets/Scenes/Between Night Transitions/MainMenu.unity
-    guid: 228e194e22721ae409bb0647cbb65793
-  - enabled: 0
-    path: Assets/Scenes/Between Night Transitions/Gameplay.unity
-    guid: f8e4da671e47a3349a567e54560d4b52
-  - enabled: 0
-    path: Assets/Scenes/Between Night Transitions/Living Room.unity
-    guid: 991a42247b44d1742b389098c4246c4b
+    path: Assets/Scenes/4_6_26/4_6_26_MainMenu.unity
+    guid: 1b8b40a894a32674eb3cb193be21465b
   - enabled: 1
     path: Assets/Scenes/4_6_26/4_6_26_N1_Animation.unity
     guid: 1d6e7054502ef3d4fbbd2e761a16a6d0
   - enabled: 1
     path: Assets/Scenes/4_6_26/4_6_26_N1.unity
     guid: 31ff5d10cccdb9b4595832464ecbaafa
+  - enabled: 1
+    path: Assets/Scenes/4_6_26/4_6_26_N2_Animation.unity
+    guid: fb117f75c28e3914eba3772b012e9300
+  - enabled: 1
+    path: Assets/Scenes/4_6_26/4_6_26_N2.unity
+    guid: ca992441b5e3bfe4aac0df0623e63214
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: dc5a169419fa04987b057f65238cf3ba, type: 2}
