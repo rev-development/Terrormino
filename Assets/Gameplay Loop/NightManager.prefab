@@ -57,12 +57,12 @@ MonoBehaviour:
   Room: {fileID: 0}
   SceneTransitioner: {fileID: 0}
   FadeDuration: 2
-  GameplaySceneName: Night2
   CutsceneSceneNames:
-  - N1_Animation
-  - N2_Animation
-  - N3_Animation
-  - N4_Animation
+  - 4_6_26_N2_Animation
+  - 4_6_26_N3_Animation
+  - 4_6_26_N4_Animation
+  - 4_6_26_N5_Animation
+  - 4_6_26_Final
   Nights:
   - Label: Night 1
     LinesRequired: 10

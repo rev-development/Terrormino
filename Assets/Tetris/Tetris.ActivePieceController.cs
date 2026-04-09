@@ -15,9 +15,12 @@ namespace Tetris
 
         public float _gravityTime;
 
-        // TODO: Reimplement repeated movement handling, potentially use hold action on action map
         private float _moveTime;
         public float _lockTime;
+
+        // Flag to skip one Update() after a new piece spawns so _lockTime
+        // doesn't carry over from the previous piece into the new one
+        private bool _justSpawned = false;
 
         public UnityEvent<InputAction> Move = new();
         public UnityEvent<InputAction> Rotate = new();
@@ -87,19 +90,12 @@ namespace Tetris
             newPosition.x += moveInput.x;
             newPosition.y += moveInput.y;
 
-            // Return the newPosition if valid, otherwise just pass back original
-            // Removes the weird bool check in original and avoids a null return
             return Board.IsValidPosition(cells, newPosition) ? newPosition : null;
         }
 
         private Vector3Int? TryRotate(int rotateInput, Vector3Int[] cells)
         {
-            // See Wall Kick: https://tetris.wiki/Super_Rotation_System#Wall_Kicks
-            // Fetches an index to a presaved transformation of the shape vector
-
             int wallKickIndex = Helpers.Math.Wrap(
-                // Add input to existing and multiply by 2, if rotateInput is negative then subtract 1
-                // The array for wall kicks basically has 2 vector arrays for each orientation, clockwise and counterclockwise
                 ((rotateInput + RotationIndex) * 2) - (rotateInput < 0 ? 1 : 0),
                 0,
                 Shape.WallKicks.GetLength(0)
@@ -120,7 +116,6 @@ namespace Tetris
 
         private Vector3Int[] GenerateRotationCells(int rotateInput)
         {
-            // Makes an non-reference copy of the array
             Vector3Int[] newCells = new List<Vector3Int>(Cells).ToArray();
 
             float[] matrix = ShapeVecs.RotationMatrix;
@@ -136,7 +131,6 @@ namespace Tetris
                 {
                     case ShapeKeys.I:
                     case ShapeKeys.O:
-                        // "I" and "O" are rotated from an offset center point
                         cell.x -= 0.5f;
                         cell.y -= 0.5f;
                         x = Mathf.CeilToInt(
@@ -178,23 +172,31 @@ namespace Tetris
 
             RotationIndex = 0;
 
+            // Set gravity relative to now so the piece waits exactly one
+            // GravityDelay before its first drop — no inherited drift
             _gravityTime = Time.time + Board.Config.GravityDelay;
             _moveTime = Time.time;
             _lockTime = 0f;
 
-            // This is a Null-coalescing assignment, if the value on the left is null then it assigns the value on the right
-            // It's the same as:
-            // if (Cells == null) { Cells = new Vector3Int[Shape.Cells.Length]; }
-            Cells ??= new Vector3Int[Shape.Cells.Length];
+            // Skip the next Update() so _lockTime starts clean
+            _justSpawned = true;
 
+            Cells ??= new Vector3Int[Shape.Cells.Length];
             Cells = Shape.GetCellsAsVec3;
         }
 
         public void Update()
         {
+            // Skip one frame after spawn so _lockTime is clean
+            if (_justSpawned)
+            {
+                _justSpawned = false;
+                Board.PaintTiles(this);
+                return;
+            }
+
             Board.UnpaintTiles(this);
 
-            // Timer before piece can no longer be moved
             _lockTime += Time.deltaTime;
 
             if (Time.time > _gravityTime)

@@ -318,8 +318,8 @@ Transform:
   m_GameObject: {fileID: 172243039}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -54.889755, y: -34.120365, z: -238.00806}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -40.493484, y: -25.046408, z: -137.6576}
+  m_LocalScale: {x: 0.73575497, y: 0.73575497, z: 0.73575497}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1092462574}
@@ -333,7 +333,7 @@ Transform:
   - {fileID: 760359618}
   - {fileID: 1172975323}
   - {fileID: 517884528}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 946575392}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &224838302
 GameObject:
@@ -848,6 +848,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3487077893912652673, guid: d8df0d5072a6c74488121235de2de84c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 762026995}
+    - targetCorrespondingSourceObject: {fileID: 3487077893912652673, guid: d8df0d5072a6c74488121235de2de84c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 172243040}
+    - targetCorrespondingSourceObject: {fileID: 3487077893912652673, guid: d8df0d5072a6c74488121235de2de84c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1576541300}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4062727015664011710, guid: d8df0d5072a6c74488121235de2de84c, type: 3}
       insertIndex: -1
@@ -2640,7 +2646,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7339039221192041354, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.49
+      value: 0.29
       objectReference: {fileID: 0}
     - target: {fileID: 7339039221192041354, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2887,8 +2893,8 @@ MonoBehaviour:
   - {fileID: 1529996206}
   - {fileID: 1037205622}
   - {fileID: 800838431}
-  GracePeriod: 80
-  SpawnInterval: 15
+  GracePeriod: 1e+11
+  SpawnInterval: 25
 --- !u!4 &1513220028
 Transform:
   m_ObjectHideFlags: 0
@@ -2933,14 +2939,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1576541298}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.461988, y: -9.022329, z: -76.00205}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 6.85363, y: -6.580404, z: -18.460867}
+  m_LocalScale: {x: 0.73575497, y: 0.73575497, z: 0.73575497}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2080039035}
   - {fileID: 745297586}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 946575392}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1670776342
 GameObject:
@@ -3248,7 +3254,7 @@ PrefabInstance:
       objectReference: {fileID: 1729017172}
     - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
       propertyPath: CutsceneSceneNames.Array.size
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
       propertyPath: Nights.Array.data[1].DemonSpeed
@@ -3264,7 +3270,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
       propertyPath: CutsceneSceneNames.Array.data[2]
-      value: 4_6_26_N3_Animation
+      value: 4_6_26_N4_Animation
+      objectReference: {fileID: 0}
+    - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
+      propertyPath: CutsceneSceneNames.Array.data[3]
+      value: 4_6_26_N5_Animation
+      objectReference: {fileID: 0}
+    - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
+      propertyPath: CutsceneSceneNames.Array.data[4]
+      value: 4_6_26_Final
       objectReference: {fileID: 0}
     - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
       propertyPath: Nights.Array.data[0].LinesRequired
@@ -4160,7 +4174,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3662083717056340413, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3362973462496457122, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
@@ -4172,7 +4187,6 @@ SceneRoots:
   - {fileID: 669044182}
   - {fileID: 961348669}
   - {fileID: 1976986487}
-  - {fileID: 1576541300}
   - {fileID: 8847502420328634144}
   - {fileID: 115014426}
   - {fileID: 1290868002}
@@ -4181,4 +4195,3 @@ SceneRoots:
   - {fileID: 1513220028}
   - {fileID: 17247462}
   - {fileID: 1729017171}
-  - {fileID: 172243040}
