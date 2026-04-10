@@ -71,25 +71,25 @@ MonoBehaviour:
     DemonFreezeDuration: 3
     GravityDelay: 1.2
   - Label: Night 2
-    LinesRequired: 8
+    LinesRequired: 6
     DemonSpeed: 1.5
     DemonPatrolDuration: 30
     DemonFreezeDuration: 2.5
     GravityDelay: 1
   - Label: Night 3
-    LinesRequired: 12
+    LinesRequired: 10
     DemonSpeed: 2
     DemonPatrolDuration: 22
     DemonFreezeDuration: 2
     GravityDelay: 0.8
   - Label: Night 4
-    LinesRequired: 16
+    LinesRequired: 14
     DemonSpeed: 2.5
     DemonPatrolDuration: 15
     DemonFreezeDuration: 1.5
     GravityDelay: 0.6
   - Label: Night 5
-    LinesRequired: 20
+    LinesRequired: 18
     DemonSpeed: 3.2
     DemonPatrolDuration: 8
     DemonFreezeDuration: 1
