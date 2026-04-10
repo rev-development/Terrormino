@@ -98,7 +98,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 0.8113208, g: 0.8113208, b: 0.8113208, a: 1}
   m_Intensity: 2.75
-  m_Range: 20
+  m_Range: 30
   m_SpotAngle: 30
   m_InnerSpotAngle: 3
   m_CookieSize: 10
@@ -297,7 +297,6 @@ GameObject:
   - component: {fileID: -5937373203774879163}
   - component: {fileID: 2624312001072739279}
   - component: {fileID: 2202248411537062923}
-  - component: {fileID: 4734697534959764037}
   - component: {fileID: -8530946292041847583}
   m_Layer: 0
   m_Name: Flashlight
@@ -338,9 +337,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LightSource: {fileID: 1823116825746203566}
   LightCollider: {fileID: 1192058182877751323}
+  ShakingSound: {fileID: 0}
+  NoChargeSound: {fileID: 0}
   GrabInteractable: {fileID: 2624312001072739279}
-  Active: 0
-  BatteryMax: 5
+  IsOn: 0
+  Battery:
+    Max: 5
+  SmoothingFactor: 0.2
+  MinThreshold: 2.5
+  ChargeMultiplier: 6
   TogglePower:
     m_PersistentCalls:
       m_Calls: []
@@ -571,18 +576,6 @@ CapsuleCollider:
   m_Height: 5
   m_Direction: 1
   m_Center: {x: 0, y: 3.75, z: 0}
---- !u!114 &4734697534959764037
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7967520735591659824}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e8193c4ecc32bc4e822fd59b6b8934e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-8530946292041847583
 MonoBehaviour:
   m_ObjectHideFlags: 0
