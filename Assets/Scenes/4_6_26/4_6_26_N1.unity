@@ -4081,9 +4081,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 396538619}
     - target: {fileID: 3964380473509740317, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+      propertyPath: Scream
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3964380473509740317, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
       propertyPath: MoonLight
       value: 
       objectReference: {fileID: 2080039036}
+    - target: {fileID: 3964380473509740317, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+      propertyPath: JumpscareDemon
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3964380473509740317, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
       propertyPath: FallbackSceneName
       value: 4_6_26_MainMenu
