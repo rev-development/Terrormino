@@ -3282,7 +3282,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
       propertyPath: Nights.Array.data[0].LinesRequired
-      value: 10
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
       propertyPath: Nights.Array.data[1].DemonPatrolDuration

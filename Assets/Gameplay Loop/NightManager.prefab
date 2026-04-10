@@ -65,31 +65,31 @@ MonoBehaviour:
   - 4_6_26_Final
   Nights:
   - Label: Night 1
-    LinesRequired: 10
+    LinesRequired: 4
     DemonSpeed: 1
     DemonPatrolDuration: 40
     DemonFreezeDuration: 3
     GravityDelay: 1.2
   - Label: Night 2
-    LinesRequired: 15
+    LinesRequired: 8
     DemonSpeed: 1.5
     DemonPatrolDuration: 30
     DemonFreezeDuration: 2.5
     GravityDelay: 1
   - Label: Night 3
-    LinesRequired: 20
+    LinesRequired: 12
     DemonSpeed: 2
     DemonPatrolDuration: 22
     DemonFreezeDuration: 2
     GravityDelay: 0.8
   - Label: Night 4
-    LinesRequired: 25
+    LinesRequired: 16
     DemonSpeed: 2.5
     DemonPatrolDuration: 15
     DemonFreezeDuration: 1.5
     GravityDelay: 0.6
   - Label: Night 5
-    LinesRequired: 30
+    LinesRequired: 20
     DemonSpeed: 3.2
     DemonPatrolDuration: 8
     DemonFreezeDuration: 1
