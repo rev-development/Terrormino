@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using static Unity.VisualScripting.Member;
 
 namespace Tetris
 {
@@ -17,6 +18,12 @@ namespace Tetris
 
         private float _moveTime;
         public float _lockTime;
+
+        //Audio sources and audio clips for rotating tetris blocks & when tetris blocks lock in place
+        public AudioSource RotateSound;
+        public AudioClip[] RotateClips;
+        public AudioSource TouchSound;
+        public AudioClip[] TouchClips;
 
         // Flag to skip one Update() after a new piece spawns so _lockTime
         // doesn't carry over from the previous piece into the new one
@@ -62,6 +69,7 @@ namespace Tetris
             if (newPosition != null)
             {
                 CommitPlayerTransform((Vector3Int)newPosition, Cells);
+                PlayRotateSound();
             }
             Board.PaintTiles(this);
         }
@@ -78,6 +86,7 @@ namespace Tetris
 
             if (newPosition != null)
             {
+                PlayRotateSound();
                 CommitPlayerTransform((Vector3Int)newPosition, newCells);
             }
             Board.PaintTiles(this);
@@ -217,9 +226,27 @@ namespace Tetris
 
         private void LockMovement()
         {
+            
             Board.PaintTiles(this);
             Board.ClearLines();
             Board.SpawnPiece();
+            PlayTouchSound();
+        }
+
+        public void PlayRotateSound()
+        {
+            if (RotateClips.Length == 0) return;
+
+            int index = Random.Range(0, RotateClips.Length);
+            RotateSound.PlayOneShot(RotateClips[index]);
+        }
+
+        public void PlayTouchSound()
+        {
+            if (TouchClips.Length == 0) return;
+
+            int index = Random.Range(0, TouchClips.Length);
+            TouchSound.PlayOneShot(TouchClips[index]);
         }
     }
 }
