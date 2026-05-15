@@ -24,6 +24,8 @@ namespace Tetris
         public AudioClip[] RotateClips;
         public AudioSource TouchSound;
         public AudioClip[] TouchClips;
+        public AudioSource LineClearSound;
+        public AudioClip[] LineClearClips;
 
         // Flag to skip one Update() after a new piece spawns so _lockTime
         // doesn't carry over from the previous piece into the new one

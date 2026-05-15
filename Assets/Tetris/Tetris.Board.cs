@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -6,6 +7,8 @@ namespace Tetris
     [DefaultExecutionOrder(-1)]
     public class Board : MonoBehaviour
     {
+        public AudioSource LineClearSound;
+        public AudioClip[] LineClearClips;
         public Tilemap BoardTilemap;
         public Shape[] Tetrominoes;
         public ActivePieceController ActivePiece;
@@ -52,7 +55,7 @@ namespace Tetris
         public void SpawnPiece()
         {
             // Currently picks randomly from all potential shapes, could use weighting
-            int random = Random.Range(0, Tetrominoes.Length);
+            int random = UnityEngine.Random.Range(0, Tetrominoes.Length);
             Shape shape = Tetrominoes[random];
 
             // Pass to the PieceController component
@@ -148,6 +151,8 @@ namespace Tetris
                     {
                         Vector3Int position = new Vector3Int(col, row, 0);
                         BoardTilemap.SetTile(position, null);
+                        int index = UnityEngine.Random.Range(0, LineClearClips.Length);
+                        LineClearSound.PlayOneShot(LineClearClips[index]);
                     }
 
                     // Shift every row above down one
