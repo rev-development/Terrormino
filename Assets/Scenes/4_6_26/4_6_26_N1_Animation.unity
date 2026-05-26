@@ -1375,10 +1375,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LightSource: {fileID: 495118039}
-  FlashlightActive: 0
-  ShakingSound: {fileID: 495118047}
-  BatteryOutSound: {fileID: 495118048}
-  TogglePower:
+  <IsActive>k__BackingField: 0
+  <Battery>k__BackingField: 5
+  <IsShaking>k__BackingField: 0
+  _cachedVelocity: {x: 0, y: 0, z: 0}
+  MinChargeMagnitudeThreshold: 0.25
+  SmoothingFactor: 0.2
+  FlashlightToggled:
+    m_PersistentCalls:
+      m_Calls: []
+  FlashlightShaking:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &495118041
@@ -6382,6 +6388,46 @@ PrefabInstance:
       propertyPath: CutsceneSceneNames.Array.data[0]
       value: 4_6_26_N1_Animation
       objectReference: {fileID: 0}
+    - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
+      propertyPath: NightConfigs._serializedList.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
+      propertyPath: NightConfigs._serializedList.Array.data[1].Key
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
+      propertyPath: NightConfigs._serializedList.Array.data[2].Key
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
+      propertyPath: NightConfigs._serializedList.Array.data[3].Key
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
+      propertyPath: NightConfigs._serializedList.Array.data[4].Key
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
+      propertyPath: NightConfigs._serializedList.Array.data[0].Value
+      value: 
+      objectReference: {fileID: 11400000, guid: f9159c2566acf034481a7691f348ad80, type: 2}
+    - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
+      propertyPath: NightConfigs._serializedList.Array.data[1].Value
+      value: 
+      objectReference: {fileID: 11400000, guid: 6495a63fc6537ae47abe932e3e31cbf5, type: 2}
+    - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
+      propertyPath: NightConfigs._serializedList.Array.data[2].Value
+      value: 
+      objectReference: {fileID: 11400000, guid: b946297432bfbfa44a1692b364550716, type: 2}
+    - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
+      propertyPath: NightConfigs._serializedList.Array.data[3].Value
+      value: 
+      objectReference: {fileID: 11400000, guid: e2b3cd51d5f93ba41b7502430badbc31, type: 2}
+    - target: {fileID: 7940560390562850351, guid: aaf9b3bf56e495c4ab6411968328af88, type: 3}
+      propertyPath: NightConfigs._serializedList.Array.data[4].Value
+      value: 
+      objectReference: {fileID: 11400000, guid: 34b19765395359e44a18e2185355aca3, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
