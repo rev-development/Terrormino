@@ -1294,8 +1294,8 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TerrorminoControls.InputRouter, Assembly-CSharp
+      - m_Target: {fileID: 9054547392913361910}
+        m_TargetAssemblyTypeName: Controls.InputRouter, Assembly-CSharp
         m_MethodName: OnSelectEnter
         m_Mode: 0
         m_Arguments:
@@ -1309,8 +1309,8 @@ MonoBehaviour:
   m_SelectExited:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TerrorminoControls.InputRouter, Assembly-CSharp
+      - m_Target: {fileID: 9054547392913361910}
+        m_TargetAssemblyTypeName: Controls.InputRouter, Assembly-CSharp
         m_MethodName: OnSelectExit
         m_Mode: 0
         m_Arguments:
@@ -1445,13 +1445,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66c85375f42993b479d17964e5de6ff4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LineClearedSound: {fileID: 0}
+  LineClearedSound:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   TetrisLoseSound: {fileID: 0}
   PieceSpawnedSound: {fileID: 0}
   PieceMovedSound: {fileID: 0}
-  PieceRotatedSound: {fileID: 0}
-  PieceLockedSound: {fileID: 0}
+  PieceRotatedSounds:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  PieceLocked:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   Board: {fileID: 0}
+  PieceController: {fileID: 0}
 --- !u!1 &8389415373778608965
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Tetris
@@ -5,14 +6,16 @@ namespace Tetris
     public class AudioController : MonoBehaviour
     {
 
-        public AudioSource LineClearedSound;
+        public List<AudioSource> LineClearedSound = new();
         public AudioSource TetrisLoseSound;
         public AudioSource PieceSpawnedSound;
         public AudioSource PieceMovedSound;
-        public AudioSource PieceRotatedSound;
-        public AudioSource PieceLockedSound;
+        public List<AudioSource> PieceRotatedSounds = new();
+        public List<AudioSource> PieceLocked = new();
+
 
         public Board Board;
+        public ActivePieceController PieceController;
 
         public void Start()
         {
@@ -21,12 +24,12 @@ namespace Tetris
 
         public void OnEnable()
         {
-            Board.LineCleared.AddListener(_ => OnTetrisEvent(LineClearedSound));
+            Board.LineClearedEvent.AddListener(OnLineCleared);
             Board.TetrisLose.AddListener(() => OnTetrisEvent(TetrisLoseSound));
             Board.PieceSpawned.AddListener(() => OnTetrisEvent(PieceSpawnedSound));
-            Board.ActivePiece.PieceMoved.AddListener(() => OnTetrisEvent(PieceMovedSound));
-            Board.ActivePiece.PieceRotated.AddListener(() => OnTetrisEvent(PieceRotatedSound));
-            Board.ActivePiece.PieceLocked.AddListener(() => OnTetrisEvent(PieceLockedSound));
+            PieceController.PieceMoved.AddListener(() => OnTetrisEvent(PieceMovedSound));
+            PieceController.PieceRotated.AddListener(OnPieceRotated);
+            PieceController.PieceLocked.AddListener(OnPieceLocked);
         }
 
         public void OnTetrisEvent(AudioSource audioSource)
@@ -36,6 +39,30 @@ namespace Tetris
                 audioSource.Play();
             }
         }
+
+        private void OnPieceRotated()
+        {
+            if (PieceRotatedSounds == null || PieceRotatedSounds.Count == 0) return;
+            var sound = PieceRotatedSounds[Random.Range(0, PieceRotatedSounds.Count)];
+            if (sound != null) sound.Play();
+        }
+
+        private void OnPieceLocked()
+        {
+            if (PieceLocked == null || PieceLocked.Count == 0) return;
+            var sound = PieceLocked[Random.Range(0, PieceLocked.Count)];
+            if (sound != null) sound.Play();
+
+        }
+
+        private void OnLineCleared()
+        {
+            if (LineClearedSound == null || LineClearedSound.Count == 0) return;
+            var sound = LineClearedSound[Random.Range(0, LineClearedSound.Count)];
+            if (sound != null) sound.Play();
+        }
+
+
 
     }
 }
