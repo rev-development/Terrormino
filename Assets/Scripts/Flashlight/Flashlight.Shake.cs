@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace Flashlight
 {
+    [DisallowMultipleComponent]
     public class Shake : MonoBehaviour
     {
 
@@ -23,9 +24,12 @@ namespace Flashlight
             _cachedVelocity = Vector3.Lerp(_cachedVelocity, position, SmoothingFactor);
 
 
-            float percentageIncrease = Mathf.Abs((currentMagnitude - _cachedVelocity.magnitude) / cachedMagnitude) * 100f; //Math for checking the percentage increase between past magnitude and current magnitude
+            float percentageIncrease
+                = Mathf.Abs((currentMagnitude - _cachedVelocity.magnitude) / cachedMagnitude)
+                  * 100f; //Math for checking the percentage increase between past magnitude and current magnitude
 
-            if (percentageIncrease >= MinChargeMagnitudeThreshold) //checking to see if the current magnitude increased by 2.5% (i.e. shaking)
+            if (percentageIncrease
+                >= MinChargeMagnitudeThreshold) //checking to see if the current magnitude increased by 2.5% (i.e. shaking)
             {
                 Battery += Time.deltaTime * 6f;
                 FlashlightShaking.Invoke(true);
