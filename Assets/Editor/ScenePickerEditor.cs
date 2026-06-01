@@ -1,11 +1,11 @@
 using UnityEditor;
 
-[CustomEditor(typeof(Helpers.ScenePicker), true)]
+[CustomEditor(typeof(ScenePicker), true)]
 public class ScenePickerEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        var picker = target as Helpers.ScenePicker;
+        var picker = target as ScenePicker;
         var oldScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(picker.ScenePath);
 
         serializedObject.Update();
