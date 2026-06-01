@@ -1657,10 +1657,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LightSource: {fileID: 646593110}
-  FlashlightActive: 0
-  ShakingSound: {fileID: 646593113}
-  BatteryOutSound: {fileID: 646593114}
-  TogglePower:
+  <IsActive>k__BackingField: 0
+  <Battery>k__BackingField: 5
+  <IsShaking>k__BackingField: 0
+  _cachedVelocity: {x: 0, y: 0, z: 0}
+  MinChargeMagnitudeThreshold: 0.25
+  SmoothingFactor: 0.2
+  FlashlightToggled:
+    m_PersistentCalls:
+      m_Calls: []
+  FlashlightShaking:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &646593112
@@ -3084,6 +3090,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Handheld
       objectReference: {fileID: 0}
+    - target: {fileID: 8516225344229621610, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
+      propertyPath: Board
+      value: 
+      objectReference: {fileID: 1164255858}
+    - target: {fileID: 8516225344229621610, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
+      propertyPath: PieceController
+      value: 
+      objectReference: {fileID: 1164255856}
     - target: {fileID: 9054547392913361910, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
       propertyPath: Routes.Array.data[1].Outputs.Array.data[0].m_PersistentCalls.m_Calls.Array.size
       value: 1

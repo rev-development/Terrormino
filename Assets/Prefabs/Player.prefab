@@ -482,8 +482,17 @@ LineRenderer:
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1388,8 +1397,17 @@ LineRenderer:
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1706,6 +1724,9 @@ MonoBehaviour:
   GameOver:
     m_PersistentCalls:
       m_Calls: []
+  TrueGameOver:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7560898925152426385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1739,11 +1760,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   CutsceneSceneNames:
-  - Expo_N1_Animation
-  - Expo_N2_Animation
-  - Expo_N3_Animation
-  - Expo_N4_Animation
-  - Expo_N5_Animation
+  - 4_6_26_N1_Animation
+  - 4_6_26_N2_Animation
+  - 4_6_26_N3_Animation
+  - 4_6_26_N4_Animation
+  - 4_6_26_N5_Animation
   FallbackSceneName: TitleScreen
 --- !u!82 &8189324296709703675
 AudioSource:
@@ -1755,7 +1776,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: e1182c995aff626489df9cb68e7a6209, type: 3}
+  m_audioClip: {fileID: 8300000, guid: f27850490a7d415469b505648b6a1d40, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -1975,7 +1996,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 3.915, y: 2.12, z: 5.37}
   m_MoveThreshold: 0.1
-  m_Carve: 0
+  m_Carve: 1
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5

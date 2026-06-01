@@ -20,7 +20,44 @@ namespace Tetris
         public void Start()
         {
             Board = Board.Instance;
+
+            AutoConnectAudioSources();
         }
+
+
+
+        private void AutoConnectAudioSources()
+        {
+            var audioManagers = GameObject.Find("Audio Managers");
+            if (audioManagers == null)
+            {
+                Debug.LogWarning("[AudioController] Could not find 'Audio Managers' GameObject in scene.");
+                return;
+            }
+
+            var lineCleared = audioManagers.transform.Find("LineClearedAudioManager");
+            if (lineCleared != null)
+            {
+                LineClearedSound.Clear();
+                LineClearedSound.AddRange(lineCleared.GetComponents<AudioSource>());
+            }
+
+            var pieceLocked = audioManagers.transform.Find("PieceLockedAudioManager");
+            if (pieceLocked != null)
+            {
+                PieceLocked.Clear();
+                PieceLocked.AddRange(pieceLocked.GetComponents<AudioSource>());
+            }
+
+            var rotate = audioManagers.transform.Find("RotateAudioManager");
+            if (rotate != null)
+            {
+                PieceRotatedSounds.Clear();
+                PieceRotatedSounds.AddRange(rotate.GetComponents<AudioSource>());
+            }
+        }
+
+
 
         public void OnEnable()
         {
