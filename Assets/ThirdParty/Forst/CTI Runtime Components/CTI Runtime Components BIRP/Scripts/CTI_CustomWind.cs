@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-namespace CTI {
+namespace ThirdParty.Forst.CTI_Runtime_Components.CTI_Runtime_Components_BIRP.Scripts {
 
 	[RequireComponent (typeof (WindZone))]
 	public class CTI_CustomWind : MonoBehaviour {

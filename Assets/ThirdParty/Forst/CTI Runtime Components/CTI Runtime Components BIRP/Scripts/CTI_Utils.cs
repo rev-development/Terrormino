@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace CTI {
+namespace ThirdParty.Forst.CTI_Runtime_Components.CTI_Runtime_Components_BIRP.Scripts {
 	
 	public static class CTI_Utils {
 
