@@ -1347,7 +1347,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7967520735591659824, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 184242882822062363, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
@@ -2748,6 +2748,10 @@ PrefabInstance:
     - target: {fileID: 8083020662612939420, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
       propertyPath: m_Name
       value: Handheld
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083020662612939420, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8516225344229621610, guid: fe31b760e7462c94cbba93a8f5b257e0, type: 3}
       propertyPath: Board
