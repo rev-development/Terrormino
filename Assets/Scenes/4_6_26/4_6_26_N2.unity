@@ -2605,6 +2605,10 @@ PrefabInstance:
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1061532795256082746, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
+      propertyPath: Shake
+      value: 
+      objectReference: {fileID: 1361137097}
     - target: {fileID: 1192058182877751323, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
       propertyPath: m_Height
       value: 3.5014174
@@ -4103,6 +4107,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 174813893654543455, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+      propertyPath: TrueGameOver.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 174813893654543455, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+      propertyPath: TrueGameOver.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3362973462496457122, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
       propertyPath: m_IsActive
       value: 0

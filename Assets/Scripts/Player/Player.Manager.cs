@@ -1,7 +1,6 @@
 using Tetris;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 namespace Player
 {
@@ -63,10 +62,7 @@ namespace Player
             TrueGameOver.Invoke();
         }
 
-        public void BackToTitle()
-        {
-            SceneManager.LoadScene(_sceneName);
-        }
+
 
     }
 }

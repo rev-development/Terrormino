@@ -66,6 +66,7 @@ public class JumpscareTrigger : MonoBehaviour
         if (_playerManager != null)
         {
             _playerManager.GameOver.AddListener(OnJumpscare);
+            Debug.Log("Jumpscare Trigger");
         }
         else
         {
