@@ -2605,6 +2605,10 @@ PrefabInstance:
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1061532795256082746, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
+      propertyPath: Shake
+      value: 
+      objectReference: {fileID: 1361137097}
     - target: {fileID: 1192058182877751323, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
       propertyPath: m_Height
       value: 3.5014174

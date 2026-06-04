@@ -256,7 +256,7 @@ namespace Demon
             if (PlayerObstacle != null) PlayerObstacle.carving = true;
         }
 
-        // ── Public API (NightManager) ──────────────────────────────────────
+
 
         public void ApplyNightConfig(float speed, float patrolDuration, float freezeDuration)
         {
