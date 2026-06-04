@@ -58,6 +58,7 @@ namespace Player
         /// </summary>
         public void OnGameOver()
         {
+
             Debug.Log("Game Over");
             TrueGameOver.Invoke();
         }

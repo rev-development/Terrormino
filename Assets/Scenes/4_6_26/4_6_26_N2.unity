@@ -3862,6 +3862,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3b68b61a782814b93001545995f655, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!82 &3655124248236098341 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 8189324296709703675, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+  m_PrefabInstance: {fileID: 8847502420328634144}
+  m_PrefabAsset: {fileID: 0}
 --- !u!108 &3809601595611800397
 Light:
   m_ObjectHideFlags: 0
@@ -4132,6 +4137,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 396538619}
     - target: {fileID: 3964380473509740317, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+      propertyPath: Scream
+      value: 
+      objectReference: {fileID: 3655124248236098341}
+    - target: {fileID: 3964380473509740317, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
       propertyPath: MoonLight
       value: 
       objectReference: {fileID: 2080039036}
@@ -4217,6 +4226,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3662083717056340413, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+    - {fileID: 1582981151391762914, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

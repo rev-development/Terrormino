@@ -30,6 +30,7 @@ public class JumpscareTrigger : MonoBehaviour
 
     public void OnJumpscare()
     {
+        Debug.Log("Jumpscare Trigger");
         _demonManager.Demons.ForEach(demon => demon.SetActive(false));
         Scream.Play();
         JumpscareDemon.SetActive(true);
@@ -65,8 +66,8 @@ public class JumpscareTrigger : MonoBehaviour
         _playerManager = Helpers.Debug.TryFindByTag("Player").GetComponent<Player.Manager>();
         if (_playerManager != null)
         {
-            _playerManager.GameOver.AddListener(OnJumpscare);
-            Debug.Log("Jumpscare Trigger");
+            _playerManager.TrueGameOver.AddListener(OnJumpscare);
+
         }
         else
         {
