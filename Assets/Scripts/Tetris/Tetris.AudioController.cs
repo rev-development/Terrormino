@@ -61,7 +61,7 @@ namespace Tetris
 
         public void OnEnable()
         {
-            Board.LineClearedEvent.AddListener(OnLineCleared);
+            Board.LineCleared.AddListener(_ => OnLineCleared());
             Board.TetrisLose.AddListener(() => OnTetrisEvent(TetrisLoseSound));
             Board.PieceSpawned.AddListener(() => OnTetrisEvent(PieceSpawnedSound));
             PieceController.PieceMoved.AddListener(() => OnTetrisEvent(PieceMovedSound));

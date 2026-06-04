@@ -72,7 +72,6 @@ namespace Tetris
 
             // Report cleared lines to NightManager to track win condition
             LineCleared.Invoke(linesCleared);
-            LineClearedEvent.Invoke();
         }
 
         #region Sub-Functions
@@ -191,9 +190,7 @@ namespace Tetris
         ///     GameLoop.NightManager listens to this event and responds with RegisterLineCleared
         /// </summary>
         public UnityEvent<int> LineCleared = new();
-
-        public UnityEvent LineClearedEvent = new();
-
+        
         /// <summary>
         ///     Triggered when Player loses Tetris
         ///     Player.Manager listens to this event and responds with GameOver
