@@ -1118,7 +1118,7 @@ GameObject:
   - component: {fileID: 1386927988402321346}
   - component: {fileID: 8516225344229621610}
   m_Layer: 0
-  m_Name: Handheld
+  m_Name: (Deprecated)Handheld
   m_TagString: Handheld
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7568881142788957808}
   - component: {fileID: 8953186558882533232}
   m_Layer: 0
-  m_Name: Board
+  m_Name: Tetris
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,20 +61,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Board: {fileID: 8953186558882533232}
+  PieceMoved:
+    m_PersistentCalls:
+      m_Calls: []
+  PieceRotated:
+    m_PersistentCalls:
+      m_Calls: []
+  PieceLocked:
+    m_PersistentCalls:
+      m_Calls: []
+  MoveInput:
+    m_PersistentCalls:
+      m_Calls: []
+  RotateInput:
+    m_PersistentCalls:
+      m_Calls: []
   Shape:
     ShapeKey: 0
     Tile: {fileID: 0}
   Cells: []
   Position: {x: 0, y: 0, z: 0}
   RotationIndex: 0
+  _moveTime: 0
   _gravityTime: 0
   _lockTime: 0
-  Move:
-    m_PersistentCalls:
-      m_Calls: []
-  Rotate:
-    m_PersistentCalls:
-      m_Calls: []
+  _justSpawned: 0
 --- !u!114 &8953186558882533232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,10 +98,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466aba6813fe8c146a27962a16d95ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LineCleared:
+    m_PersistentCalls:
+      m_Calls: []
+  LineClearedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  TetrisLose:
+    m_PersistentCalls:
+      m_Calls: []
+  PieceSpawned:
+    m_PersistentCalls:
+      m_Calls: []
+  BoardSize: {x: 10, y: 14}
+  SpawnPosition: {x: -1, y: 5, z: 0}
+  ActivePiece: {fileID: 7568881142788957808}
   BoardTilemap: {fileID: 8072356205140160581}
   Tetrominoes:
-  - ShapeKey: 0
-    Tile: {fileID: 0}
   - ShapeKey: 0
     Tile: {fileID: 11400000, guid: f6c4109fd0d185b419e5e665b07c42f0, type: 2}
   - ShapeKey: 1
@@ -105,13 +129,6 @@ MonoBehaviour:
     Tile: {fileID: 11400000, guid: be0a34e2a842ae742b4fa8541a5f9fcf, type: 2}
   - ShapeKey: 6
     Tile: {fileID: 11400000, guid: 66df2645ff909154b9c8f7c006a6af32, type: 2}
-  ActivePiece: {fileID: 7568881142788957808}
-  Config:
-    GravityDelay: 1
-    MoveDelay: 0.1
-    LockDelay: 0.5
-  BoardSize: {x: 10, y: 14}
-  SpawnPosition: {x: -1, y: 5, z: 0}
 --- !u!1 &7809542734468995820
 GameObject:
   m_ObjectHideFlags: 0
