@@ -16,7 +16,7 @@ namespace EC.DemonEC
 
         [Helpers.DisableInEditor] public AudioController AudioController;
 
-        public Helpers.Events.Channels.GameObjectEC GlobalBanish;
+        [SerializeField] private Helpers.Events.Channels.GameObjectEC _globalBanish;
 
         [SerializeField] private Vector3 _jumpscareDemonPosition = new(0, -0.5f, -4.5f);
 

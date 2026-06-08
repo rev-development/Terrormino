@@ -61,10 +61,11 @@ namespace GameLoop
 
             StartNight(NightIndex);
         }
-
+        
         public void OnEnable()
         {
             TrueGameOver.AddListener(OnTrueGameOver);
+            Debug.Log(Tetris.Board.Instance);
             Tetris.Board.Instance.LineCleared.AddListener(RegisterLineCleared);
         }
 

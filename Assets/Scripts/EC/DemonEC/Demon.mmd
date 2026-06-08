@@ -1,0 +1,92 @@
+---
+title: Demon
+---
+classDiagram
+    class GameOverChecklist {
+        + bool AnimationEnded
+        + bool AudioEnded
+        + bool Valid => AnimationEnded && AudioEnded
+    }
+    
+    class Animator {
+        + bool Illuminated
+        + trigger Banish
+        + trigger Jumpscare
+    }
+    
+    class AnimationController {
+        - OnJumpscareTriggered()
+    }
+    
+    class AnimationController_OnJumpscareTriggered {}
+    
+    AnimationController_OnJumpscareTriggered --> Animator: SetTrigger("Jumpscare")
+    
+    JumpscareTriggered --> AnimationController : OnJumpscareTriggered()
+    AnimationController --> Animator
+    
+    Illuminated --> AnimationController : OnIlluminated()
+    LocalBanished --> AnimationController : OnLocalBanished()
+    
+    class BanishAnimationEnded <<UnityEvent>> {}
+    AnimationController *-- BanishAnimationEnded
+    
+    class JumpscareAnimationEnded <<UnityEvent>> {}
+    AnimationController *--JumpscareAnimationEnded
+    
+    Controller -- AnimationController
+    
+    class Health {
+    
+    }
+    
+    class Illuminated <<UnityEvent>> {}
+    class LocalBanished <<UnityEvent>> {}
+    
+    Controller -- Health
+    
+    class AudioController {
+    
+    }
+    
+    Controller -- AudioController
+    
+    class Controller {
+        - Vector3 _jumpscareDemonPosition
+        - GameObject _modelRoot
+        - VoidEC _gameOver
+    }
+    
+    Controller o.. GameOverChecklist
+    
+    class GenericEC~T~ <<ScriptableObject>> {
+        + UnityAction~T~ OnEventRaised
+        + RaiseEvent(T parameter)
+    }
+    
+    class GameObjectEC <<ScriptableObject>> {
+    }
+    
+    class VoidEC <<ScriptableObject>> {}
+    
+    GenericEC~T~ <|-- GameObjectEC
+    GenericEC~T~ <|-- VoidEC
+    
+    class GlobalBanish <<EventChannel>> {
+    }
+    
+    class GameOver <<EventChannel>> {
+    }
+
+    GlobalBanish ..|> GameObjectEC
+    GameOver ..|> VoidEC
+    
+    Controller --> GlobalBanish
+    Controller --> GameOver
+    
+    class JumpscareTriggered <<UnityEvent>> {
+    
+    }
+    
+    Controller ..> JumpscareTriggered
+     
