@@ -1,15 +1,15 @@
-﻿using System.Collections;
+﻿using Demon.Manager;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Demon
 {
-
-
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(LightFear))]
     public class AI : MonoBehaviour
     {
+
         // ── Inspector ──────────────────────────────────────────────────────
         [Header("Patrol")]
         [Tooltip("The empty parent GameObject whose children are the patrol waypoints.")]
@@ -22,13 +22,15 @@ namespace Demon
         [Tooltip("The player Transform the demon targets once patrol ends.")]
         public Transform PlayerTarget;
 
-        [Tooltip("The NavMeshObstacle on the player — carving is disabled when chase starts so the demon can reach them.")]
+        [Tooltip(
+                "The NavMeshObstacle on the player — carving is disabled when chase starts so the demon can reach them."
+            )]
         public NavMeshObstacle PlayerObstacle;
 
         [Tooltip("How fast the demon rotates to face the player while idling (degrees per second).")]
         public float LookRotationSpeed = 20f;
-        [Tooltip("NavMeshAgent movement speed.")]
-        public float MoveSpeed = 1.5f;
+
+        [Tooltip("NavMeshAgent movement speed.")] public float MoveSpeed = 1.5f;
 
         [Tooltip("How many seconds the demon patrols before switching to chase.")]
         public float PatrolDuration = 30f;
@@ -36,23 +38,27 @@ namespace Demon
         [Tooltip("Seconds the demon stays frozen when the flashlight hits it.")]
         public float FreezeOnLitDuration = 2f;
 
-        // ── State machine ──────────────────────────────────────────────────
-        private enum Phase { Patrolling, Chasing, Frozen }
-        private Phase _phase = Phase.Patrolling;
-        private Phase _phaseBeforeFreeze;
-
         private NavMeshAgent _agent;
-        private LightFear _lightFear;
 
-        private Transform[] _patrolPoints;
         private int _currentPatrolIndex = 0;
-        private float _idleTimer = 0f;
-        private float _patrolTimer = 0f;
-        private bool _isMoving = false;
-        private bool _isLit = false;
 
         private Coroutine _freezeCoroutine;
 
+        private float _idleTimer = 0f;
+
+        private bool _isLit = false;
+
+        private bool _isMoving = false;
+
+        private LightFear _lightFear;
+
+        private Transform[] _patrolPoints;
+
+        private float _patrolTimer = 0f;
+
+        private Phase _phase = Phase.Patrolling;
+
+        private Phase _phaseBeforeFreeze;
 
         private void Start()
         {
@@ -69,20 +75,29 @@ namespace Demon
             if (PatrolPointsParent == null)
             {
                 var found = GameObject.FindGameObjectWithTag("PatrolPoints");
-                if (found != null) PatrolPointsParent = found.transform;
+
+                if (found != null)
+                {
+                    PatrolPointsParent = found.transform;
+                }
             }
 
-            if (PatrolPointsParent != null && PatrolPointsParent.childCount > 0)
+            if (PatrolPointsParent != null
+                && PatrolPointsParent.childCount > 0)
             {
                 _patrolPoints = new Transform[PatrolPointsParent.childCount];
+
                 for (int i = 0; i < PatrolPointsParent.childCount; i++)
+                {
                     _patrolPoints[i] = PatrolPointsParent.GetChild(i);
+                }
             }
 
             // Find player references at runtime if not set on prefab
             if (PlayerTarget == null)
             {
                 var player = GameObject.FindGameObjectWithTag("Player");
+
                 if (player != null)
                 {
                     PlayerTarget = player.transform;
@@ -90,10 +105,12 @@ namespace Demon
                 }
             }
 
-            if (_patrolPoints == null || _patrolPoints.Length == 0)
+            if (_patrolPoints == null
+                || _patrolPoints.Length == 0)
             {
                 Debug.LogWarning("Demon.AI: No PatrolPoints found, going straight to chase.", gameObject);
                 EnterPhase(Phase.Chasing);
+
                 return;
             }
 
@@ -105,8 +122,14 @@ namespace Demon
         {
             switch (_phase)
             {
-                case Phase.Patrolling: UpdatePatrol(); break;
-                case Phase.Chasing: UpdateChase(); break;
+                case Phase.Patrolling:
+                    UpdatePatrol();
+
+                    break;
+                case Phase.Chasing:
+                    UpdateChase();
+
+                    break;
             }
         }
 
@@ -119,6 +142,7 @@ namespace Demon
             if (_patrolTimer >= PatrolDuration)
             {
                 EnterPhase(Phase.Chasing);
+
                 return;
             }
 
@@ -126,8 +150,8 @@ namespace Demon
             {
                 // Wait until path is ready and agent is close enough
                 bool arrived = !_agent.pathPending
-                    && _agent.remainingDistance <= _agent.stoppingDistance
-                    && !_agent.hasPath;
+                               && _agent.remainingDistance <= _agent.stoppingDistance
+                               && !_agent.hasPath;
 
                 if (arrived)
                 {
@@ -138,23 +162,25 @@ namespace Demon
                     _isMoving = false;
                     _idleTimer = 0f;
                 }
+
                 return;
             }
 
             // Idling at patrol spot — slowly rotate to face player
             if (PlayerTarget != null)
             {
-                Vector3 directionToPlayer = PlayerTarget.position - transform.position;
+                var directionToPlayer = PlayerTarget.position - transform.position;
                 directionToPlayer.y = 0f;
 
                 if (directionToPlayer.sqrMagnitude > 0.01f)
                 {
-                    Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+                    var targetRotation = Quaternion.LookRotation(directionToPlayer);
+
                     transform.rotation = Quaternion.RotateTowards(
-                        transform.rotation,
-                        targetRotation,
-                        LookRotationSpeed * Time.deltaTime
-                    );
+                            transform.rotation,
+                            targetRotation,
+                            LookRotationSpeed * Time.deltaTime
+                        );
                 }
             }
 
@@ -168,7 +194,11 @@ namespace Demon
 
         private void UpdateChase()
         {
-            if (PlayerTarget == null) return;
+            if (PlayerTarget == null)
+            {
+                return;
+            }
+
             _agent.stoppingDistance = 0f; // ← add this
             _agent.speed = MoveSpeed * 1.2f;
             _agent.SetDestination(PlayerTarget.position);
@@ -182,25 +212,41 @@ namespace Demon
             {
                 case Phase.Patrolling:
                     // Enable carving so demon steers around player during patrol
-                    if (PlayerObstacle != null) PlayerObstacle.carving = true;
+                    if (PlayerObstacle != null)
+                    {
+                        PlayerObstacle.carving = true;
+                    }
+
                     MoveToNextPatrolPoint();
+
                     break;
 
                 case Phase.Chasing:
-                    if (PlayerObstacle != null) PlayerObstacle.carving = false;
+                    if (PlayerObstacle != null)
+                    {
+                        PlayerObstacle.carving = false;
+                    }
+
                     _agent.stoppingDistance = 0f;
                     _agent.isStopped = false;
                     Debug.Log("[Demon] Switching to chase.");
+
                     break;
             }
         }
 
         private void MoveToNextPatrolPoint()
         {
-            if (_patrolPoints == null || _patrolPoints.Length == 0)
+            if (_patrolPoints == null
+                || _patrolPoints.Length == 0)
             {
-                Debug.LogWarning("[Demon.AI] MoveToNextPatrolPoint called but _patrolPoints is null or empty. Check that your patrol points parent GameObject has the 'PatrolPoints' tag.", gameObject);
+                Debug.LogWarning(
+                        "[Demon.AI] MoveToNextPatrolPoint called but _patrolPoints is null or empty. Check that your patrol points parent GameObject has the 'PatrolPoints' tag.",
+                        gameObject
+                    );
+
                 EnterPhase(Phase.Chasing);
+
                 return;
             }
 
@@ -221,7 +267,11 @@ namespace Demon
 
             if (illuminated && _phase != Phase.Frozen)
             {
-                if (_freezeCoroutine != null) StopCoroutine(_freezeCoroutine);
+                if (_freezeCoroutine != null)
+                {
+                    StopCoroutine(_freezeCoroutine);
+                }
+
                 _freezeCoroutine = StartCoroutine(FreezeRoutine());
             }
         }
@@ -250,20 +300,32 @@ namespace Demon
 
         private void OnBanished(GameObject _)
         {
-            if (_freezeCoroutine != null) StopCoroutine(_freezeCoroutine);
+            if (_freezeCoroutine != null)
+            {
+                StopCoroutine(_freezeCoroutine);
+            }
+
             _agent.isStopped = true;
+
             // Restore carving in case demon is banished during chase phase
-            if (PlayerObstacle != null) PlayerObstacle.carving = true;
+            if (PlayerObstacle != null)
+            {
+                PlayerObstacle.carving = true;
+            }
         }
 
         // ── Public API (NightManager) ──────────────────────────────────────
 
-        public void ApplyNightConfig(float speed, float patrolDuration, float freezeDuration)
+        public void ApplyNightConfig(IConfigDto configDto)
         {
-            MoveSpeed = speed;
-            PatrolDuration = patrolDuration;
-            FreezeOnLitDuration = freezeDuration;
-            if (_agent != null) _agent.speed = MoveSpeed;
+            MoveSpeed = configDto.MoveSpeed;
+            PatrolDuration = configDto.PatrolDuration;
+            FreezeOnLitDuration = configDto.FreezeDuration;
+
+            if (_agent != null)
+            {
+                _agent.speed = MoveSpeed;
+            }
         }
 
         // ── Helpers ────────────────────────────────────────────────────────
@@ -276,5 +338,9 @@ namespace Demon
                 (_patrolPoints[i], _patrolPoints[j]) = (_patrolPoints[j], _patrolPoints[i]);
             }
         }
+
+        // ── State machine ──────────────────────────────────────────────────
+        private enum Phase { Patrolling, Chasing, Frozen }
+
     }
 }

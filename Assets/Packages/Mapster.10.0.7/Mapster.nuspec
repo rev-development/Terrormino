@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Mapster</id>
+    <version>10.0.7</version>
+    <authors>chaowlert,eric_swann,andrerav</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <icon>icon.png</icon>
+    <projectUrl>https://github.com/MapsterMapper/Mapster</projectUrl>
+    <iconUrl>https://cloud.githubusercontent.com/assets/5763993/26522718/d16f3e42-4330-11e7-9b78-f8c7402624e7.png</iconUrl>
+    <description>A fast, fun and stimulating object to object mapper. Kind of like AutoMapper, just simpler and way, way faster.</description>
+    <copyright>Copyright (c) 2026 Chaowlert Chaisrichalermpol, Eric Swann, Andreas Ravnestad</copyright>
+    <tags>Mapster Mapper AutoMapper Fast Mapping</tags>
+    <repository type="git" url="https://github.com/MapsterMapper/Mapster" commit="27f41a45271f717cea2009ebdf10a72d3eba7d9b" />
+    <dependencies>
+      <group targetFramework="net8.0">
+        <dependency id="Mapster.Core" version="10.0.7" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net9.0">
+        <dependency id="Mapster.Core" version="10.0.7" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net10.0">
+        <dependency id="Mapster.Core" version="10.0.7" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Mapster.Core" version="10.0.7" exclude="Build,Analyzers" />
+        <dependency id="System.Reflection.Emit" version="4.7.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

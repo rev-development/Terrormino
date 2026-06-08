@@ -1,3 +1,4 @@
+using GameLoop;
 using Tetris;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,8 +10,6 @@ namespace Player
     {
 
         public UnityEvent GameOver = new();
-
-        public UnityEvent TrueGameOver = new();
 
         private string _sceneName;
 
@@ -49,7 +48,6 @@ namespace Player
         public void OnDisable()
         {
             GameOver.RemoveAllListeners();
-            TrueGameOver.RemoveAllListeners();
         }
 
         /// <summary>
@@ -60,7 +58,7 @@ namespace Player
         public void OnGameOver()
         {
             Debug.Log("Game Over");
-            TrueGameOver.Invoke();
+            NightManager.Instance.TrueGameOver.Invoke();
         }
 
         public void BackToTitle()

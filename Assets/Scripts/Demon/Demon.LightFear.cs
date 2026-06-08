@@ -7,7 +7,7 @@ namespace Demon
     public class LightFear : MonoBehaviour
     {
 
-        public Helpers.ClampedFloat Health = new(3f, 3f);
+        [SerializeField] private Helpers.ClampedFloat _health = new(3f, 3f);
 
         public UnityEvent<bool> Illuminate = new();
 
@@ -16,9 +16,9 @@ namespace Demon
         // EventListeners are executed in the order they're added, this basically ensure that the actual destroy runs after everything else
         public UnityEvent<GameObject> Banish = new();
 
-        public Helpers.ClampedFloat InspectorHealth = new(3f, 3f);
-
         private bool _destroyInLateUpdate = false;
+
+        public Helpers.ClampedFloat Health { get => _health; private set => _health = value; }
 
         public void LateUpdate()
         {
@@ -33,12 +33,9 @@ namespace Demon
             Banish.AddListener(StartDelayedDestroy);
         }
 
-        public void OnTriggerEnter(Collider other)
+        public void OnDisable()
         {
-            if (other.TryGetComponent(out Player.Manager playerManager))
-            {
-                playerManager.GameOver.Invoke();
-            }
+            Banish.RemoveAllListeners();
         }
 
         private void OnTriggerExit(Collider other)
@@ -71,11 +68,6 @@ namespace Demon
                     Illuminate.Invoke(false);
                 }
             }
-        }
-
-        public void OnValidate()
-        {
-            InspectorHealth.Value = Health.Value;
         }
 
         public void StartDelayedDestroy(GameObject _)

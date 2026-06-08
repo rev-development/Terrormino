@@ -8,6 +8,71 @@ namespace GameLoop
     public class NightManager : MonoBehaviour
     {
 
+        public UnityEvent TrueGameOver = new();
+
+        [Header("References")]
+        [Tooltip("The room GameObject to disable when the night ends.")]
+        public GameObject Room;
+
+        [Tooltip("Handles light fading and scene loading.")] public SceneTransitioner SceneTransitioner;
+
+        public SerializedDictionary<int, NightConfig> NightConfigs;
+
+        public int NightIndex = 0;
+
+        [Header("Events")]
+        public UnityEvent<int> OnNightStarted = new(); // passes night number (1-5)
+
+        public UnityEvent OnAllNightsWon = new();
+
+        public static NightManager Instance { get; private set; }
+
+        public NightConfig CurrentNight => NightConfigs[NightIndex];
+
+        public int LinesCleared { get; private set; } = 0;
+
+        public bool NightActive { get; private set; } = false;
+
+        private void Awake()
+        {
+            if (Instance != null
+                && Instance != this)
+            {
+                Destroy(gameObject);
+
+                return;
+            }
+
+            Instance = this;
+
+            DontDestroyOnLoad(this);
+        }
+
+        private void Start()
+        {
+            var savedData = SaveManager.Instance.LoadGame();
+
+            if (savedData != null)
+            {
+                NightIndex = savedData.NightIndex;
+            }
+
+            NightIndex = savedData?.NightIndex ?? 0;
+
+            StartNight(NightIndex);
+        }
+
+        public void OnEnable()
+        {
+            TrueGameOver.AddListener(OnTrueGameOver);
+            Tetris.Board.Instance.LineCleared.AddListener(RegisterLineCleared);
+        }
+
+        public void OnDisable()
+        {
+            TrueGameOver.RemoveAllListeners();
+        }
+
         // Called by Board.ClearLines() each time lines are cleared
         public void RegisterLineCleared(int linesJustCleared)
         {
@@ -37,9 +102,9 @@ namespace GameLoop
             NightActive = true;
 
 
-            if (Demon.Manager.Instance != null)
+            if (Demon.Manager.Manager.Instance != null)
             {
-                Demon.Manager.Instance.ApplyNightConfig(CurrentNight);
+                Demon.Manager.Manager.Instance.ApplyNightConfig(CurrentNight);
             }
 
             if (Tetris.Board.Instance != null)
@@ -57,9 +122,9 @@ namespace GameLoop
 
             Debug.Log($"[NightManager] Night {NightIndex + 1} complete!");
 
-            if (Demon.Manager.Instance != null)
+            if (Demon.Manager.Manager.Instance != null)
             {
-                Demon.Manager.Instance.ClearAll();
+                Demon.Manager.Manager.Instance.ClearAll();
             }
 
             NightIndex += 1;
@@ -110,76 +175,6 @@ namespace GameLoop
 
             Debug.Log($"[NightManager] Game over on Night {NightIndex}.");
         }
-
-        #region References
-
-        [Header("References")]
-        [Tooltip("The room GameObject to disable when the night ends.")]
-        public GameObject Room;
-        [Tooltip("Handles light fading and scene loading.")]
-        public SceneTransitioner SceneTransitioner;
-        public SerializedDictionary<int, NightConfig> NightConfigs;
-
-        public static NightManager Instance { get; private set; }
-
-        #endregion
-
-        #region Runtime Values
-
-        public int NightIndex = 0;
-        public NightConfig CurrentNight => NightConfigs[NightIndex];
-        public int LinesCleared { get; private set; } = 0;
-
-        public bool NightActive { get; private set; } = false;
-
-        #endregion
-
-        #region Events
-
-        [Header("Events")]
-        public UnityEvent<int> OnNightStarted = new(); // passes night number (1-5)
-        public UnityEvent OnAllNightsWon = new();
-
-        #endregion
-
-        #region Lifecycle
-
-        private void Awake()
-        {
-            if (Instance != null
-                && Instance != this)
-            {
-                Destroy(gameObject);
-
-                return;
-            }
-
-            Instance = this;
-
-            DontDestroyOnLoad(this);
-        }
-
-        private void Start()
-        {
-            var savedData = SaveManager.Instance.LoadGame();
-
-            if (savedData != null)
-            {
-                NightIndex = savedData.NightIndex;
-            }
-
-            NightIndex = savedData?.NightIndex ?? 0;
-
-            StartNight(NightIndex);
-        }
-
-        public void OnEnable()
-        {
-            Player.Manager.Instance.TrueGameOver.AddListener(OnTrueGameOver);
-            Tetris.Board.Instance.LineCleared.AddListener(RegisterLineCleared);
-        }
-
-        #endregion
 
     }
 }
