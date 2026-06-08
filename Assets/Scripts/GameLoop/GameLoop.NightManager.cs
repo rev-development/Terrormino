@@ -11,8 +11,10 @@ namespace GameLoop
         // Called by Board.ClearLines() each time lines are cleared
         public void RegisterLineCleared(int linesJustCleared)
         {
+            Debug.Log(linesJustCleared);
             if (!NightActive)
             {
+                Debug.Log("Night Not Active");
                 return;
             }
 
@@ -157,6 +159,7 @@ namespace GameLoop
             Instance = this;
 
             DontDestroyOnLoad(this);
+            
         }
 
         private void Start()

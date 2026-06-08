@@ -851,10 +851,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LightSource: {fileID: 1823116825746203566}
   <IsActive>k__BackingField: 0
-  <Battery>k__BackingField: 5
+  <Battery>k__BackingField: 7
   <IsShaking>k__BackingField: 0
   _cachedVelocity: {x: 0, y: 0, z: 0}
-  MinChargeMagnitudeThreshold: 0.25
+  MinChargeMagnitudeThreshold: 0.2
   SmoothingFactor: 0.2
   FlashlightToggled:
     m_PersistentCalls:

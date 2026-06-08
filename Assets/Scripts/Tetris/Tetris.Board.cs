@@ -72,6 +72,7 @@ namespace Tetris
 
             // Report cleared lines to NightManager to track win condition
             LineCleared.Invoke(linesCleared);
+            
             LineClearedEvent.Invoke();
         }
 

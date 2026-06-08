@@ -30,9 +30,11 @@ namespace Flashlight
 
             if (percentageIncrease
                 >= MinChargeMagnitudeThreshold) //checking to see if the current magnitude increased by 2.5% (i.e. shaking)
+                
             {
-                Battery += Time.deltaTime * 6f;
+                Battery += Time.deltaTime * 10f;
                 FlashlightShaking.Invoke(true);
+                Debug.Log("Battery is charging");
             }
             else
             {
@@ -59,6 +61,8 @@ namespace Flashlight
         public void OnControllerTriggerInput(InputAction _)
         {
             FlashlightToggled.Invoke(!IsActive);
+
+            Debug.Log("Flashlight is turned on/Off");
         }
 
         #endregion

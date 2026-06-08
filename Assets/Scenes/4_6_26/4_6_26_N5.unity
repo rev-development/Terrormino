@@ -2473,11 +2473,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8530946292041847583, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
       propertyPath: Routes.Array.data[2].Outputs.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: VelocityCheck
+      value: OnControllerPositionInput
       objectReference: {fileID: 0}
     - target: {fileID: -8530946292041847583, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
       propertyPath: Routes.Array.data[3].Outputs.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: VelocityCheck
+      value: OnControllerPositionInput
       objectReference: {fileID: 0}
     - target: {fileID: -8530946292041847583, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
       propertyPath: Routes.Array.data[0].Outputs.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -2489,11 +2489,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8530946292041847583, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
       propertyPath: Routes.Array.data[2].Outputs.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FlashlightShake, Assembly-CSharp
+      value: Flashlight.Shake, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: -8530946292041847583, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
       propertyPath: Routes.Array.data[3].Outputs.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FlashlightShake, Assembly-CSharp
+      value: Flashlight.Shake, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: -8530946292041847583, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
       propertyPath: Routes.Array.data[2].Outputs.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
