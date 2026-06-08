@@ -83,3 +83,5 @@ Assets/Animations/Huey the pirate.mov
 *.psd
 *.spp
 *.sbsar
+
+.build/*
