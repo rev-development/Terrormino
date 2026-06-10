@@ -61,7 +61,7 @@ namespace GameLoop
 
             StartNight(NightIndex);
         }
-        
+
         public void OnEnable()
         {
             TrueGameOver.AddListener(OnTrueGameOver);

@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine;
 
 namespace AYellowpaper.SerializedCollections.Editor
 {
     public struct LabelWidth : IDisposable
     {
+
         public float PreviousWidth { get; }
 
         public LabelWidth(float width)
@@ -20,5 +18,6 @@ namespace AYellowpaper.SerializedCollections.Editor
         {
             EditorGUIUtility.labelWidth = PreviousWidth;
         }
+
     }
 }

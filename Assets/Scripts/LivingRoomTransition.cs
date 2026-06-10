@@ -6,28 +6,36 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class LivingRoomTransition : MonoBehaviour
 {
-    private float _transitionTime = 10;
-    private bool _beginTransition = false;
 
     public Light LightSource;
 
-    private Helpers.ScenePicker _scenePicker;
-
     //Shader stuff
-    public List<Material> materials = new List<Material>();
-
-    private bool _isDissolving = false;
-    private float _dissolveValue = 0f;
+    public List<Material> materials = new();
 
     public GameObject GameConsole;
+
     public SceneTransitioner SceneTransitioner;
+
+    public UnityEvent<InputAction> OnTitleTransitionGrab = new();
+
+    public bool IsDirty = false;
+
+    private bool _beginTransition = false;
+
+    private float _dissolveValue = 0f;
+
+    private bool _isDissolving = false;
+
+    private Helpers.ScenePicker _scenePicker;
+
+    private SkinnedMeshRenderer[] _skinnedMeshRenderers;
+
+    private float _transitionTime = 10;
 
     // Start is called before the first frame update
     public void Start()
     {
-        _skinnedMeshRenderers = Helpers.Debug.TryFindComponentsInChildren<SkinnedMeshRenderer>(
-            gameObject
-        );
+        _skinnedMeshRenderers = Helpers.Debug.TryFindComponentsInChildren<SkinnedMeshRenderer>(gameObject);
         _scenePicker = Helpers.Debug.TryFindComponent<Helpers.ScenePicker>(gameObject);
     }
 
@@ -63,17 +71,11 @@ public class LivingRoomTransition : MonoBehaviour
         SceneTransitioner.FadeAndLoad(_scenePicker.ScenePath);
     }
 
-    public UnityEvent<InputAction> OnTitleTransitionGrab = new();
-
-    public bool IsDirty = false;
-
     public void TitleToGameplayTransition(SelectEnterEventArgs context)
     {
-        XRGrabInteractable grabInteractable = gameObject.GetComponent<XRGrabInteractable>();
-        grabInteractable.interactionManager.SelectExit(
-            grabInteractable.interactorsSelecting[0],
-            grabInteractable
-        );
+        var grabInteractable = gameObject.GetComponent<XRGrabInteractable>();
+        grabInteractable.interactionManager.SelectExit(grabInteractable.interactorsSelecting[0], grabInteractable);
+
         if (IsDirty)
         {
             _beginTransition = true;
@@ -84,8 +86,6 @@ public class LivingRoomTransition : MonoBehaviour
             IsDirty = true;
         }
     }
-
-    private SkinnedMeshRenderer[] _skinnedMeshRenderers;
 
     public void DissolveConsole()
     {
@@ -102,4 +102,5 @@ public class LivingRoomTransition : MonoBehaviour
             _isDissolving = false;
         }
     }
+
 }

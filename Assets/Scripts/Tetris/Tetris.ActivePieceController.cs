@@ -38,7 +38,9 @@ namespace Tetris
         #region Event Hooks
 
         public UnityEvent PieceMoved = new();
+
         public UnityEvent PieceRotated = new();
+
         public UnityEvent PieceLocked = new();
 
         #endregion
@@ -46,6 +48,7 @@ namespace Tetris
         #region Input Events
 
         public UnityEvent<InputAction> MoveInput = new();
+
         public UnityEvent<InputAction> RotateInput = new();
 
         #endregion
@@ -58,7 +61,10 @@ namespace Tetris
         /// <param name="inputAction"></param>
         public void OnMove(InputAction inputAction)
         {
-            Vector2Int moveInput = new(Helpers.Math.RoundNearestNonZeroInt(inputAction.ReadValue<Vector2>().x, 0.5f), Mathf.Clamp(Helpers.Math.RoundNearestNonZeroInt(inputAction.ReadValue<Vector2>().y, 0.5f), -1, 0));
+            Vector2Int moveInput = new(
+                    Helpers.Math.RoundNearestNonZeroInt(inputAction.ReadValue<Vector2>().x, 0.5f),
+                    Mathf.Clamp(Helpers.Math.RoundNearestNonZeroInt(inputAction.ReadValue<Vector2>().y, 0.5f), -1, 0)
+                );
 
             Board.UnpaintTiles(this);
             var newPosition = TryMove(moveInput, Cells);
@@ -114,12 +120,19 @@ namespace Tetris
         #region Runtime Values
 
         [SerializeField] public Shape Shape;
+
         [SerializeField] public Vector3Int[] Cells;
+
         [SerializeField] public Vector3Int Position;
+
         [SerializeField] public int RotationIndex;
+
         [SerializeField] private float _moveTime;
+
         [SerializeField] private float _gravityTime;
+
         [SerializeField] private float _lockTime;
+
         /// <summary>
         ///     Flag to skip one Update() after a new piece spawns so _lockTime doesn't carry over from the previous piece into the
         ///     new one
@@ -158,7 +171,11 @@ namespace Tetris
 
         private Vector3Int? TryRotate(int rotateInput, Vector3Int[] cells)
         {
-            int wallKickIndex = Helpers.Math.Wrap(((rotateInput + RotationIndex) * 2) - (rotateInput < 0 ? 1 : 0), 0, Shape.WallKicks.GetLength(0));
+            int wallKickIndex = Helpers.Math.Wrap(
+                    ((rotateInput + RotationIndex) * 2) - (rotateInput < 0 ? 1 : 0),
+                    0,
+                    Shape.WallKicks.GetLength(0)
+                );
 
             for (int i = 0; i < Shape.WallKicks.GetLength(1); i++)
             {

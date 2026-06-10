@@ -3,7 +3,9 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class MatchGrabHand : XRGrabInteractable
 {
+
     public Transform LeftAttach;
+
     public Transform RightAttach;
 
     protected override void OnSelectEntering(SelectEnterEventArgs args)
@@ -19,4 +21,5 @@ public class MatchGrabHand : XRGrabInteractable
 
         base.OnSelectEntering(args);
     }
+
 }

@@ -190,7 +190,7 @@ namespace Tetris
         ///     GameLoop.NightManager listens to this event and responds with RegisterLineCleared
         /// </summary>
         public UnityEvent<int> LineCleared = new();
-        
+
         /// <summary>
         ///     Triggered when Player loses Tetris
         ///     Player.Manager listens to this event and responds with GameOver
@@ -209,7 +209,8 @@ namespace Tetris
         public ITetrisConfig TetrisConfig => _tetrisConfig;
 
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private ITetrisConfig _tetrisConfig = new TetrisConfig { TetrisGravityDelay = 1f, TetrisMoveDelay = 0.1f, TetrisLockDelay = 0.5f };
+        private ITetrisConfig _tetrisConfig
+            = new TetrisConfig { TetrisGravityDelay = 1f, TetrisMoveDelay = 0.1f, TetrisLockDelay = 0.5f };
 
         public void ApplyTetrisConfig(ITetrisConfig tetrisConfig)
         {

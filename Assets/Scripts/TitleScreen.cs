@@ -7,31 +7,42 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class TitleScreen : MonoBehaviour
 {
-    private float _transitionTime = 10;
-    private bool _beginTransition = false;
 
     public Light LightSource;
+
     public ParticleSystem Fog;
 
     public GameObject FogBlock; //Temp fix for fog staying
 
-    private string _sceneName;
-
     //Shader stuff
-    public List<Material> materials = new List<Material>();
-
-    private bool _isDissolving = false;
-    private float _dissolveValue = 0f;
+    public List<Material> materials = new();
 
     public GameObject GameConsole;
+
+    public UnityEvent<InputAction> OnTitleTransitionGrab = new();
+
+    public bool IsDirty = false;
+
+    private bool _beginTransition = false;
+
+    private float _dissolveValue = 0f;
+
+    private bool _isDissolving = false;
+
+    private MeshRenderer[] _meshRenderers;
+
+    private string _sceneName;
+
+    private SkinnedMeshRenderer[] _skinnedMeshRenderers;
+
+    private float _transitionTime = 10;
 
     // Start is called before the first frame update
     public void Start()
     {
-        _skinnedMeshRenderers = Helpers.Debug.TryFindComponentsInChildren<SkinnedMeshRenderer>(
-            gameObject
-        );
+        _skinnedMeshRenderers = Helpers.Debug.TryFindComponentsInChildren<SkinnedMeshRenderer>(gameObject);
         _meshRenderers = Helpers.Debug.TryFindComponentsInChildren<MeshRenderer>(gameObject);
+
         if (gameObject.TryGetComponent(out Helpers.ScenePicker scenePicker))
         {
             _sceneName = scenePicker.ScenePath;
@@ -55,10 +66,7 @@ public class TitleScreen : MonoBehaviour
             LightSource.intensity -= Time.deltaTime * 0.75f;
 
             var emission = Fog.emission;
-            emission.rateOverTime = Mathf.Max(
-                0,
-                emission.rateOverTime.constant - Time.deltaTime * 15f
-            );
+            emission.rateOverTime = Mathf.Max(0, emission.rateOverTime.constant - (Time.deltaTime * 15f));
 
             _transitionTime -= Time.deltaTime;
 
@@ -80,17 +88,10 @@ public class TitleScreen : MonoBehaviour
         SceneManager.LoadScene(_sceneName);
     }
 
-    public UnityEvent<InputAction> OnTitleTransitionGrab = new();
-
-    public bool IsDirty = false;
-
     public void TitleToGameplayTransition(SelectEnterEventArgs context)
     {
-        XRGrabInteractable grabInteractable = gameObject.GetComponent<XRGrabInteractable>();
-        grabInteractable.interactionManager.SelectExit(
-            grabInteractable.interactorsSelecting[0],
-            grabInteractable
-        );
+        var grabInteractable = gameObject.GetComponent<XRGrabInteractable>();
+        grabInteractable.interactionManager.SelectExit(grabInteractable.interactorsSelecting[0], grabInteractable);
 
         if (IsDirty)
         {
@@ -103,9 +104,6 @@ public class TitleScreen : MonoBehaviour
             IsDirty = true;
         }
     }
-
-    private SkinnedMeshRenderer[] _skinnedMeshRenderers;
-    private MeshRenderer[] _meshRenderers;
 
     public void DissolveConsole()
     {
@@ -127,4 +125,5 @@ public class TitleScreen : MonoBehaviour
             _isDissolving = false;
         }
     }
+
 }

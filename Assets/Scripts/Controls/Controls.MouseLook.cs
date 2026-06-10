@@ -6,11 +6,15 @@ namespace Player
     // Pulled from SnakeEyes
     public class MouseLook : MonoBehaviour
     {
+
         public Transform PlayerPosition;
+
         public PlayerInput PlayerInput;
 
         public float MouseSensitivity = 2f;
+
         public float CameraVerticalRotation = 0f;
+
         public bool LockedCursor = true;
 
         public InputActionReference MousePositionActionRef;
@@ -25,7 +29,7 @@ namespace Player
             }
         }
 
-        void Update()
+        private void Update()
         {
             if (PlayerInput.currentControlScheme == "Keyboard Mouse")
             {
@@ -44,5 +48,6 @@ namespace Player
                 PlayerPosition.Rotate(Vector3.up * inputX);
             }
         }
+
     }
 }

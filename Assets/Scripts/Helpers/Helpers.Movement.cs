@@ -5,6 +5,7 @@ namespace Helpers
 {
     public class SimpleMovement2D : MonoBehaviour
     {
+
         private InputAction _moveAction;
 
         private void Start()
@@ -18,5 +19,6 @@ namespace Helpers
             //UnityEngine.Debug.Log(moveValue);
             gameObject.transform.Translate(moveValue);
         }
+
     }
 }

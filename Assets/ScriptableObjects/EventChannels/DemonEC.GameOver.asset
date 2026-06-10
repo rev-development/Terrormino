@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0efd4041982c4e4b888c26cda5d02ef1, type: 3}
-  m_Name: GameOver
+  m_Name: DemonEC.GameOver
   m_EditorClassIdentifier: 

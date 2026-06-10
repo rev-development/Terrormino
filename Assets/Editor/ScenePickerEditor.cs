@@ -1,8 +1,9 @@
 using UnityEditor;
 
 [CustomEditor(typeof(Helpers.ScenePicker), true)]
-public class ScenePickerEditor : Editor
+public class ScenePickerEditor : UnityEditor.Editor
 {
+
     public override void OnInspectorGUI()
     {
         var picker = target as Helpers.ScenePicker;
@@ -11,15 +12,22 @@ public class ScenePickerEditor : Editor
         serializedObject.Update();
 
         EditorGUI.BeginChangeCheck();
-        var newScene =
-            EditorGUILayout.ObjectField("scene", oldScene, typeof(SceneAsset), false) as SceneAsset;
+
+        var newScene = EditorGUILayout.ObjectField(
+                "scene",
+                oldScene,
+                typeof(SceneAsset),
+                false
+            ) as SceneAsset;
 
         if (EditorGUI.EndChangeCheck())
         {
-            var newPath = AssetDatabase.GetAssetPath(newScene);
+            string newPath = AssetDatabase.GetAssetPath(newScene);
             var scenePathProperty = serializedObject.FindProperty("ScenePath");
             scenePathProperty.stringValue = newPath;
         }
+
         serializedObject.ApplyModifiedProperties();
     }
+
 }

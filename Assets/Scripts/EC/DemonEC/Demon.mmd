@@ -2,91 +2,101 @@
 title: Demon
 ---
 classDiagram
-    class GameOverChecklist {
-        + bool AnimationEnded
-        + bool AudioEnded
-        + bool Valid => AnimationEnded && AudioEnded
-    }
-    
-    class Animator {
-        + bool Illuminated
-        + trigger Banish
-        + trigger Jumpscare
-    }
-    
-    class AnimationController {
-        - OnJumpscareTriggered()
-    }
-    
-    class AnimationController_OnJumpscareTriggered {}
-    
-    AnimationController_OnJumpscareTriggered --> Animator: SetTrigger("Jumpscare")
-    
-    JumpscareTriggered --> AnimationController : OnJumpscareTriggered()
-    AnimationController --> Animator
-    
-    Illuminated --> AnimationController : OnIlluminated()
-    LocalBanished --> AnimationController : OnLocalBanished()
-    
-    class BanishAnimationEnded <<UnityEvent>> {}
-    AnimationController *-- BanishAnimationEnded
-    
-    class JumpscareAnimationEnded <<UnityEvent>> {}
-    AnimationController *--JumpscareAnimationEnded
-    
-    Controller -- AnimationController
-    
-    class Health {
-    
-    }
-    
-    class Illuminated <<UnityEvent>> {}
-    class LocalBanished <<UnityEvent>> {}
-    
-    Controller -- Health
-    
-    class AudioController {
-    
-    }
-    
-    Controller -- AudioController
-    
-    class Controller {
-        - Vector3 _jumpscareDemonPosition
-        - GameObject _modelRoot
-        - VoidEC _gameOver
-    }
-    
-    Controller o.. GameOverChecklist
-    
-    class GenericEC~T~ <<ScriptableObject>> {
-        + UnityAction~T~ OnEventRaised
-        + RaiseEvent(T parameter)
-    }
-    
-    class GameObjectEC <<ScriptableObject>> {
-    }
-    
-    class VoidEC <<ScriptableObject>> {}
-    
-    GenericEC~T~ <|-- GameObjectEC
-    GenericEC~T~ <|-- VoidEC
-    
-    class GlobalBanish <<EventChannel>> {
-    }
-    
-    class GameOver <<EventChannel>> {
-    }
+	namespace ControllerGroup {
+		class Controller {
+			+ UnityEvent<GameObject> BanishTriggered
+			+ UnityEvent<GameObject> JumpscareTriggered
+			+ UnityEvent JumpscareFxCompleted
+			+ UnityEvent BanishFxCompleted
+			+ UnityEvent<bool> Illuminated
+			- OnTriggerEnter(Collider)
+			+ PositionForJumpscare(GameObject)
+			- OnJumpscareFxCompleted()
+			- OnBanishFxCompleted()
+		}
+		class PositionForJumpscare["Controller.PositionForJumpscare"] {<<EventListener>>}
+		class OnBanishFxCompleted["Controller.OnBanishFxCompleted"] {<<EventListener>>}
+		class BanishTriggered["Controller.BanishTriggered"] {<<UnityEvent>>}
+		class JumpscareTriggered["Controller.JumpscareTriggered"] {<<UnityEvent>>}
+		class JumpscareFxCompleted["Controller.JumpscareFxCompleted"] {<<UnityEvent>>}
+		class BanishFxCompleted["Controller.BanishFxCompleted"] {<<UnityEvent>>}
+		class Illuminated["Controller.Illuminated"] {<<UnityEvent>>}
+	}
 
-    GlobalBanish ..|> GameObjectEC
-    GameOver ..|> VoidEC
-    
-    Controller --> GlobalBanish
-    Controller --> GameOver
-    
-    class JumpscareTriggered <<UnityEvent>> {
-    
+	Controller o--> PositionForJumpscare : Owns
+	JumpscareTriggered --> PositionForJumpscare : Runs
+	Controller o--> OnBanishFxCompleted : Owns
+	BanishFxCompleted --> OnBanishFxCompleted : Runs
+
+	Controller --> JumpscareTriggered : Invokes
+
+	Controller o--> BanishTriggered : Owns
+	Controller o--> JumpscareTriggered : Owns
+	Controller o--> JumpscareFxCompleted : Owns
+	Controller o--> BanishFxCompleted : Owns
+	Controller o--> Illuminated : Owns
+	
+	class Health {
+    	- Helpers.ClampedFloat _hp
+    	- OnTriggerExit(Collider)
+    	- OnTriggerStay(Collider)
     }
     
-    Controller ..> JumpscareTriggered
+    Health --> Illuminated : Invokes
+	Health --> BanishTriggered: Invokes
+
+	namespace FxControllerGroup {
+		class FxController {
+	            - PlayJumpscareAudio()
+	            + OnJumpscare(GameObject)
+	            - AfterBanishFx()
+	            - AfterJumpscareFx
+        }
+        class OnJumpscare["FxController.OnJumpscare"] {<<EventListener>>}
+        class OnIlluminated["FxController.OnIlluminated"] {<<EventListener>>}
+		class OnBanish["FxController.OnBanish"] {<<EventListener>>}
+		class PlayJumpscareAudio["FxController.PlayJumpscareAudio"] {<<Function>>}
+		class AfterBanishFx["FxController.AfterBanishFx"] {<<Function>>}
+		class AfterJumpscareFx["FxController.AfterJumpscareFx"] {<<Function>>}
+
+	}
+
+
+	FxController o--> OnJumpscare : Owns
+	FxController o--> OnIlluminated : Owns
+	FxController o--> OnBanish : Owns
+	FxController o--> PlayJumpscareAudio : Owns
+	FxController o--> AfterBanishFx : Owns
+	FxController o--> AfterJumpscareFx : Owns
+
+	JumpscareTriggered --> OnJumpscare : Runs
+	Illuminated --> OnIlluminated : Runs
+	BanishTriggered --> OnBanish : Runs
+	
+	OnJumpscare --> Animator : SetTrigger(Jumpscare)
+	OnBanish --> Animator : SetTrigger(Banish)
+	OnIlluminated --> Animator : SetBool(Illuminated)
+	
+	namespace Animation {
+		class Animator {
+			+ Trigger Jumpscare
+			+ Trigger Banish
+			+ bool Illuminated
+		}
+		class Banish {<<AnimationClip>>}
+		class Jumpscare {<<AnimationClip>>}
+	}
+	
+	Animator o--> Banish : Owns
+	Animator o--> Jumpscare : Owns
+	
+	Jumpscare --> PlayJumpscareAudio : Runs
+    Jumpscare --> AfterJumpscareFx : Runs
+    Banish --> AfterBanishFx : Runs
+    
+    AfterBanishFx --> BanishFxCompleted : Invokes
+    AfterJumpscareFx --> JumpscareFxCompleted : Invokes
+    
+
+	
      

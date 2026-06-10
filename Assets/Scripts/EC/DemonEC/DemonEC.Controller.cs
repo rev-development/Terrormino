@@ -1,110 +1,147 @@
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Events;
 
 namespace EC.DemonEC
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Health))]
-    [RequireComponent(typeof(AudioController))]
     [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(NavMeshAgent))]
     public class Controller : MonoBehaviour
     {
 
-        [Helpers.DisableInEditor] public AnimationController AnimationController;
+        [Helpers.DisableInEditor] public FxController FxController;
 
         [Helpers.DisableInEditor] public Health Health;
 
-        [Helpers.DisableInEditor] public AudioController AudioController;
-
-        [SerializeField] private Helpers.Events.Channels.GameObjectEC _globalBanish;
-
-        [SerializeField] private Vector3 _jumpscareDemonPosition = new(0, -0.5f, -4.5f);
-
-        public UnityEvent JumpscareTriggered = new();
+        [SerializeField] private Helpers.Events.Channels.GameObjectEC _removeDemon;
 
         [SerializeField] private Helpers.Events.Channels.VoidEC _gameOver;
 
-        private readonly GameOverChecklist _gameOverChecklist = new();
+        [SerializeField] private Vector3 _jumpscareModelRootPosition = new(0, -0.5f, -4.5f);
 
-        private GameObject _modelRoot;
+        [Helpers.DisableInEditor] public GameObject ModelRoot;
 
-        private void Awake()
+        public UnityEvent<GameObject> BanishTriggered = new();
+
+        public UnityEvent<GameObject> JumpscareTriggered = new();
+
+        public UnityEvent JumpscareFxCompleted = new();
+
+        public UnityEvent BanishFxCompleted = new();
+
+        public UnityEvent<bool> Illuminated = new();
+
+        [Helpers.DisableInEditor] private ControlPanel _controlPanel;
+
+        private Transform _mainCameraTransform;
+
+        private NavMeshAgent _navMeshAgent;
+
+        private Rigidbody _rb;
+
+        public void Awake()
         {
-            AnimationController = Helpers.Debug.TryFindComponentInChildren<AnimationController>(gameObject);
+            FxController = Helpers.Debug.TryFindComponentInChildren<FxController>(gameObject);
 
-            if (AnimationController)
+            if (FxController)
             {
-                _modelRoot = AnimationController.gameObject;
+                ModelRoot = FxController.gameObject;
             }
 
             Health = Helpers.Debug.TryFindComponent<Health>(gameObject);
 
-            AudioController = Helpers.Debug.TryFindComponent<AudioController>(gameObject);
+            _navMeshAgent = Helpers.Debug.TryFindComponent<NavMeshAgent>(gameObject);
+            _rb = Helpers.Debug.TryFindComponent<Rigidbody>(gameObject);
+
+            if (Camera.main != null)
+            {
+                _mainCameraTransform = Camera.main.transform;
+            }
+
+            _controlPanel = Helpers.Debug.TryFindComponent<ControlPanel>(gameObject);
         }
 
         private void OnEnable()
         {
-            if (AnimationController)
-            {
-                AnimationController.BanishAnimationEnded.AddListener(OnBanishAnimationEnded);
-                AnimationController.JumpscareAnimationEnded.AddListener(OnJumpscareAnimationEnded);
-            }
+            JumpscareTriggered.AddListener(PositionForJumpscare);
+            BanishFxCompleted.AddListener(OnBanishFxCompleted);
+            JumpscareFxCompleted.AddListener(OnJumpscareFxCompleted);
 
-            if (AudioController)
+            if (_controlPanel)
             {
-                AudioController.JumpscareAudioEnded.AddListener(OnJumpscareAudioEnded);
+                _controlPanel.AddNonPersistentListener(this, nameof(JumpscareTriggered), nameof(PositionForJumpscare));
+                _controlPanel.AddNonPersistentListener(this, nameof(BanishFxCompleted), nameof(OnBanishFxCompleted));
+
+                _controlPanel.AddNonPersistentListener(
+                        this,
+                        nameof(JumpscareFxCompleted),
+                        nameof(OnJumpscareFxCompleted)
+                    );
             }
         }
 
         private void OnDisable()
         {
+            BanishTriggered.RemoveAllListeners();
             JumpscareTriggered.RemoveAllListeners();
+            JumpscareFxCompleted.RemoveAllListeners();
+            BanishFxCompleted.RemoveAllListeners();
+            Illuminated.RemoveAllListeners();
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent<Player.Manager>(out var playerManager))
+            if (other.CompareTag("Player"))
             {
-                gameObject.transform.position = playerManager.gameObject.transform.position;
-                _modelRoot.transform.localPosition = _jumpscareDemonPosition;
-                JumpscareTriggered.Invoke();
+                JumpscareTriggered.Invoke(other.gameObject);
             }
         }
 
-        private void OnJumpscareAnimationEnded()
+        public void PositionForJumpscare(GameObject player)
         {
-            _gameOverChecklist.AnimationEnded = true;
-            TryGameOver();
-        }
+            JumpscareTriggered.RemoveListener(PositionForJumpscare);
 
-        private void OnJumpscareAudioEnded()
-        {
-            _gameOverChecklist.AudioEnded = true;
-            TryGameOver();
-        }
-
-        private void OnBanishAnimationEnded()
-        {
-            GlobalBanish.RaiseEvent(gameObject);
-        }
-
-        private void TryGameOver()
-        {
-            if (_gameOverChecklist.Valid)
+            if (_controlPanel)
             {
-                _gameOver.RaiseEvent();
+                _controlPanel.RemoveNonPersistentListener(
+                        this,
+                        nameof(JumpscareTriggered),
+                        nameof(PositionForJumpscare)
+                    );
             }
+
+            Helpers.NavMesh.FullStop(_navMeshAgent, _rb);
+
+            // var newPosition = new Vector3(
+            //         _mainCameraTransform.position.x,
+            //         Helpers.Bounds.GetComplexCapsuleBounds(gameObject).size.y
+            //         - _mainCameraTransform.transform.position.y,
+            //         _mainCameraTransform.position.z
+            //     );
+
+            var newPosition = _mainCameraTransform.position + (_mainCameraTransform.forward * 4.5f);
+
+            newPosition.y = Helpers.Bounds.GetComplexCapsuleBounds(gameObject).size.y
+                            - _mainCameraTransform.transform.position.y;
+
+            gameObject.transform.position = newPosition;
+
+            var newRotation = Quaternion.LookRotation(-_mainCameraTransform.forward, _mainCameraTransform.up);
+            gameObject.transform.rotation = newRotation;
+            // gameObject.transform.rotation = _mainCameraTransform.rotation;
+            // ModelRoot.transform.localPosition = _jumpscareModelRootPosition;
         }
 
-        private class GameOverChecklist
+        private void OnJumpscareFxCompleted()
         {
+            _gameOver.RaiseEvent();
+        }
 
-            public bool AnimationEnded = false;
-
-            public bool AudioEnded = false;
-
-            public bool Valid => AudioEnded && AnimationEnded;
-
+        private void OnBanishFxCompleted()
+        {
+            _removeDemon.RaiseEvent(gameObject);
         }
 
     }

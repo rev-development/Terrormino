@@ -7,9 +7,9 @@ namespace Helpers
     public class ClampedFloat
     {
 
-        public float Max;
+        [SerializeField] public float Max;
 
-        private float _value;
+        [SerializeField] private float _value;
 
         public ClampedFloat(float value, float max = 1f)
         {

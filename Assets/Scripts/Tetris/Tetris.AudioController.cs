@@ -7,14 +7,19 @@ namespace Tetris
     {
 
         public List<AudioSource> LineClearedSound = new();
+
         public AudioSource TetrisLoseSound;
+
         public AudioSource PieceSpawnedSound;
+
         public AudioSource PieceMovedSound;
+
         public List<AudioSource> PieceRotatedSounds = new();
+
         public List<AudioSource> PieceLocked = new();
 
-
         public Board Board;
+
         public ActivePieceController PieceController;
 
         public void Start()
@@ -24,41 +29,6 @@ namespace Tetris
             AutoConnectAudioSources();
         }
 
-
-
-        private void AutoConnectAudioSources()
-        {
-            var audioManagers = GameObject.Find("Audio Managers");
-            if (audioManagers == null)
-            {
-                Debug.LogWarning("[AudioController] Could not find 'Audio Managers' GameObject in scene.");
-                return;
-            }
-
-            var lineCleared = audioManagers.transform.Find("LineClearedAudioManager");
-            if (lineCleared != null)
-            {
-                LineClearedSound.Clear();
-                LineClearedSound.AddRange(lineCleared.GetComponents<AudioSource>());
-            }
-
-            var pieceLocked = audioManagers.transform.Find("PieceLockedAudioManager");
-            if (pieceLocked != null)
-            {
-                PieceLocked.Clear();
-                PieceLocked.AddRange(pieceLocked.GetComponents<AudioSource>());
-            }
-
-            var rotate = audioManagers.transform.Find("RotateAudioManager");
-            if (rotate != null)
-            {
-                PieceRotatedSounds.Clear();
-                PieceRotatedSounds.AddRange(rotate.GetComponents<AudioSource>());
-            }
-        }
-
-
-
         public void OnEnable()
         {
             Board.LineCleared.AddListener(_ => OnLineCleared());
@@ -67,6 +37,42 @@ namespace Tetris
             PieceController.PieceMoved.AddListener(() => OnTetrisEvent(PieceMovedSound));
             PieceController.PieceRotated.AddListener(OnPieceRotated);
             PieceController.PieceLocked.AddListener(OnPieceLocked);
+        }
+
+        private void AutoConnectAudioSources()
+        {
+            var audioManagers = GameObject.Find("Audio Managers");
+
+            if (audioManagers == null)
+            {
+                Debug.LogWarning("[AudioController] Could not find 'Audio Managers' GameObject in scene.");
+
+                return;
+            }
+
+            var lineCleared = audioManagers.transform.Find("LineClearedAudioManager");
+
+            if (lineCleared != null)
+            {
+                LineClearedSound.Clear();
+                LineClearedSound.AddRange(lineCleared.GetComponents<AudioSource>());
+            }
+
+            var pieceLocked = audioManagers.transform.Find("PieceLockedAudioManager");
+
+            if (pieceLocked != null)
+            {
+                PieceLocked.Clear();
+                PieceLocked.AddRange(pieceLocked.GetComponents<AudioSource>());
+            }
+
+            var rotate = audioManagers.transform.Find("RotateAudioManager");
+
+            if (rotate != null)
+            {
+                PieceRotatedSounds.Clear();
+                PieceRotatedSounds.AddRange(rotate.GetComponents<AudioSource>());
+            }
         }
 
         public void OnTetrisEvent(AudioSource audioSource)
@@ -79,27 +85,51 @@ namespace Tetris
 
         private void OnPieceRotated()
         {
-            if (PieceRotatedSounds == null || PieceRotatedSounds.Count == 0) return;
+            if (PieceRotatedSounds == null
+                || PieceRotatedSounds.Count == 0)
+            {
+                return;
+            }
+
             var sound = PieceRotatedSounds[Random.Range(0, PieceRotatedSounds.Count)];
-            if (sound != null) sound.Play();
+
+            if (sound != null)
+            {
+                sound.Play();
+            }
         }
 
         private void OnPieceLocked()
         {
-            if (PieceLocked == null || PieceLocked.Count == 0) return;
-            var sound = PieceLocked[Random.Range(0, PieceLocked.Count)];
-            if (sound != null) sound.Play();
+            if (PieceLocked == null
+                || PieceLocked.Count == 0)
+            {
+                return;
+            }
 
+            var sound = PieceLocked[Random.Range(0, PieceLocked.Count)];
+
+            if (sound != null)
+            {
+                sound.Play();
+            }
         }
 
         private void OnLineCleared()
         {
-            if (LineClearedSound == null || LineClearedSound.Count == 0) return;
+            if (LineClearedSound == null
+                || LineClearedSound.Count == 0)
+            {
+                return;
+            }
+
             var sound = LineClearedSound[Random.Range(0, LineClearedSound.Count)];
-            if (sound != null) sound.Play();
+
+            if (sound != null)
+            {
+                sound.Play();
+            }
         }
-
-
 
     }
 }

@@ -5,17 +5,28 @@ public class DemonAudio : MonoBehaviour
 {
 
     public List<AudioSource> HeartBeats = new();
+
     private float _timer;
 
-
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         HeartBeatSFXConnect();
         _timer = Random.Range(5f, 6f);
-
     }
 
+    // Update is called once per frame
+    private void Update()
+    {
+        _timer = _timer - Time.deltaTime;
+
+        if (_timer <= 0)
+        {
+            var sound = HeartBeats[Random.Range(0, HeartBeats.Count)];
+            sound.Play();
+            _timer = Random.Range(10f, 12f);
+        }
+    }
 
     private void HeartBeatSFXConnect()
     {
@@ -26,25 +37,6 @@ public class DemonAudio : MonoBehaviour
             HeartBeats.Clear();
             HeartBeats.AddRange(HeartBeatAudio.GetComponents<AudioSource>());
         }
-
-
-
     }
 
-
-
-    // Update is called once per frame
-    void Update()
-    {
-
-        _timer = _timer - Time.deltaTime;
-        if (_timer <= 0)
-        {
-            var sound = HeartBeats[Random.Range(0, HeartBeats.Count)];
-            sound.Play();
-            _timer = Random.Range(10f, 12f);
-        }
-
-
-    }
 }

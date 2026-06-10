@@ -1,49 +1,49 @@
 void CTI_SimpleTranslucentLighting_half(
-   float3   PositionWS,
-   half3    NormalWS,
-   half3    TangentWS,
-   half3    BitangentWS,
+    float3 PositionWS,
+    half3 NormalWS,
+    half3 TangentWS,
+    half3 BitangentWS,
 
-   half3    Albedo,
-   half3    NormalTS,
-   half3    Transmission,
-   half     TransmissionMask,
+    half3 Albedo,
+    half3 NormalTS,
+    half3 Transmission,
+    half TransmissionMask,
 
-   half     Occlusion,
+    half Occlusion,
 
-   out half3 o_NormalWS,
-   out half3 o_Transmission
+    out half3 o_NormalWS,
+    out half3 o_Transmission
 )
 {
-   #ifdef SHADERGRAPH_PREVIEW
-      o_NormalWS = half3(0,1,0);
-      o_Transmission = 0;
-   #else
+    #ifdef SHADERGRAPH_PREVIEW
+    o_NormalWS = half3(0, 1, 0);
+    o_Transmission = 0;
+    #else
 
-      half3 translucency = 1;
-      half3 viewDirWS = GetWorldSpaceNormalizeViewDir(PositionWS);
-      half3x3 tangentToWorld = half3x3(TangentWS, BitangentWS, NormalWS);
-      o_NormalWS = NormalizeNormalPerPixel(TransformTangentToWorld(NormalTS, tangentToWorld));
+    half3 translucency = 1;
+    half3 viewDirWS = GetWorldSpaceNormalizeViewDir(PositionWS);
+    half3x3 tangentToWorld = half3x3(TangentWS, BitangentWS, NormalWS);
+    o_NormalWS = NormalizeNormalPerPixel(TransformTangentToWorld(NormalTS, tangentToWorld));
 
-      half4 shadowCoord = TransformWorldToShadowCoord(PositionWS);
-      Light mainLight = GetMainLight(shadowCoord);
+    half4 shadowCoord = TransformWorldToShadowCoord(PositionWS);
+    Light mainLight = GetMainLight(shadowCoord);
 
-      half w = 0.3; // 0.4
-      half NdotL = saturate((dot(o_NormalWS, mainLight.direction) + w) / ((1 + w) * (1 + w)));
+    half w = 0.3; // 0.4
+    half NdotL = saturate((dot(o_NormalWS, mainLight.direction) + w) / ((1 + w) * (1 + w)));
 
-      half3 transLightDir = mainLight.direction + o_NormalWS * Transmission.z;
-      half transDot = dot( transLightDir, -viewDirWS );
-      transDot = exp2(saturate(transDot) * Transmission.y - Transmission.y);
-      o_Transmission = transDot * (1.0 - NdotL) * mainLight.color * mainLight.shadowAttenuation * Transmission.x;
+    half3 transLightDir = mainLight.direction + o_NormalWS * Transmission.z;
+    half transDot = dot(transLightDir, -viewDirWS);
+    transDot = exp2(saturate(transDot) * Transmission.y - Transmission.y);
+    o_Transmission = transDot * (1.0 - NdotL) * mainLight.color * mainLight.shadowAttenuation * Transmission.x;
 
-      if(_AmbientTranslucency > 0)
-      {
-         o_Transmission += SampleSH(-o_NormalWS) * _AmbientTranslucency * Occlusion;
-      }
+    if (_AmbientTranslucency > 0)
+    {
+        o_Transmission += SampleSH(-o_NormalWS) * _AmbientTranslucency * Occlusion;
+    }
 
-      o_Transmission *= Albedo * TransmissionMask;
+    o_Transmission *= Albedo * TransmissionMask;
 
-   #endif
+    #endif
 }
 
 void SampleSH(half3 normalWS, out half3 Ambient)

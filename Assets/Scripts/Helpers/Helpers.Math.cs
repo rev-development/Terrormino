@@ -5,20 +5,20 @@ namespace Helpers
 {
     public static class Math
     {
+
         public static int RoundNearestNonZeroInt(float val)
         {
             if (val > 0)
             {
                 return Mathf.CeilToInt(val);
             }
-            else if (val < 0)
+
+            if (val < 0)
             {
                 return Mathf.FloorToInt(val);
             }
-            else
-            {
-                return 0;
-            }
+
+            return 0;
         }
 
         public static int RoundNearestNonZeroInt(float val, float floor)
@@ -27,14 +27,13 @@ namespace Helpers
             {
                 return Mathf.CeilToInt(val);
             }
-            else if (val <= floor)
+
+            if (val <= floor)
             {
                 return Mathf.FloorToInt(val);
             }
-            else
-            {
-                return 0;
-            }
+
+            return 0;
         }
 
         // If value is greater than max, cap it at max
@@ -43,12 +42,10 @@ namespace Helpers
         {
             if (input < min)
             {
-                return max - (min - input) % (max - min);
+                return max - ((min - input) % (max - min));
             }
-            else
-            {
-                return min + (input - min) % (max - min);
-            }
+
+            return min + ((input - min) % (max - min));
         }
 
         public static List<T> PickTwo<T>(List<T> pool)
@@ -59,11 +56,11 @@ namespace Helpers
             {
                 var choices = pool;
 
-                var chooseA = choices[UnityEngine.Random.Range(0, pool.Count - 1)];
+                var chooseA = choices[Random.Range(0, pool.Count - 1)];
                 chosen.Add(chooseA);
                 choices.Remove(chooseA);
 
-                var chooseB = choices[UnityEngine.Random.Range(0, pool.Count - 1)];
+                var chooseB = choices[Random.Range(0, pool.Count - 1)];
                 chosen.Add(chooseB);
             }
 
@@ -74,5 +71,6 @@ namespace Helpers
         {
             return Mathf.Round(value * 10 * decimals) / (10 * decimals);
         }
+
     }
 }

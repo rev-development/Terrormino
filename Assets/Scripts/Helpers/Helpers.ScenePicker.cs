@@ -4,8 +4,8 @@ namespace Helpers
 {
     public class ScenePicker : MonoBehaviour
     {
-        [SerializeField]
-        public string ScenePath;
+
+        [SerializeField] public string ScenePath;
 
         public static string TryGetScenePath(GameObject gameObject)
         {
@@ -13,11 +13,11 @@ namespace Helpers
             {
                 return scenePicker.ScenePath;
             }
-            else
-            {
-                UnityEngine.Debug.Log($"No ScenePicker component found on {gameObject.name}", gameObject);
-                return null;
-            }
+
+            UnityEngine.Debug.Log($"No ScenePicker component found on {gameObject.name}", gameObject);
+
+            return null;
         }
+
     }
 }

@@ -12,10 +12,10 @@ public class SceneTransitioner : MonoBehaviour
     [Tooltip("Default fade duration in seconds. Can be overridden per call.")]
     public float DefaultFadeDuration = 2f;
 
-    private Coroutine _activeTransition;
-
     // Cache starting intensities on Awake so RestoreLights() always knows original values
     private readonly Dictionary<Light, float> _startIntensities = new();
+
+    private Coroutine _activeTransition;
 
     private void Awake()
     {

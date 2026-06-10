@@ -6,7 +6,9 @@ namespace Player
     {
 
         private Collider _playerReach;
+
         private Vector3 _startingPosition;
+
         private Quaternion _startingRotation;
 
         // Start is called before the first frame update

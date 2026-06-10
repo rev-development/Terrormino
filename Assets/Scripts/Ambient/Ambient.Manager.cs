@@ -6,18 +6,10 @@ namespace Ambient
 {
     public class Manager : MonoBehaviour
     {
+
         public List<Effect> Effects;
+
         public List<GameObject> TrackedObjects;
-
-        public void Update()
-        {
-            TriggerEffects();
-        }
-
-        public void Start()
-        {
-            Effects.AddRange(gameObject.GetComponents<Effect>());
-        }
 
         public List<GameObject> UnwatchedObjects
         {
@@ -26,32 +18,42 @@ namespace Ambient
                 var camera = Camera.main;
                 var planes = GeometryUtility.CalculateFrustumPlanes(camera);
 
-                return TrackedObjects
-                    .Where(trackedObject =>
-                    {
-                        if (trackedObject.TryGetComponent<Collider>(out Collider collider))
-                        {
-                            return !GeometryUtility.TestPlanesAABB(planes, collider.bounds);
-                        }
-                        else
-                        {
-                            Debug.Log(
-                                $"No Collider Component found on {trackedObject.name}",
-                                trackedObject
-                            );
-                            return false;
-                        }
-                    })
-                    .ToList();
+                return TrackedObjects.Where(trackedObject =>
+                                          {
+                                              if (trackedObject.TryGetComponent(out Collider collider))
+                                              {
+                                                  return !GeometryUtility.TestPlanesAABB(planes, collider.bounds);
+                                              }
+
+                                              Debug.Log(
+                                                  $"No Collider Component found on {trackedObject.name}",
+                                                  trackedObject
+                                              );
+
+                                              return false;
+                                          }
+                                      )
+                                     .ToList();
             }
         }
 
-        void TriggerEffects()
+        public void Start()
         {
-            foreach (Effect effect in Effects)
+            Effects.AddRange(gameObject.GetComponents<Effect>());
+        }
+
+        public void Update()
+        {
+            TriggerEffects();
+        }
+
+        private void TriggerEffects()
+        {
+            foreach (var effect in Effects)
             {
                 effect.TriggerEffect.Invoke(UnwatchedObjects);
             }
         }
+
     }
 }

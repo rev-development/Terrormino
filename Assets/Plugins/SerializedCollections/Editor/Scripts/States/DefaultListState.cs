@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using static AYellowpaper.SerializedCollections.Editor.SerializedDictionaryDrawer;
 
 namespace AYellowpaper.SerializedCollections.Editor.States
 {
     internal class DefaultListState : ListState
     {
-        public override int ListSize => Drawer.ListProperty.minArraySize;
 
-        public DefaultListState(SerializedDictionaryInstanceDrawer serializedDictionaryDrawer) : base(serializedDictionaryDrawer)
+        public DefaultListState(SerializedDictionaryInstanceDrawer serializedDictionaryDrawer) : base(
+                serializedDictionaryDrawer
+            )
         {
         }
+
+        public override int ListSize => Drawer.ListProperty.minArraySize;
 
         public override void OnEnter()
         {
@@ -26,7 +26,9 @@ namespace AYellowpaper.SerializedCollections.Editor.States
         public override ListState OnUpdate()
         {
             if (Drawer.SearchText.Length > 0)
+            {
                 return Drawer.SearchState;
+            }
 
             return this;
         }
@@ -51,5 +53,6 @@ namespace AYellowpaper.SerializedCollections.Editor.States
             Drawer.ListProperty.InsertArrayElementAtIndex(index);
             Drawer.ListProperty.serializedObject.ApplyModifiedProperties();
         }
+
     }
 }

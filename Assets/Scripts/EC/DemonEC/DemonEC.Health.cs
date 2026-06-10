@@ -1,6 +1,5 @@
 using Flashlight;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace EC.DemonEC
 {
@@ -8,23 +7,20 @@ namespace EC.DemonEC
     public class Health : MonoBehaviour
     {
 
-        public UnityEvent<bool> Illuminated = new();
+        [Helpers.DisableInEditor] [SerializeField] private Controller _controller;
 
-        public UnityEvent<GameObject> LocalBanished = new();
+        [SerializeField] private Helpers.ClampedFloat _hp = new(3f, 3f);
 
-        private readonly Helpers.ClampedFloat _health = new(3f, 3f);
-
-        private void OnDisable()
+        public void Awake()
         {
-            Illuminated.RemoveAllListeners();
-            LocalBanished.RemoveAllListeners();
+            _controller = Helpers.Debug.TryFindComponentInParent<Controller>(gameObject);
         }
 
         private void OnTriggerExit(Collider other)
         {
             if (other.CompareTag("Flashlight"))
             {
-                Illuminated.Invoke(false);
+                _controller.Illuminated.Invoke(false);
             }
         }
 
@@ -36,17 +32,17 @@ namespace EC.DemonEC
 
                 if (shake.IsActive)
                 {
-                    Illuminated.Invoke(true);
-                    _health.Value -= Time.deltaTime;
+                    _controller.Illuminated.Invoke(true);
+                    _hp.Value -= Time.deltaTime;
 
-                    if (_health.Value <= 0)
+                    if (_hp.Value <= 0)
                     {
-                        LocalBanished.Invoke(gameObject);
+                        _controller.BanishTriggered.Invoke(gameObject);
                     }
                 }
                 else
                 {
-                    Illuminated.Invoke(false);
+                    _controller.Illuminated.Invoke(false);
                 }
             }
         }

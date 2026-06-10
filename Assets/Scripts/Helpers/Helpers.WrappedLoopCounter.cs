@@ -5,13 +5,15 @@ namespace Helpers
 
         public int CurrentIncrement = 0;
 
-        public WrappedLoopCounter(int maxIncrement) {
+        public WrappedLoopCounter(int maxIncrement)
+        {
             MaxIncrement = maxIncrement;
         }
 
         public int MaxIncrement { get; }
 
-        public void Increment() {
+        public void Increment()
+        {
             if (CurrentIncrement + 1 >= MaxIncrement)
             {
                 CurrentIncrement = 0;

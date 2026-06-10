@@ -19,13 +19,13 @@ public class JumpscareTrigger : MonoBehaviour
 
     [Tooltip("Must match the CutsceneSceneNames array in NightManager exactly.")]
     public List<string> CutsceneSceneNames = new()
-    {
-        "Expo_N1_Animation",
-        "Expo_N2_Animation",
-        "Expo_N3_Animation",
-        "Expo_N4_Animation",
-        "Expo_N5_Animation"
-    };
+                                             {
+                                                 "Expo_N1_Animation",
+                                                 "Expo_N2_Animation",
+                                                 "Expo_N3_Animation",
+                                                 "Expo_N4_Animation",
+                                                 "Expo_N5_Animation"
+                                             };
 
     [Tooltip("Scene to load if no cutscene is found for the current night (e.g. title screen).")]
     public string FallbackSceneName = "TitleScreen";

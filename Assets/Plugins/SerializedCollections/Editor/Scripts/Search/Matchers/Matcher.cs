@@ -4,6 +4,7 @@ namespace AYellowpaper.SerializedCollections.Editor.Search
 {
     public abstract class Matcher
     {
+
         public string SearchString { get; private set; }
 
         public void Prepare(string searchString)
@@ -15,6 +16,8 @@ namespace AYellowpaper.SerializedCollections.Editor.Search
         {
             return searchString;
         }
+
         public abstract bool IsMatch(SerializedProperty property);
+
     }
 }

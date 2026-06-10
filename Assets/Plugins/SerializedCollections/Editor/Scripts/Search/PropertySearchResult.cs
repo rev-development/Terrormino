@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine;
 
 namespace AYellowpaper.SerializedCollections.Editor.Search
 {
     public class PropertySearchResult
     {
+
         public SerializedProperty Property;
 
         public PropertySearchResult(SerializedProperty property)
@@ -18,5 +16,6 @@ namespace AYellowpaper.SerializedCollections.Editor.Search
         {
             return $"Found match in in {Property.propertyPath}";
         }
+
     }
 }

@@ -77,18 +77,20 @@ namespace Flashlight
         ///     Battery Life
         /// </summary>
         [Tooltip("Battery Life")]
-        [field: SerializeField] public float Battery { get; private set; } = 5f;
+        [field: SerializeField]
+        public float Battery { get; private set; } = 5f;
         /// <summary>
         ///     Bool value backing shaking event
         ///     Should not be modified directly, use FlashlightShaking to ensure all side effects occur
         /// </summary>
         [Tooltip("Bool value backing shaking event")]
-        [field: SerializeField] public bool IsShaking { get; private set; } = false;
+        [field: SerializeField]
+        public bool IsShaking { get; private set; } = false;
         /// <summary>
         ///     Velocity value saved from last frame
         /// </summary>
-        [Tooltip("Velocity value saved from last frame")]
-        [SerializeField] private Vector3 _cachedVelocity = new();
+        [Tooltip("Velocity value saved from last frame")] [SerializeField]
+        private Vector3 _cachedVelocity = new();
 
         #endregion
 
@@ -98,8 +100,7 @@ namespace Flashlight
         ///     Minimum velocity magnitude to register charge
         /// </summary>
         [Header("Config Values")]
-        [Tooltip("Minimum velocity magnitude to register charge")]
-        public float MinChargeMagnitudeThreshold = 0.25f;
+        [Tooltip("Minimum velocity magnitude to register charge")] public float MinChargeMagnitudeThreshold = 0.25f;
         /// <summary>
         ///     Multiplier to help with noise from controller inputs
         /// </summary>
@@ -114,13 +115,11 @@ namespace Flashlight
         ///     Triggered when Flashlight is turned on/off
         /// </summary>
         [Header("Events")]
-        [Tooltip("Triggered when Flashlight is turned on/off")]
-        public UnityEvent<bool> FlashlightToggled = new();
+        [Tooltip("Triggered when Flashlight is turned on/off")] public UnityEvent<bool> FlashlightToggled = new();
         /// <summary>
         ///     Triggered when Flashlight begins/stops shaking
         /// </summary>
-        [Tooltip("Triggered when Flashlight begins/stops shaking")]
-        public UnityEvent<bool> FlashlightShaking = new();
+        [Tooltip("Triggered when Flashlight begins/stops shaking")] public UnityEvent<bool> FlashlightShaking = new();
 
         #endregion
 

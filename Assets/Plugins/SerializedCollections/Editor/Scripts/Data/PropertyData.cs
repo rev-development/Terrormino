@@ -1,20 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace AYellowpaper.SerializedCollections.Editor.Data
 {
     [System.Serializable]
     internal class PropertyData
     {
-        [SerializeField]
-        private float _keyLabelWidth;
-        [SerializeField]
-        private ElementData _keyData;
-        [SerializeField]
-        private ElementData _valueData;
-        [SerializeField]
-        private bool _alwaysShowSearch = false;
+
+        [SerializeField] private float _keyLabelWidth;
+
+        [SerializeField] private ElementData _keyData;
+
+        [SerializeField] private ElementData _valueData;
+
+        [SerializeField] private bool _alwaysShowSearch = false;
+
+        public PropertyData() : this(new ElementSettings(), new ElementSettings()) { }
+
+        public PropertyData(ElementSettings keySettings, ElementSettings valueSettings)
+        {
+            _keyData = new ElementData(keySettings);
+            _valueData = new ElementData(valueSettings);
+        }
 
         public bool AlwaysShowSearch
         {
@@ -33,12 +39,5 @@ namespace AYellowpaper.SerializedCollections.Editor.Data
             return fieldType == SCEditorUtility.KeyFlag ? _keyData : _valueData;
         }
 
-        public PropertyData() : this(new ElementSettings(), new ElementSettings()) { }
-
-        public PropertyData(ElementSettings keySettings, ElementSettings valueSettings)
-        {
-            _keyData = new ElementData(keySettings);
-            _valueData = new ElementData(valueSettings);
-        }
     }
 }
