@@ -19,11 +19,11 @@ namespace EC.DemonEC
 
         public List<NonPersistentListenerDisplay> NonPersistentListeners = new();
 
-        private Controller _controller;
+        [HideInInspector] public Controller Controller;
 
-        private FxController _fxController;
+        [HideInInspector] public FxController FXController;
 
-        private Health _health;
+        [HideInInspector] public Health Health;
 
         private NavMeshAgent _navMeshAgent;
 
@@ -53,46 +53,45 @@ namespace EC.DemonEC
 
         public Component GetInitializedMainComponent()
         {
-            _controller = gameObject.GetComponent<Controller>();
+            Controller = gameObject.GetComponent<Controller>();
 
-            if (_controller)
+            if (Controller)
             {
-                _controller.Awake();
+                Controller.Awake();
             }
 
-            return _controller;
+            return Controller;
         }
 
         public List<Component> GetInitializedSubcomponents()
         {
             var subcomponents = new List<Component>();
 
-
-            if (!_controller
-                || !_controller.FxController
-                || !_controller.Health)
+            if (!Controller
+                || !Controller.FxController
+                || !Controller.Health)
             {
                 GetInitializedMainComponent();
             }
 
-            if (!_controller)
+            if (!Controller)
             {
                 return new List<Component>();
             }
 
-            _fxController = _controller.FxController;
-            _health = _controller.Health;
+            FXController = Controller.FxController;
+            Health = Controller.Health;
 
-            if (_fxController)
+            if (FXController)
             {
-                _fxController.Awake();
-                subcomponents.Add(_fxController);
+                FXController.Awake();
+                subcomponents.Add(FXController);
             }
 
-            if (_health)
+            if (Health)
             {
-                _health.Awake();
-                subcomponents.Add(_health);
+                Health.Awake();
+                subcomponents.Add(Health);
             }
 
             return subcomponents;
@@ -172,23 +171,32 @@ namespace EC.DemonEC
         public void ResetJumpscare()
         {
             gameObject.transform.position = Vector3.zero;
-            _controller.ModelRoot.transform.localPosition = Vector3.zero;
 
             if (_navMeshAgent)
             {
                 _navMeshAgent.enabled = true;
             }
 
-            _controller.JumpscareTriggered.AddListener(_controller.PositionForJumpscare);
+            Controller.JumpscareTriggered.AddListener(Controller.PositionForJumpscare);
 
             AddNonPersistentListener(
-                    _controller,
-                    nameof(_controller.JumpscareTriggered),
-                    nameof(_controller.PositionForJumpscare)
+                    Controller,
+                    nameof(Controller.JumpscareTriggered),
+                    nameof(Controller.PositionForJumpscare)
                 );
 
-            _controller.FxController.EndJumpscare();
+            Controller.FxController.EndJumpscare();
             _navMeshAgent.ResetPath();
+        }
+
+        public void TogglePathing()
+        {
+            _navMeshAgent.isStopped = !_navMeshAgent.isStopped;
+
+            if (_navMeshAgent.isStopped)
+            {
+                _navMeshAgent.velocity = Vector3.zero;
+            }
         }
 
         [Serializable]

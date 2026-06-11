@@ -19,10 +19,6 @@ namespace EC.DemonEC
 
         [SerializeField] private Helpers.Events.Channels.VoidEC _gameOver;
 
-        [SerializeField] private Vector3 _jumpscareModelRootPosition = new(0, -0.5f, -4.5f);
-
-        [Helpers.DisableInEditor] public GameObject ModelRoot;
-
         public UnityEvent<GameObject> BanishTriggered = new();
 
         public UnityEvent<GameObject> JumpscareTriggered = new();
@@ -44,11 +40,6 @@ namespace EC.DemonEC
         public void Awake()
         {
             FxController = Helpers.Debug.TryFindComponentInChildren<FxController>(gameObject);
-
-            if (FxController)
-            {
-                ModelRoot = FxController.gameObject;
-            }
 
             Health = Helpers.Debug.TryFindComponent<Health>(gameObject);
 
@@ -112,14 +103,10 @@ namespace EC.DemonEC
                     );
             }
 
-            Helpers.NavMesh.FullStop(_navMeshAgent, _rb);
-
-            // var newPosition = new Vector3(
-            //         _mainCameraTransform.position.x,
-            //         Helpers.Bounds.GetComplexCapsuleBounds(gameObject).size.y
-            //         - _mainCameraTransform.transform.position.y,
-            //         _mainCameraTransform.position.z
-            //     );
+            _navMeshAgent.isStopped = true;
+            _navMeshAgent.ResetPath();
+            _navMeshAgent.velocity = Vector3.zero;
+            _navMeshAgent.enabled = false;
 
             var newPosition = _mainCameraTransform.position + (_mainCameraTransform.forward * 4.5f);
 
@@ -130,8 +117,6 @@ namespace EC.DemonEC
 
             var newRotation = Quaternion.LookRotation(-_mainCameraTransform.forward, _mainCameraTransform.up);
             gameObject.transform.rotation = newRotation;
-            // gameObject.transform.rotation = _mainCameraTransform.rotation;
-            // ModelRoot.transform.localPosition = _jumpscareModelRootPosition;
         }
 
         private void OnJumpscareFxCompleted()

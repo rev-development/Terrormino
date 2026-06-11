@@ -9,7 +9,7 @@ namespace EC.DemonEC
 
         [Helpers.DisableInEditor] [SerializeField] private Controller _controller;
 
-        [SerializeField] private Helpers.ClampedFloat _hp = new(3f, 3f);
+        [field: SerializeField] public Helpers.ClampedFloat HP = new(3f, 3f);
 
         public void Awake()
         {
@@ -33,9 +33,9 @@ namespace EC.DemonEC
                 if (shake.IsActive)
                 {
                     _controller.Illuminated.Invoke(true);
-                    _hp.Value -= Time.deltaTime;
+                    HP.Value -= Time.deltaTime;
 
-                    if (_hp.Value <= 0)
+                    if (HP.Value <= 0)
                     {
                         _controller.BanishTriggered.Invoke(gameObject);
                     }

@@ -11,7 +11,6 @@ namespace Helpers
             navMeshAgent.isStopped = true;
             navMeshAgent.velocity = Vector3.zero;
             navMeshAgent.ResetPath();
-            navMeshAgent.enabled = false;
         }
 
         public static void FullStop(NavMeshAgent navMeshAgent, Rigidbody rb)

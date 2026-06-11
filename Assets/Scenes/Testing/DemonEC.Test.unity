@@ -598,7 +598,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 253537706936573021, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_Speed
-      value: 10
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 253537706936573021, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_Acceleration
@@ -606,7 +606,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 253537706936573021, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_AngularSpeed
-      value: 240
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 456664510719804038, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: JumpscareTarget
@@ -635,6 +635,14 @@ PrefabInstance:
     - target: {fileID: 3459793416131779911, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972412652372423964, guid: a3548566adb47e84782b40f416631141, type: 3}
+      propertyPath: HP.Max
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972412652372423964, guid: a3548566adb47e84782b40f416631141, type: 3}
+      propertyPath: HP._value
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7016050918856958138, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_Name
