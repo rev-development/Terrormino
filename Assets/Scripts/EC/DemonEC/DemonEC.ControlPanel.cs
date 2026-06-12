@@ -1,5 +1,4 @@
 using Flashlight;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,13 +16,21 @@ namespace EC.DemonEC
 
         public GameObject JumpscareTarget;
 
-        public List<NonPersistentListenerDisplay> NonPersistentListeners = new();
+        public GameObject NavTargetA;
 
-        [HideInInspector] public Controller Controller;
+        public GameObject NavTargetB;
+
+        [HideInInspector] public EventBus EventBus;
 
         [HideInInspector] public FxController FXController;
 
+        [HideInInspector] public Jumpscare Jumpscare;
+
         [HideInInspector] public Health Health;
+
+        [HideInInspector] public Pathing Pathing;
+
+        public Helpers.NonPersistentListenerTracker ListenerTracker = new();
 
         private NavMeshAgent _navMeshAgent;
 
@@ -32,69 +39,57 @@ namespace EC.DemonEC
             _navMeshAgent = Helpers.Debug.TryFindComponent<NavMeshAgent>(gameObject);
         }
 
-        public void AddNonPersistentListener(Component component, string unityEvent, string unityAction)
+        public void TogglePathing()
         {
-            NonPersistentListeners.Add(new NonPersistentListenerDisplay(component, unityEvent, unityAction));
+            Helpers.Nav.TogglePathing(_navMeshAgent);
         }
 
-        public void RemoveNonPersistentListener(Component component, string unityEvent, string unityAction)
+        public List<Component> GetInitializedComponents()
         {
-            var match = NonPersistentListeners.Find(nonPersistentListener =>
-                    nonPersistentListener.Component == component
-                    && nonPersistentListener.UnityEvent == unityEvent
-                    && nonPersistentListener.UnityAction == unityAction
-                );
+            var components = new List<Component>();
 
-            if (match != null)
+            EventBus = gameObject.GetComponent<EventBus>();
+            FXController = gameObject.GetComponentInChildren<FxController>();
+            Health = gameObject.GetComponent<Health>();
+            Jumpscare = gameObject.GetComponent<Jumpscare>();
+            Pathing = gameObject.GetComponent<Pathing>();
+
+            if (EventBus)
             {
-                NonPersistentListeners.Remove(match);
+                EventBus.Awake();
+                components.Add(EventBus);
             }
-        }
-
-        public Component GetInitializedMainComponent()
-        {
-            Controller = gameObject.GetComponent<Controller>();
-
-            if (Controller)
-            {
-                Controller.Awake();
-            }
-
-            return Controller;
-        }
-
-        public List<Component> GetInitializedSubcomponents()
-        {
-            var subcomponents = new List<Component>();
-
-            if (!Controller
-                || !Controller.FxController
-                || !Controller.Health)
-            {
-                GetInitializedMainComponent();
-            }
-
-            if (!Controller)
-            {
-                return new List<Component>();
-            }
-
-            FXController = Controller.FxController;
-            Health = Controller.Health;
 
             if (FXController)
             {
                 FXController.Awake();
-                subcomponents.Add(FXController);
+                components.Add(FXController);
             }
 
             if (Health)
             {
                 Health.Awake();
-                subcomponents.Add(Health);
+                components.Add(Health);
             }
 
-            return subcomponents;
+            if (Jumpscare)
+            {
+                Jumpscare.Awake();
+                components.Add(Jumpscare);
+            }
+
+            if (Pathing)
+            {
+                Pathing.Awake();
+                components.Add(Pathing);
+            }
+
+            if (!Application.isPlaying)
+            {
+                Debug.Log("Initialized");
+            }
+
+            return components;
         }
 
         public void SpawnAndTestFlashlight()
@@ -164,7 +159,7 @@ namespace EC.DemonEC
                 && Camera.main != null
                 && JumpscareTarget)
             {
-                _navMeshAgent.SetDestination(JumpscareTarget.transform.position);
+                Pathing.GoTo(JumpscareTarget.gameObject);
             }
         }
 
@@ -177,45 +172,30 @@ namespace EC.DemonEC
                 _navMeshAgent.enabled = true;
             }
 
-            Controller.JumpscareTriggered.AddListener(Controller.PositionForJumpscare);
+            EventBus.JumpscareTriggered.AddListener(Jumpscare.PositionForJumpscare);
 
-            AddNonPersistentListener(
-                    Controller,
-                    nameof(Controller.JumpscareTriggered),
-                    nameof(Controller.PositionForJumpscare)
-                );
+            ListenerTracker.Add(EventBus, nameof(EventBus.JumpscareTriggered), nameof(Jumpscare.PositionForJumpscare));
 
-            Controller.FxController.EndJumpscare();
+            FXController.EndJumpscare();
             _navMeshAgent.ResetPath();
         }
 
-        public void TogglePathing()
+        public void PathToNavTarget(bool chooseTargetA)
         {
-            _navMeshAgent.isStopped = !_navMeshAgent.isStopped;
+            if (!_navMeshAgent) return;
 
-            if (_navMeshAgent.isStopped)
+            var target = gameObject;
+
+            if (chooseTargetA)
             {
-                _navMeshAgent.velocity = Vector3.zero;
+                target = NavTargetA != null ? NavTargetA : target;
             }
-        }
-
-        [Serializable]
-        public class NonPersistentListenerDisplay
-        {
-
-            [SerializeField] public Component Component;
-
-            [SerializeField] public string UnityEvent;
-
-            [SerializeField] public string UnityAction;
-
-            public NonPersistentListenerDisplay(Component component, string unityEvent, string unityAction)
+            else
             {
-                Component = component;
-                UnityEvent = unityEvent;
-                UnityAction = unityAction;
+                target = NavTargetB != null ? NavTargetB : target;
             }
 
+            Pathing.GoTo(target);
         }
 
     }

@@ -20,7 +20,7 @@ namespace EC.DemonEC
 
         [Helpers.DisableInEditor] [SerializeField] private AudioSource _audioSource;
 
-        [Helpers.DisableInEditor] [SerializeField] private Controller _controller;
+        [Helpers.DisableInEditor] [SerializeField] private EventBus _eventBus;
 
         [Helpers.DisableInEditor] [SerializeField] private ControlPanel _controlPanel;
 
@@ -30,26 +30,21 @@ namespace EC.DemonEC
         {
             _animator = Helpers.Debug.TryFindComponent<Animator>(gameObject);
             _audioSource = Helpers.Debug.TryFindComponent<AudioSource>(gameObject);
-            _controller = Helpers.Debug.TryFindComponentInParent<Controller>(gameObject);
+            _eventBus = Helpers.Debug.TryFindComponentInParent<EventBus>(gameObject);
             _controlPanel = Helpers.Debug.TryFindComponentInParent<ControlPanel>(gameObject);
         }
 
         public void OnEnable()
         {
-            _controller.JumpscareTriggered.AddListener(OnJumpscare);
-            _controller.Illuminated.AddListener(OnIlluminated);
-            _controller.BanishTriggered.AddListener(OnBanish);
+            _eventBus.JumpscareTriggered.AddListener(OnJumpscare);
+            _eventBus.Illuminated.AddListener(OnIlluminated);
+            _eventBus.BanishTriggered.AddListener(OnBanish);
 
             if (_controlPanel)
             {
-                _controlPanel.AddNonPersistentListener(
-                        this,
-                        nameof(_controller.JumpscareTriggered),
-                        nameof(OnJumpscare)
-                    );
-
-                _controlPanel.AddNonPersistentListener(this, nameof(_controller.Illuminated), nameof(OnIlluminated));
-                _controlPanel.AddNonPersistentListener(this, nameof(_controller.BanishTriggered), nameof(OnBanish));
+                _controlPanel.ListenerTracker.Add(this, nameof(_eventBus.JumpscareTriggered), nameof(OnJumpscare));
+                _controlPanel.ListenerTracker.Add(this, nameof(_eventBus.Illuminated), nameof(OnIlluminated));
+                _controlPanel.ListenerTracker.Add(this, nameof(_eventBus.BanishTriggered), nameof(OnBanish));
             }
         }
 
@@ -73,7 +68,7 @@ namespace EC.DemonEC
         // ReSharper disable once UnusedMember.Local
         private void AfterBanishFx()
         {
-            _controller.BanishFxCompleted.Invoke();
+            _eventBus.BanishFxCompleted.Invoke();
         }
 
         /// <summary>
@@ -82,7 +77,7 @@ namespace EC.DemonEC
         // ReSharper disable once UnusedMember.Local
         private void AfterJumpscareFx()
         {
-            _controller.JumpscareFxCompleted.Invoke();
+            _eventBus.JumpscareFxCompleted.Invoke();
         }
 
         public void OnBanish(GameObject _)
@@ -92,7 +87,7 @@ namespace EC.DemonEC
 
         public void OnIlluminated(bool isIlluminated)
         {
-            _animator.SetBool(_illuminated, isIlluminated);
+            if (_animator.GetBool(_illuminated) != isIlluminated) _animator.SetBool(_illuminated, isIlluminated);
         }
 
         /// <summary>

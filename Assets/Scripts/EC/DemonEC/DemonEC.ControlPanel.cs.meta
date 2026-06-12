@@ -1,3 +1,21 @@
 fileFormatVersion: 2
 guid: f12e6d21500c466fbc43c00bdfec3de8
-timeCreated: 1781049674
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - FlashlightPrefab: {fileID: 7967520735591659824, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
+  - SpawnedFlashlight: {instanceID: 0}
+  - JumpscareTarget: {instanceID: 0}
+  - NavTargetA: {instanceID: 0}
+  - NavTargetB: {instanceID: 0}
+  - EventBus: {instanceID: 0}
+  - FXController: {instanceID: 0}
+  - Jumpscare: {instanceID: 0}
+  - Health: {instanceID: 0}
+  - FxController: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -36,7 +36,7 @@ namespace Editor.DemonECEditors
                     root,
                     new List<(string, EventCallback<ClickEvent>, bool)>
                     {
-                        ("Test Jumpscare", _ => controlPanel.TestJumpscare(),
+                        ("Path to Jumpscare Target", _ => controlPanel.TestJumpscare(),
                          Application.isPlaying && controlPanel.JumpscareTarget),
                         ("Reset Jumpscare", _ => controlPanel.ResetJumpscare(), Application.isPlaying)
                     }
@@ -47,7 +47,20 @@ namespace Editor.DemonECEditors
                     root,
                     new List<(string, EventCallback<ClickEvent>, bool)>
                     {
-                        ("Toggle Pathing", _ => controlPanel.TogglePathing(), Application.isPlaying)
+                        ("Toggle Pathing", _ => controlPanel.TogglePathing(), Application.isPlaying),
+                        ("Nav to Target A", _ => controlPanel.PathToNavTarget(true),
+                         Application.isPlaying && controlPanel.NavTargetA),
+                        ("Nav to Target B", _ => controlPanel.PathToNavTarget(false),
+                         Application.isPlaying && controlPanel.NavTargetB)
+                    }
+                );
+
+            Helpers.Editor.Style.GenerateTestingGroup(
+                    "Config Tools",
+                    root,
+                    new List<(string, EventCallback<ClickEvent>, bool)>
+                    {
+                        ("Initialize Components", _ => controlPanel.GetInitializedComponents(), !Application.isPlaying)
                     }
                 );
 
@@ -67,38 +80,17 @@ namespace Editor.DemonECEditors
 
             root.Add(componentLabel);
 
-            // 3b. Get main component and then subcomponents
-            var demonController = controlPanel.GetInitializedMainComponent();
-
-            var subcomponents = controlPanel.GetInitializedSubcomponents();
-
-            // 3c. Generate Foldout for main component (escape if missing)
-            if (!demonController)
-            {
-                return root;
-            }
-
-            GenerateSubcomponentFoldout(
-                    demonController,
-                    demonController,
-                    subcomponents,
-                    root
-                );
-
-            var subcomponentFoldouts = new List<Foldout>();
-
+            var components = controlPanel.GetInitializedComponents();
             // 3d. Generate Foldouts for subcomponents (GetInitializedSubcomponents() only returns non-null)
-            foreach (var comp in subcomponents)
-            {
-                subcomponentFoldouts.Add(
-                        GenerateSubcomponentFoldout(
-                                comp,
-                                demonController,
-                                subcomponents,
-                                root
-                            )
-                    );
-            }
+
+            var subcomponentFoldouts = components.Select(comp => GenerateSubcomponentFoldout(
+                                                          comp,
+                                                          controlPanel.gameObject,
+                                                          components,
+                                                          root
+                                                      )
+                                                  )
+                                                 .ToList();
 
             // 4. Attach additional component-based props
             GenerateHP(controlPanel, subcomponentFoldouts, flashlightTestingGroup);
@@ -188,7 +180,10 @@ namespace Editor.DemonECEditors
                 col.Add(hpMaxField);
                 // flashlightTestingGroup.Children().First(child => child.name == "row").Add(hpValueField);
                 // flashlightTestingGroup.Children().First(child => child.name == "row").Add(hpMaxField);
-                flashlightTestingGroup.Children().First(child => child.name == "row").Add(col);
+                var row = Helpers.Editor.Style.Row();
+                row.Add(col);
+                Helpers.Editor.Style.GenerateDivider(flashlightTestingGroup);
+                flashlightTestingGroup.Add(row);
 
                 // 3i. Bind to serialized object
                 hpValueField.Bind(health);
@@ -197,7 +192,7 @@ namespace Editor.DemonECEditors
 
         private Foldout GenerateSubcomponentFoldout(
             Component comp,
-            Component mainComponent,
+            GameObject mainGO,
             List<Component> subcomponents,
             VisualElement root
         )
@@ -206,18 +201,10 @@ namespace Editor.DemonECEditors
                           {
                               text = comp.GetType().Name,
                               name = comp.GetType().Name,
-                              viewDataKey = $"{mainComponent.gameObject.GetInstanceID()}_{comp.GetType().Name}_Foldout"
+                              viewDataKey = $"{mainGO.GetInstanceID()}_{comp.GetType().Name}_Foldout"
                           };
 
-            IterateProps(
-                    comp,
-                    foldout,
-                    new[]
-                        {
-                            mainComponent
-                        }.Concat(subcomponents)
-                         .ToArray()
-                );
+            IterateProps(comp, foldout, subcomponents.ToArray());
 
             root.Add(foldout);
 

@@ -9,30 +9,33 @@ namespace Helpers.Editor
     public static class Style
     {
 
-        public static StyleColor LightGrey = new(
-                new Color(
-                        70f / 255f,
-                        70f / 255f,
-                        70f / 255f,
-                        1f
-                    )
-            );
-        public static StyleColor NearBlack = new(
-                new Color(
-                        26f / 255f,
-                        26f / 255f,
-                        26f / 255f,
-                        1f
-                    )
-            );
-        public static StyleColor NearWhite = new(
-                new Color(
-                        210f / 255f,
-                        210f / 255f,
-                        210f / 255f,
-                        1f
-                    )
-            );
+        public static StyleColor LightGrey = RGBAtoStyleColor(70f);
+
+        public static StyleColor NearBlack = RGBAtoStyleColor(26f);
+
+        public static StyleColor NearWhite = RGBAtoStyleColor(210f);
+
+        public static StyleColor RGBAtoStyleColor(float r, float g, float b, float a = 255f)
+        {
+            return new StyleColor(
+                    new Color(
+                            r / 255f,
+                            g / 255f,
+                            b / 255f,
+                            a / 255f
+                        )
+                );
+        }
+
+        public static StyleColor RGBAtoStyleColor(float rgb, float a = 255f)
+        {
+            return RGBAtoStyleColor(
+                    rgb,
+                    rgb,
+                    rgb,
+                    a
+                );
+        }
 
         public static void SetAllBorderRadius(VisualElement ele, int value)
         {
@@ -72,7 +75,8 @@ namespace Helpers.Editor
             bool enabledCondition
         )
         {
-            var button = new Button { text = buttonText };
+            var button = new Button { text = buttonText, style = { backgroundColor = Solarized.Cyan } };
+            SetAllBorder(button, 1, Solarized.Base00);
             button.RegisterCallback(clickHandler);
             container.Add(button);
             button.SetEnabled(enabledCondition);
@@ -92,9 +96,9 @@ namespace Helpers.Editor
                                         style =
                                         {
                                             height = 1,
-                                            marginTop = 10,
-                                            marginBottom = 10,
-                                            backgroundColor = NearWhite
+                                            marginTop = 4,
+                                            marginBottom = 4,
+                                            backgroundColor = Solarized.Base00
                                         }
                                     };
 
@@ -105,10 +109,10 @@ namespace Helpers.Editor
 
         public static VisualElement GenerateGroup()
         {
-            var group = new VisualElement { style = { backgroundColor = LightGrey } };
+            var group = new VisualElement { style = { backgroundColor = Solarized.Base03 } };
             SetAllBorderRadius(group, 3);
             SetAllPadding(group, 4);
-            SetAllBorder(group, 1, NearBlack);
+            SetAllBorder(group, 1, Solarized.Base00);
 
             return group;
         }
@@ -123,7 +127,7 @@ namespace Helpers.Editor
 
             // 1a. Generate Group for Controls
             var group = GenerateGroup();
-
+            group.style.marginBottom = 4;
             var label = new Label { text = labelText, style = { unityFontStyleAndWeight = FontStyle.Bold } };
 
             group.Add(label);
@@ -148,6 +152,35 @@ namespace Helpers.Editor
             container.Add(group);
 
             return group;
+        }
+
+        public static class Solarized
+        {
+
+            public static StyleColor Base03 = RGBAtoStyleColor(0f, 43f, 54f);
+
+            public static StyleColor Base02 = RGBAtoStyleColor(7f, 54f, 66f);
+
+            public static StyleColor Base01 = RGBAtoStyleColor(88f, 110f, 117f);
+
+            public static StyleColor Base00 = RGBAtoStyleColor(101f, 123f, 131f);
+
+            public static StyleColor Yellow = RGBAtoStyleColor(181f, 137f, 0f);
+
+            public static StyleColor Orange = RGBAtoStyleColor(203f, 75f, 22f);
+
+            public static StyleColor Red = RGBAtoStyleColor(211f, 1f, 2f);
+
+            public static StyleColor Magenta = RGBAtoStyleColor(211f, 54f, 130f);
+
+            public static StyleColor Violet = RGBAtoStyleColor(108f, 113f, 196f);
+
+            public static StyleColor Blue = RGBAtoStyleColor(38f, 139f, 210f);
+
+            public static StyleColor Cyan = RGBAtoStyleColor(42f, 161f, 152f);
+
+            public static StyleColor Green = RGBAtoStyleColor(133f, 153f, 0f);
+
         }
 
     }

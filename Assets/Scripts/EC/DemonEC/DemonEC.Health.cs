@@ -4,23 +4,24 @@ using UnityEngine;
 namespace EC.DemonEC
 {
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(EventBus))]
     public class Health : MonoBehaviour
     {
 
-        [Helpers.DisableInEditor] [SerializeField] private Controller _controller;
+        [Helpers.DisableInEditor] [SerializeField] private EventBus _eventBus;
 
         [field: SerializeField] public Helpers.ClampedFloat HP = new(3f, 3f);
 
         public void Awake()
         {
-            _controller = Helpers.Debug.TryFindComponentInParent<Controller>(gameObject);
+            _eventBus = Helpers.Debug.TryFindComponentInParent<EventBus>(gameObject);
         }
 
         private void OnTriggerExit(Collider other)
         {
             if (other.CompareTag("Flashlight"))
             {
-                _controller.Illuminated.Invoke(false);
+                _eventBus.Illuminated.Invoke(false);
             }
         }
 
@@ -32,17 +33,17 @@ namespace EC.DemonEC
 
                 if (shake.IsActive)
                 {
-                    _controller.Illuminated.Invoke(true);
+                    _eventBus.Illuminated.Invoke(true);
                     HP.Value -= Time.deltaTime;
 
                     if (HP.Value <= 0)
                     {
-                        _controller.BanishTriggered.Invoke(gameObject);
+                        _eventBus.BanishTriggered.Invoke(gameObject);
                     }
                 }
                 else
                 {
-                    _controller.Illuminated.Invoke(false);
+                    _eventBus.Illuminated.Invoke(false);
                 }
             }
         }
