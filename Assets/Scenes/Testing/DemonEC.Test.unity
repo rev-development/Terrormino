@@ -715,54 +715,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 253537706936573021, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: m_Speed
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 253537706936573021, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: m_Acceleration
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 253537706936573021, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: m_AngularSpeed
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 456664510719804038, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: Health
-      value: 
-      objectReference: {fileID: 217754545}
-    - target: {fileID: 456664510719804038, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: EventBus
-      value: 
-      objectReference: {fileID: 1644009709}
-    - target: {fileID: 456664510719804038, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: Jumpscare
-      value: 
-      objectReference: {fileID: 1644009708}
-    - target: {fileID: 456664510719804038, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: Controller
-      value: 
-      objectReference: {fileID: 1644009709}
-    - target: {fileID: 456664510719804038, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: NavTargetA
-      value: 
-      objectReference: {fileID: 2021622691}
-    - target: {fileID: 456664510719804038, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: NavTargetB
-      value: 
-      objectReference: {fileID: 1167967015}
-    - target: {fileID: 456664510719804038, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: FXController
-      value: 
-      objectReference: {fileID: 1644009710}
     - target: {fileID: 456664510719804038, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: JumpscareTarget
       value: 
       objectReference: {fileID: 1450784507}
-    - target: {fileID: 1295109646027962146, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: _eventBus
+    - target: {fileID: 456664510719804038, guid: a3548566adb47e84782b40f416631141, type: 3}
+      propertyPath: NavBeacons.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 456664510719804038, guid: a3548566adb47e84782b40f416631141, type: 3}
+      propertyPath: NavBeacons.Array.data[0]
       value: 
-      objectReference: {fileID: 1644009709}
+      objectReference: {fileID: 1167967015}
+    - target: {fileID: 456664510719804038, guid: a3548566adb47e84782b40f416631141, type: 3}
+      propertyPath: NavBeacons.Array.data[1]
+      value: 
+      objectReference: {fileID: 2021622691}
     - target: {fileID: 2054372183984781843, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: _health
       value: 
@@ -787,46 +755,10 @@ PrefabInstance:
       propertyPath: m_ApplyRootMotion
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4972412652372423964, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: HP.Max
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4972412652372423964, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: HP._value
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4972412652372423964, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: _eventBus
-      value: 
-      objectReference: {fileID: 1644009709}
     - target: {fileID: 7016050918856958138, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_Name
       value: DemonEC
       objectReference: {fileID: 0}
-    - target: {fileID: 7845095468570277842, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: NavBeaconEC
-      value: 
-      objectReference: {fileID: 11400000, guid: 9ec024d2b89bae34d970bd64159f5487, type: 2}
-    - target: {fileID: 7845095468570277842, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: AgentSteeringConfig.Speed
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7845095468570277842, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: AgentSteeringConfig.AutoBraking
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7845095468570277842, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: AgentSteeringConfig.Acceleration
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7845095468570277842, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: AgentSteeringConfig.AngularSpeed
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 8327578364097951205, guid: a3548566adb47e84782b40f416631141, type: 3}
-      propertyPath: _controlPanel
-      value: 
-      objectReference: {fileID: 2090982755}
     - target: {fileID: 9066433164670549038, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -873,39 +805,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a3548566adb47e84782b40f416631141, type: 3}
---- !u!114 &1644009708 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1295109646027962146, guid: a3548566adb47e84782b40f416631141, type: 3}
-  m_PrefabInstance: {fileID: 1644009707}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8bd62048ec845e2a9daaf5f38a389ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1644009709 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8327578364097951205, guid: a3548566adb47e84782b40f416631141, type: 3}
-  m_PrefabInstance: {fileID: 1644009707}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53c5d64a6370429f9a2d1cfbb88c1600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1644009710 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3539786944465138672, guid: a3548566adb47e84782b40f416631141, type: 3}
-  m_PrefabInstance: {fileID: 1644009707}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 883033e823df4954b7150cbcbe732f7d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1866091041
 GameObject:
   m_ObjectHideFlags: 0
@@ -1423,17 +1322,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NavBeaconEC: {fileID: 11400000, guid: 9ec024d2b89bae34d970bd64159f5487, type: 2}
---- !u!114 &2090982755 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 456664510719804038, guid: a3548566adb47e84782b40f416631141, type: 3}
-  m_PrefabInstance: {fileID: 1644009707}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f12e6d21500c466fbc43c00bdfec3de8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

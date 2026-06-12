@@ -1,6 +1,6 @@
-using Flashlight;
 using System.Collections;
 using System.Collections.Generic;
+using Flashlight;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,10 +16,6 @@ namespace EC.DemonEC
 
         public GameObject JumpscareTarget;
 
-        public GameObject NavTargetA;
-
-        public GameObject NavTargetB;
-
         [HideInInspector] public EventBus EventBus;
 
         [HideInInspector] public FxController FXController;
@@ -30,22 +26,23 @@ namespace EC.DemonEC
 
         [HideInInspector] public Pathing Pathing;
 
+        public Helpers.Events.Channels.GameObjectEC NavBeaconEC;
+
+        public List<GameObject> NavBeacons = new();
+
         public Helpers.NonPersistentListenerTracker ListenerTracker = new();
 
         private NavMeshAgent _navMeshAgent;
 
-        private void Awake()
-        {
+        private void Awake() {
             _navMeshAgent = Helpers.Debug.TryFindComponent<NavMeshAgent>(gameObject);
         }
 
-        public void TogglePathing()
-        {
+        public void TogglePathing() {
             Helpers.Nav.TogglePathing(_navMeshAgent);
         }
 
-        public List<Component> GetInitializedComponents()
-        {
+        public List<Component> GetInitializedComponents() {
             var components = new List<Component>();
 
             EventBus = gameObject.GetComponent<EventBus>();
@@ -84,20 +81,13 @@ namespace EC.DemonEC
                 components.Add(Pathing);
             }
 
-            if (!Application.isPlaying)
-            {
-                Debug.Log("Initialized");
-            }
+            NavBeacons = NavBeaconEC.CollectedParams;
 
             return components;
         }
 
-        public void SpawnAndTestFlashlight()
-        {
-            if (!FlashlightPrefab)
-            {
-                return;
-            }
+        public void SpawnAndTestFlashlight() {
+            if (!FlashlightPrefab) return;
 
             DestroyFlashlight();
 
@@ -123,54 +113,35 @@ namespace EC.DemonEC
             }
         }
 
-        private IEnumerator ToggleFlashlightDelay()
-        {
+        private IEnumerator ToggleFlashlightDelay() {
             yield return new WaitForSeconds(1);
 
-            if (!SpawnedFlashlight)
-            {
-                yield break;
-            }
+            if (!SpawnedFlashlight) yield break;
 
             if (SpawnedFlashlight.TryGetComponent<Shake>(out var shake))
-            {
                 shake.FlashlightToggled.Invoke(true);
-            }
             else
-            {
                 DestroyFlashlight();
-            }
         }
 
-        public void DestroyFlashlight()
-        {
-            if (!SpawnedFlashlight)
-            {
-                return;
-            }
+        public void DestroyFlashlight() {
+            if (!SpawnedFlashlight) return;
 
             Destroy(SpawnedFlashlight);
             SpawnedFlashlight = null;
         }
 
-        public void TestJumpscare()
-        {
+        public void TestJumpscare() {
             if (_navMeshAgent
                 && Camera.main != null
                 && JumpscareTarget)
-            {
                 Pathing.GoTo(JumpscareTarget.gameObject);
-            }
         }
 
-        public void ResetJumpscare()
-        {
+        public void ResetJumpscare() {
             gameObject.transform.position = Vector3.zero;
 
-            if (_navMeshAgent)
-            {
-                _navMeshAgent.enabled = true;
-            }
+            if (_navMeshAgent) _navMeshAgent.enabled = true;
 
             EventBus.JumpscareTriggered.AddListener(Jumpscare.PositionForJumpscare);
 
@@ -178,24 +149,6 @@ namespace EC.DemonEC
 
             FXController.EndJumpscare();
             _navMeshAgent.ResetPath();
-        }
-
-        public void PathToNavTarget(bool chooseTargetA)
-        {
-            if (!_navMeshAgent) return;
-
-            var target = gameObject;
-
-            if (chooseTargetA)
-            {
-                target = NavTargetA != null ? NavTargetA : target;
-            }
-            else
-            {
-                target = NavTargetB != null ? NavTargetB : target;
-            }
-
-            Pathing.GoTo(target);
         }
 
     }

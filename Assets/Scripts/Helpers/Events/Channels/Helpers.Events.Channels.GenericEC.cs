@@ -10,19 +10,15 @@ namespace Helpers.Events.Channels
         [Tooltip("When enabled, each time an event is raised, the parameters are added to a list")]
         public bool CollectParams = false;
 
-        public List<T> CollectedParams = new();
+        [System.NonSerialized] public List<T> CollectedParams = new();
 
         [Tooltip("The action to perform; Listeners subscribe to this UnityAction")]
         public UnityAction<T> OnEventRaised;
 
-        public void RaiseEvent(T parameter)
-        {
+        public void RaiseEvent(T parameter) {
             OnEventRaised?.Invoke(parameter);
 
-            if (CollectParams)
-            {
-                CollectedParams.Add(parameter);
-            }
+            if (CollectParams) CollectedParams.Add(parameter);
         }
 
     }

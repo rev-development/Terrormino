@@ -60,9 +60,10 @@ MonoBehaviour:
   FXController: {fileID: 3539786944465138672}
   Jumpscare: {fileID: 1295109646027962146}
   Health: {fileID: 4972412652372423964}
-  Pathing: {fileID: 0}
+  Pathing: {fileID: 7845095468570277842}
   ListenerTracker:
     NonPersistentListeners: []
+  NavBeaconEC: {fileID: 11400000, guid: 9ec024d2b89bae34d970bd64159f5487, type: 2}
 --- !u!114 &8327578364097951205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,7 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41d1b4ca0ad94e52ab769d74cbba29b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _eventBus: {fileID: 0}
+  _eventBus: {fileID: 8327578364097951205}
   HP:
     Max: 3
     _value: 3
@@ -134,8 +135,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e565e7cac9148fc98d31d057c538280, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _eventBus: {fileID: 0}
-  _navMeshAgent: {fileID: 0}
+  _eventBus: {fileID: 8327578364097951205}
+  _navMeshAgent: {fileID: 253537706936573021}
   AgentSteeringConfig:
     Speed: 1.5
     AngularSpeed: 60
@@ -598,8 +599,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 8057765940946793823}
   _audioSource: {fileID: 8884589832936913552}
-  _eventBus: {fileID: 0}
-  _controlPanel: {fileID: 0}
+  _eventBus: {fileID: 8327578364097951205}
+  _controlPanel: {fileID: 456664510719804038}
   Scream: {fileID: 8300000, guid: e1182c995aff626489df9cb68e7a6209, type: 3}
 --- !u!82 &8884589832936913552
 AudioSource:

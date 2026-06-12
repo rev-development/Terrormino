@@ -1,6 +1,6 @@
-using EC.DemonEC;
 using System.Collections.Generic;
 using System.Linq;
+using EC.DemonEC;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -13,8 +13,7 @@ namespace Editor.DemonECEditors
     public class ControlPanelEditor : UnityEditor.Editor
     {
 
-        public override VisualElement CreateInspectorGUI()
-        {
+        public override VisualElement CreateInspectorGUI() {
             var root = new VisualElement();
 
             var controlPanel = (ControlPanel)target;
@@ -42,16 +41,12 @@ namespace Editor.DemonECEditors
                     }
                 );
 
-            Helpers.Editor.Style.GenerateTestingGroup(
+            var pathingTestingGroup = Helpers.Editor.Style.GenerateTestingGroup(
                     "Pathing Testing",
                     root,
                     new List<(string, EventCallback<ClickEvent>, bool)>
                     {
-                        ("Toggle Pathing", _ => controlPanel.TogglePathing(), Application.isPlaying),
-                        ("Nav to Target A", _ => controlPanel.PathToNavTarget(true),
-                         Application.isPlaying && controlPanel.NavTargetA),
-                        ("Nav to Target B", _ => controlPanel.PathToNavTarget(false),
-                         Application.isPlaying && controlPanel.NavTargetB)
+                        ("Toggle Pathing", _ => controlPanel.TogglePathing(), Application.isPlaying)
                     }
                 );
 
@@ -64,8 +59,10 @@ namespace Editor.DemonECEditors
                     }
                 );
 
+            var controlPanelSO = new SerializedObject(controlPanel);
+
             // 2. Generate default inspector
-            InspectorElement.FillDefaultInspector(root, new SerializedObject(controlPanel), this);
+            InspectorElement.FillDefaultInspector(root, controlPanelSO, this);
 
             // 3. Creating Property Display Drawers for other components
 
@@ -75,7 +72,11 @@ namespace Editor.DemonECEditors
 
             var componentLabel = new Label
                                  {
-                                     text = "Demon Components", style = { unityFontStyleAndWeight = FontStyle.Bold }
+                                     text = "Demon Components",
+                                     style =
+                                     {
+                                         unityFontStyleAndWeight = FontStyle.Bold
+                                     }
                                  };
 
             root.Add(componentLabel);
@@ -94,16 +95,101 @@ namespace Editor.DemonECEditors
 
             // 4. Attach additional component-based props
             GenerateHP(controlPanel, subcomponentFoldouts, flashlightTestingGroup);
+            GenerateNavBeacons(controlPanel, pathingTestingGroup);
 
             return root;
+        }
+
+        private void GenerateNavBeacons(ControlPanel controlPanel, VisualElement pathingTestingGroup) {
+            Helpers.Editor.Style.GenerateDivider(pathingTestingGroup);
+
+            var navBeaconLabel = new Label
+                                 {
+                                     text = "Nav Beacons",
+                                     style =
+                                     {
+                                         unityFontStyleAndWeight = FontStyle.Bold,
+                                         marginBottom = 2
+                                     }
+                                 };
+
+            pathingTestingGroup.Add(navBeaconLabel);
+
+            var navBeaconRow = Helpers.Editor.Style.Row();
+            navBeaconRow.style.flexGrow = 1;
+            pathingTestingGroup.Add(navBeaconRow);
+
+            var navBeaconList = new ListView
+                                {
+                                    itemsSource = controlPanel.NavBeacons,
+                                    makeItem = () =>
+                                    {
+                                        var row = Helpers.Editor.Style.Row();
+                                        row.name = "row";
+
+                                        var label = new Label
+                                                    {
+                                                        name = "label"
+                                                    };
+
+                                        row.Add(label);
+
+                                        var button = new Button
+                                                     {
+                                                         name = "btn"
+                                                     };
+
+                                        row.Add(button);
+
+                                        return row;
+                                    },
+                                    bindItem = (element, index) =>
+                                    {
+                                        element.schedule.Execute(() =>
+                                                {
+                                                    var qLabel = element.Q("label");
+
+                                                    if (qLabel is Label label)
+                                                    {
+                                                        label.text = controlPanel.NavBeacons[index].name;
+                                                        label.style.unityTextAlign = TextAnchor.MiddleLeft;
+                                                    }
+
+                                                    var qBtn = element.Q("btn");
+
+                                                    if (qBtn is Button btn)
+                                                    {
+                                                        btn.text = "Go To";
+                                                        btn.style.backgroundColor = Helpers.Editor.Style.Solarized.Cyan;
+
+                                                        btn.RegisterCallback<ClickEvent>(evt =>
+                                                                controlPanel.Pathing.GoTo(
+                                                                    controlPanel.NavBeacons[index]
+                                                                )
+                                                            );
+
+                                                        btn.SetEnabled(Application.isPlaying);
+                                                    }
+                                                }
+                                            );
+                                    },
+                                    showAddRemoveFooter = false, // Disable modifications
+                                    reorderable = false,
+                                    style =
+                                    {
+                                        backgroundColor = Helpers.Editor.Style.Solarized.Base03,
+                                        flexGrow = 1
+                                    }
+                                };
+
+            navBeaconRow.Add(navBeaconList);
         }
 
         private void GenerateHP(
             ControlPanel controlPanel,
             List<Foldout> subcomponentFoldouts,
             VisualElement flashlightTestingGroup
-        )
-        {
+        ) {
             if (controlPanel.Health)
             {
                 // 1. Set SerializedObject to start pulling props out of
@@ -131,7 +217,6 @@ namespace Editor.DemonECEditors
 
                 // 3b. Dig in by narrowing VisualElement to PropertyField, which it is 
                 if (hpOriginal is PropertyField propertyField)
-                {
                     // 3c. schedule.Execute 'spawns' a querying scope to find children
                     // They don't appear under .Children()
                     propertyField.schedule.Execute(() =>
@@ -172,10 +257,16 @@ namespace Editor.DemonECEditors
                                 }
                             }
                         );
-                }
 
                 // 3h. Add fields to testing group
-                var col = new VisualElement { style = { flexDirection = FlexDirection.Column } };
+                var col = new VisualElement
+                          {
+                              style =
+                              {
+                                  flexDirection = FlexDirection.Column
+                              }
+                          };
+
                 col.Add(hpValueField);
                 col.Add(hpMaxField);
                 // flashlightTestingGroup.Children().First(child => child.name == "row").Add(hpValueField);
@@ -195,8 +286,7 @@ namespace Editor.DemonECEditors
             GameObject mainGO,
             List<Component> subcomponents,
             VisualElement root
-        )
-        {
+        ) {
             var foldout = new Foldout
                           {
                               text = comp.GetType().Name,
@@ -215,14 +305,12 @@ namespace Editor.DemonECEditors
             Component comp,
             VisualElement ele,
             params Component[] ignoreReferencesToTheseComponents
-        )
-        {
+        ) {
             SerializedObject nestedSO = new(comp);
 
             var prop = nestedSO.GetIterator();
 
             if (prop.NextVisible(true))
-            {
                 do
                 {
                     // Skip if:
@@ -233,13 +321,15 @@ namespace Editor.DemonECEditors
                         || (prop.propertyType == SerializedPropertyType.ObjectReference
                             && (ignoreReferencesToTheseComponents.Contains(prop.objectReferenceValue)
                                 || prop.objectReferenceValue == target)))
-                    {
                         continue;
-                    }
 
-                    ele.Add(new PropertyField(prop) { name = prop.name });
+                    ele.Add(
+                            new PropertyField(prop)
+                            {
+                                name = prop.name
+                            }
+                        );
                 } while (prop.NextVisible(false));
-            }
 
             ele.Bind(nestedSO);
         }

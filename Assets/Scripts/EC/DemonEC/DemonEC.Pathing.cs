@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,8 +18,9 @@ namespace EC.DemonEC
 
         public Helpers.Events.Channels.GameObjectEC NavBeaconEC;
 
-        public void Awake()
-        {
+        public List<GameObject> NavBeacons = new();
+
+        public void Awake() {
             _navMeshAgent = Helpers.Debug.TryFindComponent<NavMeshAgent>(gameObject);
 
             AgentSteeringConfig.Apply(_navMeshAgent);
@@ -26,30 +28,29 @@ namespace EC.DemonEC
             _eventBus = Helpers.Debug.TryFindComponent<EventBus>(gameObject);
         }
 
-        public void OnEnable()
-        {
+        public void Start() {
+            NavBeacons = NavBeaconEC.CollectedParams;
+        }
+
+        public void OnEnable() {
             _eventBus.Illuminated.AddListener(OnIlluminated);
             _eventBus.BanishTriggered.AddListener(OnBanishTriggered);
         }
 
-        private void OnBanishTriggered(GameObject arg0)
-        {
+        private void OnBanishTriggered(GameObject arg0) {
             Helpers.Nav.TogglePathing(_navMeshAgent, false);
         }
 
-        private void OnIlluminated(bool isIlluminated)
-        {
+        private void OnIlluminated(bool isIlluminated) {
             Helpers.Nav.TogglePathing(_navMeshAgent, !isIlluminated);
         }
 
-        public void GoTo(GameObject targetGO)
-        {
+        public void GoTo(GameObject targetGO) {
             Helpers.Nav.TogglePathing(_navMeshAgent, true);
             _navMeshAgent.SetDestination(targetGO.transform.position);
         }
 
-        public void Stop()
-        {
+        public void Stop() {
             Helpers.Nav.TogglePathing(_navMeshAgent, false);
         }
 

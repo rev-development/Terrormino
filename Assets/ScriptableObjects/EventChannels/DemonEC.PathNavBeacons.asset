@@ -13,4 +13,3 @@ MonoBehaviour:
   m_Name: DemonEC.PathNavBeacons
   m_EditorClassIdentifier: 
   CollectParams: 1
-  CollectedParams: []

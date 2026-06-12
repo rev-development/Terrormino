@@ -15,8 +15,7 @@ namespace Helpers.Editor
 
         public static StyleColor NearWhite = RGBAtoStyleColor(210f);
 
-        public static StyleColor RGBAtoStyleColor(float r, float g, float b, float a = 255f)
-        {
+        public static StyleColor RGBAtoStyleColor(float r, float g, float b, float a = 255f) {
             return new StyleColor(
                     new Color(
                             r / 255f,
@@ -27,8 +26,7 @@ namespace Helpers.Editor
                 );
         }
 
-        public static StyleColor RGBAtoStyleColor(float rgb, float a = 255f)
-        {
+        public static StyleColor RGBAtoStyleColor(float rgb, float a = 255f) {
             return RGBAtoStyleColor(
                     rgb,
                     rgb,
@@ -37,24 +35,21 @@ namespace Helpers.Editor
                 );
         }
 
-        public static void SetAllBorderRadius(VisualElement ele, int value)
-        {
+        public static void SetAllBorderRadius(VisualElement ele, int value) {
             ele.style.borderTopLeftRadius = value;
             ele.style.borderTopRightRadius = value;
             ele.style.borderBottomLeftRadius = value;
             ele.style.borderBottomRightRadius = value;
         }
 
-        public static void SetAllPadding(VisualElement ele, int value)
-        {
+        public static void SetAllPadding(VisualElement ele, int value) {
             ele.style.paddingLeft = value;
             ele.style.paddingBottom = value;
             ele.style.paddingTop = value;
             ele.style.paddingRight = value;
         }
 
-        public static void SetAllBorder(VisualElement ele, int width, StyleColor styleColor)
-        {
+        public static void SetAllBorder(VisualElement ele, int width, StyleColor styleColor) {
             ele.style.borderLeftWidth = width;
             ele.style.borderLeftColor = styleColor;
 
@@ -73,9 +68,16 @@ namespace Helpers.Editor
             EventCallback<ClickEvent> clickHandler,
             VisualElement container,
             bool enabledCondition
-        )
-        {
-            var button = new Button { text = buttonText, style = { backgroundColor = Solarized.Cyan } };
+        ) {
+            var button = new Button
+                         {
+                             text = buttonText,
+                             style =
+                             {
+                                 backgroundColor = Solarized.Cyan
+                             }
+                         };
+
             SetAllBorder(button, 1, Solarized.Base00);
             button.RegisterCallback(clickHandler);
             container.Add(button);
@@ -84,13 +86,17 @@ namespace Helpers.Editor
             return button;
         }
 
-        public static VisualElement Row()
-        {
-            return new VisualElement { style = { flexDirection = FlexDirection.Row } };
+        public static VisualElement Row() {
+            return new VisualElement
+                   {
+                       style =
+                       {
+                           flexDirection = FlexDirection.Row
+                       }
+                   };
         }
 
-        public static VisualElement GenerateDivider(VisualElement container)
-        {
+        public static VisualElement GenerateDivider(VisualElement container) {
             VisualElement divider = new()
                                     {
                                         style =
@@ -107,9 +113,16 @@ namespace Helpers.Editor
             return divider;
         }
 
-        public static VisualElement GenerateGroup()
-        {
-            var group = new VisualElement { style = { backgroundColor = Solarized.Base03 } };
+        public static VisualElement GenerateGroup() {
+            var group = new VisualElement
+                        {
+                            style =
+                            {
+                                backgroundColor = Solarized.Base03,
+                                flexGrow = 1
+                            }
+                        };
+
             SetAllBorderRadius(group, 3);
             SetAllPadding(group, 4);
             SetAllBorder(group, 1, Solarized.Base00);
@@ -121,19 +134,34 @@ namespace Helpers.Editor
             string labelText,
             VisualElement container,
             List<(string, EventCallback<ClickEvent>, bool)> buttonParams
-        )
-        {
+        ) {
             // 1. Creating Custom Buttons
 
             // 1a. Generate Group for Controls
             var group = GenerateGroup();
             group.style.marginBottom = 4;
-            var label = new Label { text = labelText, style = { unityFontStyleAndWeight = FontStyle.Bold } };
+
+            var label = new Label
+                        {
+                            text = labelText,
+                            style =
+                            {
+                                unityFontStyleAndWeight = FontStyle.Bold
+                            }
+                        };
 
             group.Add(label);
 
             // 1b. Generate Row for Buttons
-            var row = new VisualElement { name = "row", style = { flexDirection = FlexDirection.Row } };
+            var row = new VisualElement
+                      {
+                          name = "row",
+                          style =
+                          {
+                              flexDirection = FlexDirection.Row,
+                              flexGrow = 1
+                          }
+                      };
 
             // 1c. Generate specific Buttons with their callbacks and enabled conditions
             foreach (var buttonParam in buttonParams)
