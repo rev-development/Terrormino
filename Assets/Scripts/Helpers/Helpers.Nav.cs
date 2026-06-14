@@ -8,24 +8,26 @@ namespace Helpers
     public static class Nav
     {
 
-        public static void TogglePathing(NavMeshAgent navMeshAgent)
-        {
+        /// <summary>
+        ///     Sets isStopped to either opposite val then sets velocity to 0 if isStopped.
+        /// </summary>
+        /// <param name="navMeshAgent"></param>
+        public static void TogglePathing(NavMeshAgent navMeshAgent) {
             navMeshAgent.isStopped = !navMeshAgent.isStopped;
 
-            if (navMeshAgent.isStopped)
-            {
-                navMeshAgent.velocity = Vector3.zero;
-            }
+            if (navMeshAgent.isStopped) navMeshAgent.velocity = Vector3.zero;
         }
 
-        public static void TogglePathing(NavMeshAgent navMeshAgent, bool enable)
-        {
-            navMeshAgent.isStopped = !enable;
+        /// <summary>
+        ///     Sets is isStopped to the OPPOSITE value passed through.
+        ///     True is Green Light, False is Red Light
+        /// </summary>
+        /// <param name="navMeshAgent"></param>
+        /// <param name="pathingEnabled"></param>
+        public static void TogglePathing(NavMeshAgent navMeshAgent, bool pathingEnabled) {
+            navMeshAgent.isStopped = !pathingEnabled;
 
-            if (navMeshAgent.isStopped)
-            {
-                navMeshAgent.velocity = Vector3.zero;
-            }
+            if (navMeshAgent.isStopped) navMeshAgent.velocity = Vector3.zero;
         }
 
         [Serializable]
@@ -33,6 +35,8 @@ namespace Helpers
         [SuppressMessage("ReSharper", "ConvertToConstant.Global")]
         public class AgentSteeringConfig
         {
+
+            // All values are default values for NavMeshAgent
 
             [SerializeField] public float Speed = 3.5f;
 
@@ -44,8 +48,7 @@ namespace Helpers
 
             [SerializeField] public bool AutoBraking = true;
 
-            public void Apply(NavMeshAgent navMeshAgent)
-            {
+            public void Apply(NavMeshAgent navMeshAgent) {
                 navMeshAgent.acceleration = Acceleration;
                 navMeshAgent.angularSpeed = AngularSpeed;
                 navMeshAgent.autoBraking = AutoBraking;

@@ -20,6 +20,10 @@ namespace EC.DemonEC
 
         public List<GameObject> NavBeacons = new();
 
+        public GameObject Player;
+
+        public GameObject Bed { get; set; }
+
         public void Awake() {
             _navMeshAgent = Helpers.Debug.TryFindComponent<NavMeshAgent>(gameObject);
 
@@ -30,19 +34,26 @@ namespace EC.DemonEC
 
         public void Start() {
             NavBeacons = NavBeaconEC.CollectedParams;
+            Player = GameObject.FindGameObjectWithTag("Player");
+            Bed = GameObject.FindGameObjectWithTag("Bed");
         }
 
         public void OnEnable() {
-            _eventBus.Illuminated.AddListener(OnIlluminated);
-            _eventBus.BanishTriggered.AddListener(OnBanishTriggered);
+            _eventBus.Illuminated.AddListener(isIlluminated => TogglePathing(!isIlluminated));
+            _eventBus.BanishTriggered.AddListener(_ => TogglePathing(false));
+            NavBeaconEC.OnEventRaised += OnNewNavBeacon;
         }
 
-        private void OnBanishTriggered(GameObject arg0) {
-            Helpers.Nav.TogglePathing(_navMeshAgent, false);
+        public void OnDisable() {
+            NavBeaconEC.OnEventRaised -= OnNewNavBeacon;
         }
 
-        private void OnIlluminated(bool isIlluminated) {
-            Helpers.Nav.TogglePathing(_navMeshAgent, !isIlluminated);
+        private void OnNewNavBeacon(GameObject navBeacon) {
+            NavBeacons.Add(navBeacon);
+        }
+
+        private void TogglePathing(bool pathingEnabled) {
+            Helpers.Nav.TogglePathing(_navMeshAgent, pathingEnabled);
         }
 
         public void GoTo(GameObject targetGO) {

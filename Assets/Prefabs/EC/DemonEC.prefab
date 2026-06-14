@@ -54,16 +54,15 @@ MonoBehaviour:
   FlashlightPrefab: {fileID: 7967520735591659824, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
   SpawnedFlashlight: {fileID: 0}
   JumpscareTarget: {fileID: 0}
-  NavTargetA: {fileID: 0}
-  NavTargetB: {fileID: 0}
   EventBus: {fileID: 8327578364097951205}
   FXController: {fileID: 3539786944465138672}
   Jumpscare: {fileID: 1295109646027962146}
   Health: {fileID: 4972412652372423964}
   Pathing: {fileID: 7845095468570277842}
+  NavBeaconEC: {fileID: 11400000, guid: 9ec024d2b89bae34d970bd64159f5487, type: 2}
+  NavBeacons: []
   ListenerTracker:
     NonPersistentListeners: []
-  NavBeaconEC: {fileID: 11400000, guid: 9ec024d2b89bae34d970bd64159f5487, type: 2}
 --- !u!114 &8327578364097951205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,6 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _eventBus: {fileID: 8327578364097951205}
+  JumpscarePlacementDistance: 4.5
 --- !u!114 &7845095468570277842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,6 +144,8 @@ MonoBehaviour:
     StoppingDistance: 0
     AutoBraking: 0
   NavBeaconEC: {fileID: 11400000, guid: 9ec024d2b89bae34d970bd64159f5487, type: 2}
+  NavBeacons: []
+  Player: {fileID: 0}
 --- !u!195 &253537706936573021
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -153,18 +155,18 @@ NavMeshAgent:
   m_GameObject: {fileID: 7016050918856958138}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.75
-  m_Speed: 1.5
-  m_Acceleration: 1.5
+  m_Radius: 2
+  m_Speed: 10
+  m_Acceleration: 10
   avoidancePriority: 50
   m_AngularSpeed: 60
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
   m_AutoRepath: 1
-  m_Height: 5.5
+  m_Height: 5.75
   m_BaseOffset: 0
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 1
   m_ObstacleAvoidanceType: 4
 --- !u!54 &1221006442558860849
 Rigidbody:
@@ -599,8 +601,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 8057765940946793823}
   _audioSource: {fileID: 8884589832936913552}
-  _eventBus: {fileID: 8327578364097951205}
-  _controlPanel: {fileID: 456664510719804038}
+  _eventBus: {fileID: 0}
+  _controlPanel: {fileID: 0}
   Scream: {fileID: 8300000, guid: e1182c995aff626489df9cb68e7a6209, type: 3}
 --- !u!82 &8884589832936913552
 AudioSource:

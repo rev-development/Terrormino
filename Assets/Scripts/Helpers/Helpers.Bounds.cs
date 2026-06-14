@@ -7,8 +7,7 @@ namespace Helpers
     public static class Bounds
     {
 
-        public static Vector3 GetRandomPositionInCollider(Collider collider)
-        {
+        public static Vector3 GetRandomPositionInCollider(Collider collider) {
             return new Vector3(
                     Random.Range(collider.bounds.min.x, collider.bounds.max.x),
                     Random.Range(collider.bounds.min.y, collider.bounds.max.y),
@@ -16,8 +15,7 @@ namespace Helpers
                 );
         }
 
-        public static Vector3 GetRandomPositionOnNavMesh(NavMeshSurface navMesh)
-        {
+        public static Vector3 GetRandomPositionOnNavMesh(NavMeshSurface navMesh) {
             var randomBounds = new UnityEngine.Bounds();
 
             randomBounds.SetMinMax(navMesh.navMeshData.sourceBounds.min, navMesh.navMeshData.sourceBounds.max);
@@ -42,8 +40,7 @@ namespace Helpers
             NavMeshSurface navMesh,
             Collider excludeCollider,
             int excludeColliderMultiplier
-        )
-        {
+        ) {
             var randomBounds = new UnityEngine.Bounds();
 
             randomBounds.SetMinMax(
@@ -57,7 +54,6 @@ namespace Helpers
                     Random.Range(randomBounds.min.z, randomBounds.max.z)
                 );
 
-
             UnityEngine.AI.NavMesh.SamplePosition(
                     randomPosition,
                     out var navMeshHit,
@@ -68,19 +64,14 @@ namespace Helpers
             return navMeshHit.position;
         }
 
-        public static UnityEngine.Bounds GetComplexCapsuleBounds(GameObject gameObject)
-        {
-            var colliders = gameObject.GetComponentsInChildren<CapsuleCollider>();
+        public static UnityEngine.Bounds GetComplexBounds(GameObject gameObject) {
+            var colliders = gameObject.GetComponentsInChildren<Collider>();
 
             if (colliders.Length > 0)
             {
                 var bounds = colliders[0].bounds;
 
-                foreach (var capsuleCollider in colliders.Skip(1))
-                {
-                    bounds.Encapsulate(capsuleCollider.bounds);
-                }
-
+                foreach (var collider in colliders.Skip(1)) bounds.Encapsulate(collider.bounds);
 
                 return bounds;
             }

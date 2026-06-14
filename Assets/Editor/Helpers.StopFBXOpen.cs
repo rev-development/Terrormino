@@ -2,7 +2,8 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
-public class StopFBXOpen
+// ReSharper disable once CheckNamespace
+public static class StopFBXOpen
 {
 
     // The OnOpenAsset attribute intercepts double-clicks on any asset in the project

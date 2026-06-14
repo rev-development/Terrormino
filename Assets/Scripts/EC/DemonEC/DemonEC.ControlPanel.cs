@@ -45,6 +45,8 @@ namespace EC.DemonEC
         public List<Component> GetInitializedComponents() {
             var components = new List<Component>();
 
+            if (string.IsNullOrEmpty(gameObject.scene.name)) return components;
+
             EventBus = gameObject.GetComponent<EventBus>();
             FXController = gameObject.GetComponentInChildren<FxController>();
             Health = gameObject.GetComponent<Health>();

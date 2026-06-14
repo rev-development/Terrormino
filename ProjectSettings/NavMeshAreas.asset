@@ -13,7 +13,7 @@ NavMeshProjectSettings:
     cost: 2
   - name: Slow
     cost: 1
-  - name: 
+  - name: Bed
     cost: 1
   - name: 
     cost: 1
@@ -69,14 +69,14 @@ NavMeshProjectSettings:
     cost: 1
   - name: 
     cost: 1
-  m_LastAgentTypeID: -1372625422
+  m_LastAgentTypeID: -334000983
   m_Settings:
   - serializedVersion: 3
     agentTypeID: 0
     agentRadius: 1
-    agentHeight: 3
+    agentHeight: 2
     agentSlope: 45
-    agentClimb: 2
+    agentClimb: 1
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2
@@ -90,4 +90,4 @@ NavMeshProjectSettings:
     debug:
       m_Flags: 0
   m_SettingNames:
-  - Humanoid
+  - Demon

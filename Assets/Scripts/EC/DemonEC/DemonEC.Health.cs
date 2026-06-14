@@ -12,21 +12,15 @@ namespace EC.DemonEC
 
         [field: SerializeField] public Helpers.ClampedFloat HP = new(3f, 3f);
 
-        public void Awake()
-        {
-            _eventBus = Helpers.Debug.TryFindComponentInParent<EventBus>(gameObject);
+        public void Awake() {
+            _eventBus = Helpers.Debug.TryFindComponent<EventBus>(gameObject);
         }
 
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.CompareTag("Flashlight"))
-            {
-                _eventBus.Illuminated.Invoke(false);
-            }
+        private void OnTriggerExit(Collider other) {
+            if (other.CompareTag("Flashlight")) _eventBus.Illuminated.Invoke(false);
         }
 
-        private void OnTriggerStay(Collider other)
-        {
+        private void OnTriggerStay(Collider other) {
             if (other.CompareTag("Flashlight"))
             {
                 var shake = other.GetComponentInParent<Shake>();
@@ -36,10 +30,7 @@ namespace EC.DemonEC
                     _eventBus.Illuminated.Invoke(true);
                     HP.Value -= Time.deltaTime;
 
-                    if (HP.Value <= 0)
-                    {
-                        _eventBus.BanishTriggered.Invoke(gameObject);
-                    }
+                    if (HP.Value <= 0) _eventBus.BanishTriggered.Invoke(gameObject);
                 }
                 else
                 {
