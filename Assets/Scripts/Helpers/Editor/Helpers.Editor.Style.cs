@@ -182,6 +182,24 @@ namespace Helpers.Editor
             return group;
         }
 
+        // public static void BindNestedField<TField, TValue>(
+        //     PropertyField sourcePropertyField,
+        //     string unityInputQueryName,
+        //     TField mirrorField
+        // )
+        //     where TField : BaseField<TValue> {
+        //     sourcePropertyField.schedule.Execute(() =>
+        //             {
+        //                 var source = sourcePropertyField.Q(unityInputQueryName);
+        //
+        //                 if (source is not TField sourceField) return;
+        //
+        //                 sourceField.RegisterCallback<ChangeEvent<TValue>>(evt => mirrorField.value = evt.newValue);
+        //                 mirrorField.RegisterCallback<ChangeEvent<TValue>>(evt => sourceField.value = evt.newValue);
+        //             }
+        //         );
+        // }
+
         public static class Solarized
         {
 

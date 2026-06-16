@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -18,9 +19,9 @@ namespace EC.DemonEC
 
         public Helpers.Events.Channels.GameObjectEC NavBeaconEC;
 
-        public List<GameObject> NavBeacons = new();
-
         public GameObject Player;
+
+        [NonSerialized] public List<GameObject> NavBeacons = new();
 
         public GameObject Bed { get; set; }
 

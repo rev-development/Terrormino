@@ -14,7 +14,7 @@ NavMeshProjectSettings:
   - name: Slow
     cost: 1
   - name: Bed
-    cost: 1
+    cost: 50
   - name: 
     cost: 1
   - name: 

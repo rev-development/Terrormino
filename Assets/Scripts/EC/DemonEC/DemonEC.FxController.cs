@@ -26,16 +26,14 @@ namespace EC.DemonEC
 
         public AudioClip Scream;
 
-        public void Awake()
-        {
+        public void Awake() {
             _animator = Helpers.Debug.TryFindComponent<Animator>(gameObject);
             _audioSource = Helpers.Debug.TryFindComponent<AudioSource>(gameObject);
             _eventBus = Helpers.Debug.TryFindComponentInParent<EventBus>(gameObject);
             _controlPanel = Helpers.Debug.TryFindComponentInParent<ControlPanel>(gameObject);
         }
 
-        public void OnEnable()
-        {
+        public void OnEnable() {
             _eventBus.JumpscareTriggered.AddListener(OnJumpscare);
             _eventBus.Illuminated.AddListener(OnIlluminated);
             _eventBus.BanishTriggered.AddListener(OnBanish);
@@ -48,53 +46,22 @@ namespace EC.DemonEC
             }
         }
 
-        /// <summary>
-        ///     This is called from an animation event at the beginning of the "Jumpscare" Animation.
-        /// </summary>
-        // ReSharper disable once UnusedMember.Local
-        private void PlayJumpscareAudio()
-        {
-            _audioSource.PlayOneShot(Scream);
-        }
-
-        public void OnJumpscare(GameObject _)
-        {
+        public void OnJumpscare(GameObject _) {
             _animator.SetTrigger(_jumpscare);
         }
 
-        /// <summary>
-        ///     This is called from an animation event at the end of the "Banish" Animation.
-        /// </summary>
-        // ReSharper disable once UnusedMember.Local
-        private void AfterBanishFx()
-        {
-            _eventBus.BanishFxCompleted.Invoke();
-        }
-
-        /// <summary>
-        ///     This is called from an animation event at the end of the "Jumpscare" Animation.
-        /// </summary>
-        // ReSharper disable once UnusedMember.Local
-        private void AfterJumpscareFx()
-        {
-            _eventBus.JumpscareFxCompleted.Invoke();
-        }
-
-        public void OnBanish(GameObject _)
-        {
+        public void OnBanish(GameObject _) {
             _animator.SetTrigger(_banish);
         }
 
-        public void OnIlluminated(bool isIlluminated)
-        {
+        public void OnIlluminated(bool isIlluminated) {
             if (_animator.GetBool(_illuminated) != isIlluminated) _animator.SetBool(_illuminated, isIlluminated);
         }
 
         /// <summary>
         ///     Only called during testing
         /// </summary>
-        public void EndJumpscare()
-        {
+        public void EndJumpscare() {
             _animator.SetTrigger(_endJumpscare);
         }
 

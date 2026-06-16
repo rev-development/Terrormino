@@ -1,0 +1,85 @@
+
+            .sol-bg {
+                background-color: #002B36;
+            }
+
+            .sol-bg-highlight {
+                background-color: #073642;
+            }
+
+            .sol-text-body {
+                color: #839496;
+                -unity-font-style: normal;
+            }
+
+            .sol-text-emphasis {
+                color: #93A1A1;
+                -unity-font-style: bold;
+            }
+
+            .sol-text-secondary {
+                color: #586E75;
+                font-size: 11px;
+            }
+
+            .sol-accent-blue    { color: #268BD2; }
+            .sol-accent-cyan    { color: #2AA198; }
+            .sol-accent-yellow  { color: #B58900; }
+            .sol-accent-green   { color: #859900; }
+            .sol-accent-red     { color: #DC322F; }
+
+            .sol-card {
+                background-color: #073642;
+                border-radius: 4px;
+                border-top-width: 1px;
+                border-bottom-width: 1px;
+                border-left-width: 1px;
+                border-right-width: 1px;
+                border-top-color: #586E75;
+                border-bottom-color: #586E75;
+                border-left-color: #586E75;
+                border-right-color: #586E75;
+                padding: 8px;
+                margin-bottom: 4px;
+            }
+
+            .sol-divider {
+                height: 1px;
+                background-color: #586E75;
+                margin-top: 4px;
+                margin-bottom: 4px;
+            }
+
+            .sol-button {
+                background-color: #073642;
+                color: #839496;
+                border-radius: 3px;
+                border-top-color: #586E75;
+                border-bottom-color: #586E75;
+                border-left-color: #586E75;
+                border-right-color: #586E75;
+                border-top-width: 1px;
+                border-bottom-width: 1px;
+                border-left-width: 1px;
+                border-right-width: 1px;
+            }
+
+            .sol-button:hover {
+                background-color: #586E75;
+                color: #93A1A1;
+            }
+
+            .sol-button-primary {
+                background-color: #268BD2;
+                color: #002B36;
+                border-top-width: 0;
+                border-bottom-width: 0;
+                border-left-width: 0;
+                border-right-width: 0;
+                border-radius: 3px;
+            }
+
+            .sol-button-primary:hover {
+                background-color: #2AA198;
+            }
+        

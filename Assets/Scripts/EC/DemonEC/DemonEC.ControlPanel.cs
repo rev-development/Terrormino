@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Flashlight;
@@ -28,11 +29,11 @@ namespace EC.DemonEC
 
         public Helpers.Events.Channels.GameObjectEC NavBeaconEC;
 
-        public List<GameObject> NavBeacons = new();
-
         public Helpers.NonPersistentListenerTracker ListenerTracker = new();
 
         private NavMeshAgent _navMeshAgent;
+
+        [NonSerialized] public List<GameObject> NavBeacons = new();
 
         private void Awake() {
             _navMeshAgent = Helpers.Debug.TryFindComponent<NavMeshAgent>(gameObject);
@@ -83,7 +84,7 @@ namespace EC.DemonEC
                 components.Add(Pathing);
             }
 
-            NavBeacons = NavBeaconEC.CollectedParams;
+            if (Application.isPlaying) NavBeacons = NavBeaconEC.CollectedParams;
 
             return components;
         }

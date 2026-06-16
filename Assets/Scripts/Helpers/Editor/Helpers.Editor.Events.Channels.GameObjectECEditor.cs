@@ -46,6 +46,14 @@ namespace Editor
                                }
                            };
 
+            listView.schedule.Execute(() =>
+                             {
+                                 listView.itemsSource = gameObjectEC.CollectedParams;
+                                 listView.RefreshItems();
+                             }
+                         )
+                    .Every(100);
+
             root.Add(listView);
 
             return root;

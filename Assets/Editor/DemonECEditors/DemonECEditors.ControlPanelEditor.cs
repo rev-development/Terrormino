@@ -196,71 +196,22 @@ namespace Editor.DemonECEditors
 
             if (hpSubcomponent == null) return;
 
-            // 1. Set SerializedObject to start pulling props out of
             var health = new SerializedObject(controlPanel.Health);
 
-            // 2. Make new fields and set values equal to the property values
             var hpValueField = new FloatField
                                {
-                                   label = "HP Value",
-                                   value = health.FindProperty("HP").FindPropertyRelative("_value").floatValue
+                                   label = "HP Value"
                                };
+
+            hpValueField.BindProperty(health.FindProperty("HP").FindPropertyRelative("_value"));
 
             var hpMaxField = new FloatField
                              {
-                                 label = "HP Max",
-                                 value = health.FindProperty("HP").FindPropertyRelative("Max").floatValue
+                                 label = "HP Max"
                              };
 
-            // 3a. Find the actual component field generated
-            // Because this is for a nested property, we have to grab parent that is actually in the class
+            hpMaxField.BindProperty(health.FindProperty("HP").FindPropertyRelative("Max"));
 
-            var hpOriginal = hpSubcomponent.Children().ToList().Find(child => child.name == "HP");
-
-            // 3b. Dig in by narrowing VisualElement to PropertyField, which it is 
-            if (hpOriginal is PropertyField propertyField)
-                // 3c. schedule.Execute 'spawns' a querying scope to find children
-                // They don't appear under .Children()
-                propertyField.schedule.Execute(() =>
-                        {
-                            // 3d. Query by name
-                            // Found name by logging target of parent's ChangeEvent
-                            var hpValueFieldOriginal = propertyField.Q("unity-input-HP._value");
-
-                            // 3e. Dig in by narrowing PropertyField to FloatField
-                            if (hpValueFieldOriginal is FloatField valueFloatField)
-                            {
-                                // 3f. Register callback for value change from original to new
-                                valueFloatField.RegisterCallback<ChangeEvent<float>>(evt =>
-                                    hpValueField.value = evt.newValue
-                                );
-
-                                // 3g. Register callback for value change from new to original
-                                hpValueField.RegisterCallback<ChangeEvent<float>>(evt =>
-                                    valueFloatField.value = evt.newValue
-                                );
-                            }
-
-                            // 3d.
-                            var hpMaxFieldOriginal = propertyField.Q("unity-input-HP.Max");
-
-                            // 3e.
-                            if (hpMaxFieldOriginal is FloatField maxFloatField)
-                            {
-                                // 3f.
-                                hpMaxFieldOriginal.RegisterCallback<ChangeEvent<float>>(evt =>
-                                    hpMaxField.value = evt.newValue
-                                );
-
-                                // 3g.
-                                hpMaxField.RegisterCallback<ChangeEvent<float>>(evt =>
-                                    maxFloatField.value = evt.newValue
-                                );
-                            }
-                        }
-                    );
-
-            // 3h. Add fields to testing group
             var col = new VisualElement
                       {
                           style =
@@ -271,14 +222,10 @@ namespace Editor.DemonECEditors
 
             col.Add(hpValueField);
             col.Add(hpMaxField);
-            // flashlightTestingGroup.Children().First(child => child.name == "row").Add(hpValueField);
-            // flashlightTestingGroup.Children().First(child => child.name == "row").Add(hpMaxField);
             var row = Helpers.Editor.Style.Row();
             row.Add(col);
             Helpers.Editor.Style.GenerateDivider(flashlightTestingGroup);
             flashlightTestingGroup.Add(row);
-
-            // 3i. Bind to serialized object
             hpValueField.Bind(health);
         }
 
