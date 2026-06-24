@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Helpers.Editor.Theming.SolarizedDark
 {
+    [AiGenerated("Claude", "Sonnet 4.6")]
     public static class StyleHelper
     {
 

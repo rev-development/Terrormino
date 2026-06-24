@@ -1,0 +1,7 @@
+{
+  "name": "com.reverendcode.helpers",
+  "version": "1.0.0",
+  "displayName": "Helpers",
+  "description": "Reusable utility classes for Unity",
+  "unity": "2022.3.55f1"
+}

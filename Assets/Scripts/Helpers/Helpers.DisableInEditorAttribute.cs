@@ -3,9 +3,8 @@ using UnityEngine;
 
 namespace Helpers
 {
-    [AttributeUsage(AttributeTargets.Field)]
-    public class DisableInEditorAttribute : PropertyAttribute
-    {
-
-    }
+	[AttributeUsage(AttributeTargets.Field)]
+	public class DisableInEditorAttribute : PropertyAttribute
+	{
+	}
 }

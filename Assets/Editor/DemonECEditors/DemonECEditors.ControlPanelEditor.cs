@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using EC.DemonEC;
+using EC.Demon;
+using EC.Demon.Pathing;
+using Helpers;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -8,279 +10,308 @@ using UnityEngine.UIElements;
 
 namespace Editor.DemonECEditors
 {
-    [CanEditMultipleObjects]
-    [CustomEditor(typeof(ControlPanel))]
-    public class ControlPanelEditor : UnityEditor.Editor
-    {
+	[CanEditMultipleObjects]
+	[CustomEditor(typeof(ControlPanel))]
+	public class ControlPanelEditor : UnityEditor.Editor
+	{
+		public override VisualElement CreateInspectorGUI()
+		{
+			var root = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolRoot();
 
-        public override VisualElement CreateInspectorGUI() {
-            var root = new VisualElement();
+			var controlPanel = (ControlPanel)target;
 
-            var controlPanel = (ControlPanel)target;
+			var flashlightTestingGroup = Helpers.Editor.Style.GenerateTestingGroup(
+				"Flashlight Testing",
+				root,
+				new List<(string, EventCallback<ClickEvent>, bool)>
+				{
+					("Spawn and Test Flashlight", _ => controlPanel.SpawnAndTestFlashlight(),
+					 Application.isPlaying && controlPanel.FlashlightPrefab),
+					("Destroy Flashlight", _ => controlPanel.DestroyFlashlight(),
+					 Application.isPlaying && controlPanel.FlashlightPrefab && controlPanel.SpawnedFlashlight),
+				}
+			);
 
-            var flashlightTestingGroup = Helpers.Editor.Style.GenerateTestingGroup(
-                    "Flashlight Testing",
-                    root,
-                    new List<(string, EventCallback<ClickEvent>, bool)>
-                    {
-                        ("Spawn and Test Flashlight", _ => controlPanel.SpawnAndTestFlashlight(),
-                         Application.isPlaying && controlPanel.FlashlightPrefab),
-                        ("Destroy Flashlight", _ => controlPanel.DestroyFlashlight(),
-                         Application.isPlaying && controlPanel.FlashlightPrefab && controlPanel.SpawnedFlashlight)
-                    }
-                );
+			Helpers.Editor.Style.GenerateTestingGroup(
+				"Jumpscare Testing",
+				root,
+				new List<(string, EventCallback<ClickEvent>, bool)>
+				{
+					("Path to Jumpscare Target", _ => controlPanel.TestJumpscare(),
+					 Application.isPlaying && controlPanel.JumpscareTarget),
+					("Reset Jumpscare", _ => controlPanel.ResetJumpscare(), Application.isPlaying),
+				}
+			);
 
-            Helpers.Editor.Style.GenerateTestingGroup(
-                    "Jumpscare Testing",
-                    root,
-                    new List<(string, EventCallback<ClickEvent>, bool)>
-                    {
-                        ("Path to Jumpscare Target", _ => controlPanel.TestJumpscare(),
-                         Application.isPlaying && controlPanel.JumpscareTarget),
-                        ("Reset Jumpscare", _ => controlPanel.ResetJumpscare(), Application.isPlaying)
-                    }
-                );
+			var pathingTestingGroup = Helpers.Editor.Style.GenerateTestingGroup(
+				"Pathing Testing",
+				root,
+				new List<(string, EventCallback<ClickEvent>, bool)>
+				{
+					("Toggle Pathing", _ => controlPanel.TogglePathing(), Application.isPlaying),
+					("Enter State: Patrol", _ => controlPanel.Pathing.EnterState(StateType.Patrol),
+					 Application.isPlaying),
+					("Enter State: Chase", _ => controlPanel.Pathing.EnterState(StateType.Chase),
+					 Application.isPlaying),
+				}
+			);
 
-            var pathingTestingGroup = Helpers.Editor.Style.GenerateTestingGroup(
-                    "Pathing Testing",
-                    root,
-                    new List<(string, EventCallback<ClickEvent>, bool)>
-                    {
-                        ("Toggle Pathing", _ => controlPanel.TogglePathing(), Application.isPlaying)
-                    }
-                );
+			Helpers.Editor.Style.GenerateTestingGroup(
+				"Config Tools",
+				root,
+				new List<(string, EventCallback<ClickEvent>, bool)>
+				{
+					("Initialize Components", _ => controlPanel.GetInitializedComponents(), !Application.isPlaying),
+				}
+			);
 
-            Helpers.Editor.Style.GenerateTestingGroup(
-                    "Config Tools",
-                    root,
-                    new List<(string, EventCallback<ClickEvent>, bool)>
-                    {
-                        ("Initialize Components", _ => controlPanel.GetInitializedComponents(), !Application.isPlaying)
-                    }
-                );
+			var controlPanelSO = new SerializedObject(controlPanel);
 
-            var controlPanelSO = new SerializedObject(controlPanel);
+			// 2. Generate default inspector
+			InspectorElement.FillDefaultInspector(root, controlPanelSO, this);
 
-            // 2. Generate default inspector
-            InspectorElement.FillDefaultInspector(root, controlPanelSO, this);
+			// 3. Creating Property Display Drawers for other components
 
-            // 3. Creating Property Display Drawers for other components
+			// 3a. Generate divider and section label
 
-            // 3a. Generate divider and section label
+			root.Add(Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolDivider());
 
-            Helpers.Editor.Style.GenerateDivider(root);
+			var componentLabel
+				= Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolLabel("Demon Components", true);
 
-            var componentLabel = new Label
-                                 {
-                                     text = "Demon Components",
-                                     style =
-                                     {
-                                         unityFontStyleAndWeight = FontStyle.Bold
-                                     }
-                                 };
+			root.Add(componentLabel);
 
-            root.Add(componentLabel);
+			var components = controlPanel.GetInitializedComponents();
+			// 3d. Generate Foldouts for subcomponents (GetInitializedSubcomponents() only returns non-null)
 
-            var components = controlPanel.GetInitializedComponents();
-            // 3d. Generate Foldouts for subcomponents (GetInitializedSubcomponents() only returns non-null)
+			var subcomponentFoldouts = components.Select(comp => GenerateSubcomponentFoldout(
+														  comp,
+														  controlPanel.gameObject,
+														  components,
+														  root
+													  )
+												  )
+												 .ToList();
 
-            var subcomponentFoldouts = components.Select(comp => GenerateSubcomponentFoldout(
-                                                          comp,
-                                                          controlPanel.gameObject,
-                                                          components,
-                                                          root
-                                                      )
-                                                  )
-                                                 .ToList();
+			// 4. Attach additional component-based props
+			GenerateHP(controlPanel, subcomponentFoldouts, flashlightTestingGroup);
+			GenerateCurrentStateType(controlPanel, subcomponentFoldouts, pathingTestingGroup);
+			GenerateNavBeacons(controlPanel, pathingTestingGroup);
 
-            // 4. Attach additional component-based props
-            GenerateHP(controlPanel, subcomponentFoldouts, flashlightTestingGroup);
-            GenerateNavBeacons(controlPanel, pathingTestingGroup);
+			return root;
+		}
 
-            return root;
-        }
+		private void GenerateNavBeacons(ControlPanel controlPanel, VisualElement pathingTestingGroup)
+		{
+			pathingTestingGroup.Add(Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolDivider());
 
-        private void GenerateNavBeacons(ControlPanel controlPanel, VisualElement pathingTestingGroup) {
-            Helpers.Editor.Style.GenerateDivider(pathingTestingGroup);
+			var navBeaconLabel = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolLabel("Nav Beacons");
 
-            var navBeaconLabel = new Label
-                                 {
-                                     text = "Nav Beacons",
-                                     style =
-                                     {
-                                         unityFontStyleAndWeight = FontStyle.Bold,
-                                         marginBottom = 2
-                                     }
-                                 };
+			pathingTestingGroup.Add(navBeaconLabel);
 
-            pathingTestingGroup.Add(navBeaconLabel);
+			var navBeaconRow = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolRow();
 
-            var navBeaconRow = Helpers.Editor.Style.Row();
-            navBeaconRow.style.flexGrow = 1;
-            pathingTestingGroup.Add(navBeaconRow);
+			pathingTestingGroup.Add(navBeaconRow);
 
-            var navBeaconList = new ListView
-                                {
-                                    itemsSource = controlPanel.NavBeacons,
-                                    makeItem = () =>
-                                    {
-                                        var row = Helpers.Editor.Style.Row();
-                                        row.name = "row";
+			var navBeaconList = new ListView
+								{
+									itemsSource = controlPanel.NavBeacons,
+									makeItem = () =>
+									{
+										var row = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolRow();
+										row.name = "row";
 
-                                        var label = new Label
-                                                    {
-                                                        name = "label"
-                                                    };
+										var label = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolLabel("");
+										label.name = "label";
 
-                                        row.Add(label);
+										row.Add(label);
 
-                                        var button = new Button
-                                                     {
-                                                         name = "btn"
-                                                     };
+										var button = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper
+															.SolButton("");
 
-                                        row.Add(button);
+										button.name = "btn";
 
-                                        return row;
-                                    },
-                                    bindItem = (element, index) =>
-                                    {
-                                        element.schedule.Execute(() =>
-                                                {
-                                                    var qLabel = element.Q("label");
+										row.Add(button);
 
-                                                    if (qLabel is Label label)
-                                                    {
-                                                        label.text = controlPanel.NavBeacons[index].name;
-                                                        label.style.unityTextAlign = TextAnchor.MiddleLeft;
-                                                    }
+										return row;
+									},
+									bindItem = (element, index) =>
+									{
+										element.schedule.Execute(() =>
+											{
+												var qLabel = element.Q("label");
 
-                                                    var qBtn = element.Q("btn");
+												if (qLabel is Label label)
+													label.text = controlPanel.NavBeacons[index].name;
 
-                                                    if (qBtn is Button btn)
-                                                    {
-                                                        btn.text = "Go To";
-                                                        btn.style.backgroundColor = Helpers.Editor.Style.Solarized.Cyan;
+												var qBtn = element.Q("btn");
 
-                                                        btn.RegisterCallback<ClickEvent>(evt =>
-                                                                controlPanel.Pathing.GoTo(
-                                                                    controlPanel.NavBeacons[index]
-                                                                )
-                                                            );
+												if (qBtn is Button btn)
+												{
+													btn.text = "Go To";
 
-                                                        btn.SetEnabled(Application.isPlaying);
-                                                    }
-                                                }
-                                            );
-                                    },
-                                    showAddRemoveFooter = false, // Disable modifications
-                                    reorderable = false,
-                                    style =
-                                    {
-                                        backgroundColor = Helpers.Editor.Style.Solarized.Base03,
-                                        flexGrow = 1
-                                    }
-                                };
+													btn.RegisterCallback<ClickEvent>(evt =>
+														controlPanel.Pathing.NavMeshAgent.GoTo(
+															controlPanel.NavBeacons[index].transform.position
+														)
+													);
 
-            navBeaconRow.Add(navBeaconList);
-        }
+													btn.SetEnabled(Application.isPlaying);
+												}
+											}
+										);
+									},
+									showAddRemoveFooter = false, // Disable modifications
+									reorderable = false,
+								};
 
-        private void GenerateHP(
-            ControlPanel controlPanel,
-            List<Foldout> subcomponentFoldouts,
-            VisualElement flashlightTestingGroup
-        ) {
-            if (controlPanel.Health == null) return;
+			navBeaconRow.Add(navBeaconList);
+		}
 
-            var hpSubcomponent = subcomponentFoldouts.Find(subcomponentFoldout => subcomponentFoldout.name == "Health");
+		private void GenerateCurrentStateType(
+			ControlPanel controlPanel,
+			List<Foldout> subcomponentFoldouts,
+			VisualElement pathingTestingGroup
+		)
+		{
+			if (controlPanel.Pathing == null) return;
 
-            if (hpSubcomponent == null) return;
+			var pathingSubcomponent = subcomponentFoldouts.Find(subcomponentFoldout =>
+				subcomponentFoldout.name == "EC.Demon.Pathing.Controller"
+			);
 
-            var health = new SerializedObject(controlPanel.Health);
+			if (pathingSubcomponent == null) return;
 
-            var hpValueField = new FloatField
-                               {
-                                   label = "HP Value"
-                               };
+			var pathing = new SerializedObject(controlPanel.Pathing);
 
-            hpValueField.BindProperty(health.FindProperty("HP").FindPropertyRelative("_value"));
+			var currentStateTypeValueField = new EnumField
+											 {
+												 label = "Current State Type",
+												 style =
+												 {
+													 flexShrink = 1,
+												 },
+											 };
 
-            var hpMaxField = new FloatField
-                             {
-                                 label = "HP Max"
-                             };
+			currentStateTypeValueField.BindProperty(pathing.FindProperty("CurrentStateType"));
 
-            hpMaxField.BindProperty(health.FindProperty("HP").FindPropertyRelative("Max"));
+			currentStateTypeValueField.SetEnabled(false);
 
-            var col = new VisualElement
-                      {
-                          style =
-                          {
-                              flexDirection = FlexDirection.Column
-                          }
-                      };
+			var col = new VisualElement
+					  {
+						  style =
+						  {
+							  flexDirection = FlexDirection.Column,
+						  },
+					  };
 
-            col.Add(hpValueField);
-            col.Add(hpMaxField);
-            var row = Helpers.Editor.Style.Row();
-            row.Add(col);
-            Helpers.Editor.Style.GenerateDivider(flashlightTestingGroup);
-            flashlightTestingGroup.Add(row);
-            hpValueField.Bind(health);
-        }
+			col.Add(currentStateTypeValueField);
+			var row = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolRow();
+			row.Add(col);
+			pathingTestingGroup.Add(Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolDivider());
+			pathingTestingGroup.Add(row);
+			currentStateTypeValueField.Bind(pathing);
+		}
 
-        private Foldout GenerateSubcomponentFoldout(
-            Component comp,
-            GameObject mainGO,
-            List<Component> subcomponents,
-            VisualElement root
-        ) {
-            var foldout = new Foldout
-                          {
-                              text = comp.GetType().Name,
-                              name = comp.GetType().Name,
-                              viewDataKey = $"{mainGO.GetInstanceID()}_{comp.GetType().Name}_Foldout"
-                          };
+		private void GenerateHP(
+			ControlPanel controlPanel,
+			List<Foldout> subcomponentFoldouts,
+			VisualElement flashlightTestingGroup
+		)
+		{
+			if (controlPanel.Health == null) return;
 
-            IterateProps(comp, foldout, subcomponents.ToArray());
+			var hpSubcomponent
+				= subcomponentFoldouts.Find(subcomponentFoldout => subcomponentFoldout.name == "EC.Demon.Health");
 
-            root.Add(foldout);
+			if (hpSubcomponent == null) return;
 
-            return foldout;
-        }
+			var health = new SerializedObject(controlPanel.Health);
 
-        private void IterateProps(
-            Component comp,
-            VisualElement ele,
-            params Component[] ignoreReferencesToTheseComponents
-        ) {
-            SerializedObject nestedSO = new(comp);
+			var hpValueField = new FloatField
+							   {
+								   label = "HP Value",
+							   };
 
-            var prop = nestedSO.GetIterator();
+			hpValueField.BindProperty(health.FindProperty("HP").FindPropertyRelative("_value"));
 
-            if (prop.NextVisible(true))
-                do
-                {
-                    // Skip if:
-                    // Default Script Property
-                    // Reference to Subcomponent being Iterated
-                    // Reference to the Control Panel
-                    if (prop.name == "m_Script"
-                        || (prop.propertyType == SerializedPropertyType.ObjectReference
-                            && (ignoreReferencesToTheseComponents.Contains(prop.objectReferenceValue)
-                                || prop.objectReferenceValue == target)))
-                        continue;
+			var hpMaxField = new FloatField
+							 {
+								 label = "HP Max",
+							 };
 
-                    ele.Add(
-                            new PropertyField(prop)
-                            {
-                                name = prop.name
-                            }
-                        );
-                } while (prop.NextVisible(false));
+			hpMaxField.BindProperty(health.FindProperty("HP").FindPropertyRelative("Max"));
 
-            ele.Bind(nestedSO);
-        }
+			var col = new VisualElement
+					  {
+						  style =
+						  {
+							  flexDirection = FlexDirection.Column,
+						  },
+					  };
 
-    }
+			col.Add(hpValueField);
+			col.Add(hpMaxField);
+			var row = Helpers.Editor.Style.Row();
+			row.Add(col);
+			Helpers.Editor.Style.GenerateDivider(flashlightTestingGroup);
+			flashlightTestingGroup.Add(row);
+			hpValueField.Bind(health);
+		}
+
+		private Foldout GenerateSubcomponentFoldout(
+			Component comp,
+			GameObject mainGO,
+			List<Component> subcomponents,
+			VisualElement root
+		)
+		{
+			var foldout = new Foldout
+						  {
+							  text = comp.GetType().FullName,
+							  name = comp.GetType().FullName,
+							  viewDataKey = $"{mainGO.GetInstanceID()}_{comp.GetType().Name}_Foldout",
+						  };
+
+			IterateProps(comp, foldout, subcomponents.ToArray());
+
+			root.Add(foldout);
+
+			return foldout;
+		}
+
+		private void IterateProps(
+			Component comp,
+			VisualElement ele,
+			params Component[] ignoreReferencesToTheseComponents
+		)
+		{
+			SerializedObject nestedSO = new(comp);
+
+			var prop = nestedSO.GetIterator();
+
+			if (prop.NextVisible(true))
+				do
+				{
+					// Skip if:
+					// Default Script Property
+					// Reference to Subcomponent being Iterated
+					// Reference to the Control Panel
+					if (prop.name == "m_Script"
+						|| (prop.propertyType == SerializedPropertyType.ObjectReference
+							&& (ignoreReferencesToTheseComponents.Contains(prop.objectReferenceValue)
+								|| prop.objectReferenceValue == target)))
+						continue;
+
+					ele.Add(
+						new PropertyField(prop)
+						{
+							name = prop.name,
+						}
+					);
+				} while (prop.NextVisible(false));
+
+			ele.Bind(nestedSO);
+		}
+	}
 }

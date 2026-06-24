@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5111840678269315788
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8068169688837458836}
+  - component: {fileID: 273122194917010831}
+  m_Layer: 0
+  m_Name: EC.DemonManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8068169688837458836
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5111840678269315788}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &273122194917010831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5111840678269315788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e509fac19a5942e695dc747849c53334, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _demonPrefab: {fileID: 7016050918856958138, guid: a3548566adb47e84782b40f416631141, type: 3}
+  _removeDemon: {fileID: 11400000, guid: 7df8db95bd0b2084ea0725e89cf89b09, type: 2}
+  _gameOver: {fileID: 11400000, guid: cfcdf534d691df64d90d7722a7a3991f, type: 2}
+  _spawnAreaMask: 0
+  _spawnColliders: []
+  _demons: []
+  _graceTimer:
+    BaseAlarmTime: 1
+    AlarmVarianceRange: {x: 0, y: 0}
+    Dirty: 0
+  _spawnTimer:
+    BaseAlarmTime: 1
+    AlarmVarianceRange: {x: 0, y: 0}
+    Dirty: 0
+  <Config>k__BackingField:
+    <ChaseConfig>k__BackingField:
+      <AreaMask>k__BackingField: 0
+    <DemonMax>k__BackingField: 1
+    <PatrolConfig>k__BackingField:
+      <PatrolDuration>k__BackingField: 40
+      <IdleDuration>k__BackingField: 3
+      <AreaMask>k__BackingField: 0
+    <SteeringConfig>k__BackingField:
+      <Speed>k__BackingField: 2
+      <AngularSpeed>k__BackingField: 120
+      <Acceleration>k__BackingField: 2
+      <StoppingDistance>k__BackingField: 0
+      <AutoBraking>k__BackingField: 0
+    <MaxHealth>k__BackingField: 3
+    <SpawnGracePeriod>k__BackingField: 30
+    <SpawnInterval>k__BackingField: 15

@@ -1,0 +1,62 @@
+@startuml
+class Controller {
+    - Illuminated : int
+    - Banish : int
+    - Jumpscare : int
+    - EndJumpscare : int
+    + Scream : AudioClip
+}
+class JumpscareSMB {
+    + Scream : AudioClip
+    - _audioSource : AudioSource
+    - _eventBus : EventBus
+}
+class Config {
+    + AgentSteeringConfig : Helpers.Nav.AgentSteeringConfig
+}
+class Manager {
+    + Demons : List<GameObject>
+    + DemonPrefab : GameObject
+    + SpawnColliders : List<Collider>
+    - _graceEndTime : float
+    - _nextSpawnTime : float
+    + Config : Config
+}
+interface IConfigDto {
+}
+class ChaseState {
+}
+class StateConfig {
+}
+class Controller {
+    + NavBeaconEC : Helpers.Events.Channels.GameObjectEC
+    + NavBeaconsBag : Helpers.RandomBag<GameObject>
+    + TogglePathing : Action<bool>
+    + IsAtDestination : Func<bool>
+    + ApplyAreaMask : Action<int>
+    + GoTo : Action<GameObject>
+}
+class PatrolState {
+    + PatrolTimer : Helpers.Timer
+    + IdleTimer : Helpers.Timer
+}
+class StateConfig {
+}
+class NightConfig {
+    + Label : string
+    + LinesRequired : int
+    + CutsceneName : string
+    + DemonConfig : Config
+}
+MonoBehaviour <|-- Controller
+StateMachineBehaviour <|-- JumpscareSMB
+IConfigDto <|-- Config
+Helpers.SingletonMonoBehaviour <|-- Manager
+Helpers.StateMachines.FSMState <|-- ChaseState
+MonoBehaviour <|-- Controller
+Helpers.StateMachines.FSMState <|-- PatrolState
+ScriptableObject <|-- NightConfig
+ITetrisConfig <|.. NightConfig
+Manager --> Config : Config
+NightConfig --> Config : DemonConfig
+@enduml

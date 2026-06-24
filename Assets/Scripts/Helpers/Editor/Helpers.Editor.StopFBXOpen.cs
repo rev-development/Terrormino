@@ -3,6 +3,7 @@ using UnityEditor.Callbacks;
 
 namespace Helpers.Editor
 {
+    [AiGenerated("Claude", "Sonnet 4.6")]
     public static class StopFBXOpen
     {
 

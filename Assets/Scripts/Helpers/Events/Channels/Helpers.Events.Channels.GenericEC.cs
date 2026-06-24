@@ -1,25 +1,30 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Helpers.Events.Channels
 {
-    public abstract class GenericEC<T> : ScriptableObject
-    {
+	public abstract class GenericEC<T> : ScriptableObject
+	{
+		[Tooltip("When enabled, each time an event is raised, the parameters are added to a list")]
+		public bool CollectParams = false;
 
-        [Tooltip("When enabled, each time an event is raised, the parameters are added to a list")]
-        public bool CollectParams = false;
+		[NonSerialized] public List<T> CollectedParams = new();
 
-        [System.NonSerialized] public List<T> CollectedParams = new();
+		[Tooltip("The action to perform; Listeners subscribe to this UnityAction")]
+		public UnityAction<T> OnEventRaised;
 
-        [Tooltip("The action to perform; Listeners subscribe to this UnityAction")]
-        public UnityAction<T> OnEventRaised;
+		public void OnDisable()
+		{
+			OnEventRaised = null;
+		}
 
-        public void RaiseEvent(T parameter) {
-            OnEventRaised?.Invoke(parameter);
+		public void RaiseEvent(T parameter)
+		{
+			OnEventRaised?.Invoke(parameter);
 
-            if (CollectParams) CollectedParams.Add(parameter);
-        }
-
-    }
+			if (CollectParams) CollectedParams.Add(parameter);
+		}
+	}
 }

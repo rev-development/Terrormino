@@ -1,18 +1,14 @@
 namespace Helpers
 {
-    public static class Enums
-    {
+	public static class Enums
+	{
+		public enum LeftRightNeither
+		{
+			Neither = 0,
 
-        public enum LeftRightNeither
-        {
+			Left = -1,
 
-            Neither = 0,
-
-            Left = -1,
-
-            Right = 1
-
-        }
-
-    }
+			Right = 1
+		}
+	}
 }

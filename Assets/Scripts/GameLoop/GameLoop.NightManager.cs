@@ -1,181 +1,155 @@
 ﻿using AYellowpaper.SerializedCollections;
+using Tetris;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace GameLoop
 {
-    public class NightManager : MonoBehaviour
-    {
+	public class NightManager : MonoBehaviour
+	{
+		public UnityEvent TrueGameOver = new();
 
-        public UnityEvent TrueGameOver = new();
+		[Header("References")]
+		[Tooltip("The room GameObject to disable when the night ends.")]
+		public GameObject Room;
 
-        [Header("References")]
-        [Tooltip("The room GameObject to disable when the night ends.")]
-        public GameObject Room;
+		[Tooltip("Handles light fading and scene loading.")] public SceneTransitioner SceneTransitioner;
 
-        [Tooltip("Handles light fading and scene loading.")] public SceneTransitioner SceneTransitioner;
+		public SerializedDictionary<int, NightConfig> NightConfigs;
 
-        public SerializedDictionary<int, NightConfig> NightConfigs;
+		public int NightIndex = 0;
 
-        public int NightIndex = 0;
+		[Header("Events")]
+		public UnityEvent<int> OnNightStarted = new(); // passes night number (1-5)
 
-        [Header("Events")]
-        public UnityEvent<int> OnNightStarted = new(); // passes night number (1-5)
+		public UnityEvent OnAllNightsWon = new();
 
-        public UnityEvent OnAllNightsWon = new();
+		public static NightManager Instance { get; private set; }
 
-        public static NightManager Instance { get; private set; }
+		public NightConfig CurrentNight => NightConfigs[NightIndex];
 
-        public NightConfig CurrentNight => NightConfigs[NightIndex];
+		public int LinesCleared { get; private set; } = 0;
 
-        public int LinesCleared { get; private set; } = 0;
+		public bool NightActive { get; private set; } = false;
 
-        public bool NightActive { get; private set; } = false;
+		private void Awake()
+		{
+			if (Instance != null
+				&& Instance != this)
+			{
+				Destroy(gameObject);
 
-        private void Awake()
-        {
-            if (Instance != null
-                && Instance != this)
-            {
-                Destroy(gameObject);
+				return;
+			}
 
-                return;
-            }
+			Instance = this;
 
-            Instance = this;
+			DontDestroyOnLoad(this);
+		}
 
-            DontDestroyOnLoad(this);
-        }
+		public void OnEnable()
+		{
+			TrueGameOver.AddListener(OnTrueGameOver);
+			Debug.Log(Board.Instance);
+			Board.Instance.LineCleared.AddListener(RegisterLineCleared);
+		}
 
-        private void Start()
-        {
-            var savedData = SaveManager.Instance.LoadGame();
+		private void Start()
+		{
+			var savedData = SaveManager.Instance.LoadGame();
 
-            if (savedData != null)
-            {
-                NightIndex = savedData.NightIndex;
-            }
+			if (savedData != null) NightIndex = savedData.NightIndex;
 
-            NightIndex = savedData?.NightIndex ?? 0;
+			NightIndex = savedData?.NightIndex ?? 0;
 
-            StartNight(NightIndex);
-        }
+			StartNight(NightIndex);
+		}
 
-        public void OnEnable()
-        {
-            TrueGameOver.AddListener(OnTrueGameOver);
-            Debug.Log(Tetris.Board.Instance);
-            Tetris.Board.Instance.LineCleared.AddListener(RegisterLineCleared);
-        }
+		public void OnDisable()
+		{
+			TrueGameOver.RemoveAllListeners();
+		}
 
-        public void OnDisable()
-        {
-            TrueGameOver.RemoveAllListeners();
-        }
+		// Called by Board.ClearLines() each time lines are cleared
+		public void RegisterLineCleared(int linesJustCleared)
+		{
+			if (!NightActive) return;
 
-        // Called by Board.ClearLines() each time lines are cleared
-        public void RegisterLineCleared(int linesJustCleared)
-        {
-            if (!NightActive)
-            {
-                return;
-            }
+			LinesCleared += linesJustCleared;
 
-            LinesCleared += linesJustCleared;
+			Debug.Log(LinesCleared);
 
-            Debug.Log(LinesCleared);
+			if (LinesCleared >= CurrentNight.LinesRequired) WinNight();
+		}
 
-            if (LinesCleared >= CurrentNight.LinesRequired)
-            {
-                WinNight();
-            }
-        }
+		private void StartNight(int nightIndex)
+		{
+			if (NightIndex >= NightConfigs.Count) return;
 
-        private void StartNight(int nightIndex)
-        {
-            if (NightIndex >= NightConfigs.Count)
-            {
-                return;
-            }
+			LinesCleared = 0;
+			NightActive = true;
 
-            LinesCleared = 0;
-            NightActive = true;
+			if (Demon.Manager.Manager.Instance != null) Demon.Manager.Manager.Instance.ApplyNightConfig(CurrentNight);
 
+			if (Board.Instance != null) Board.Instance.ApplyTetrisConfig(CurrentNight);
 
-            if (Demon.Manager.Manager.Instance != null)
-            {
-                Demon.Manager.Manager.Instance.ApplyNightConfig(CurrentNight);
-            }
+			Debug.Log($"[NightManager] {CurrentNight.Label} started — need {CurrentNight.LinesRequired} lines.");
+			OnNightStarted.Invoke(nightIndex);
+		}
 
-            if (Tetris.Board.Instance != null)
-            {
-                Tetris.Board.Instance.ApplyTetrisConfig(CurrentNight);
-            }
+		private void WinNight()
+		{
+			NightActive = false;
 
-            Debug.Log($"[NightManager] {CurrentNight.Label} started — need {CurrentNight.LinesRequired} lines.");
-            OnNightStarted.Invoke(nightIndex);
-        }
+			Debug.Log($"[NightManager] Night {NightIndex + 1} complete!");
 
-        private void WinNight()
-        {
-            NightActive = false;
+			if (Demon.Manager.Manager.Instance != null) Demon.Manager.Manager.Instance.ClearAll();
 
-            Debug.Log($"[NightManager] Night {NightIndex + 1} complete!");
+			NightIndex += 1;
 
-            if (Demon.Manager.Manager.Instance != null)
-            {
-                Demon.Manager.Manager.Instance.ClearAll();
-            }
+			if (NightIndex + 1 >= NightConfigs.Count)
+			{
+				SaveManager.Instance.SaveGame(new SaveData(NightIndex));
+				Debug.Log("[NightManager] All nights survived — you win!");
+				OnAllNightsWon.Invoke();
+			}
+			else
+			{
+				SaveManager.Instance.SaveGame(new SaveData(NightIndex));
 
-            NightIndex += 1;
+				if (!string.IsNullOrEmpty(CurrentNight.CutsceneName))
+				{
+					StartCutsceneTransition(CurrentNight.CutsceneName);
+				}
+				else
+				{
+					Debug.LogWarning($"[NightManager] No cutscene defined for night {NightIndex}, skipping.");
+					StartNight(NightIndex);
+				}
+			}
+		}
 
-            if (NightIndex + 1 >= NightConfigs.Count)
-            {
-                SaveManager.Instance.SaveGame(new SaveData(NightIndex));
-                Debug.Log("[NightManager] All nights survived — you win!");
-                OnAllNightsWon.Invoke();
-            }
-            else
-            {
-                SaveManager.Instance.SaveGame(new SaveData(NightIndex));
+		private void StartCutsceneTransition(string sceneName)
+		{
+			if (Room != null) Room.SetActive(false);
 
-                if (!string.IsNullOrEmpty(CurrentNight.CutsceneName))
-                {
-                    StartCutsceneTransition(CurrentNight.CutsceneName);
-                }
-                else
-                {
-                    Debug.LogWarning($"[NightManager] No cutscene defined for night {NightIndex}, skipping.");
-                    StartNight(NightIndex);
-                }
-            }
-        }
+			if (SceneTransitioner != null)
+			{
+				SceneTransitioner.FadeAndLoad(sceneName);
+			}
+			else
+			{
+				Debug.LogWarning("[NightManager] No SceneTransitioner assigned — loading scene immediately.");
+				SceneManager.LoadScene(sceneName);
+			}
+		}
 
-        private void StartCutsceneTransition(string sceneName)
-        {
-            if (Room != null)
-            {
-                Room.SetActive(false);
-            }
+		private void OnTrueGameOver()
+		{
+			NightActive = false;
 
-            if (SceneTransitioner != null)
-            {
-                SceneTransitioner.FadeAndLoad(sceneName);
-            }
-            else
-            {
-                Debug.LogWarning("[NightManager] No SceneTransitioner assigned — loading scene immediately.");
-                SceneManager.LoadScene(sceneName);
-            }
-        }
-
-        private void OnTrueGameOver()
-        {
-            NightActive = false;
-
-            Debug.Log($"[NightManager] Game over on Night {NightIndex}.");
-        }
-
-    }
+			Debug.Log($"[NightManager] Game over on Night {NightIndex}.");
+		}
+	}
 }

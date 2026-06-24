@@ -1,65 +1,85 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Helpers
 {
-    [Serializable]
-    public class Timer
-    {
+	[Serializable]
+	[AiGenerated("Claude", "Sonnet 4.6")]
+	public class Timer
+	{
+		public float BaseAlarmTime = 1f;
 
-        public float BaseAlarmTime = 1f;
+		public Vector2 AlarmVarianceRange = new(0f, 0f);
 
-        public float AlarmVarianceLowerBound = 0f;
+		public bool Dirty;
 
-        public float AlarmVarianceUpperBound = 0f;
+		public Timer(float baseAlarmTime = 1f, Vector2 alarmVarianceRange = default) =>
+			Init(baseAlarmTime, alarmVarianceRange);
 
-        public Timer(float baseAlarmTime = 1f, float alarmVarianceLowerBound = 0f, float alarmVarianceUpperBound = 0f)
-        {
-            BaseAlarmTime = baseAlarmTime;
-            AlarmVarianceLowerBound = alarmVarianceLowerBound;
-            AlarmVarianceUpperBound = alarmVarianceUpperBound;
-        }
+		public bool Initialized { get; private set; }
 
-        public float CurrentAlarmTime { get; private set; }
+		/// <summary>
+		///     This is when the Timer will ring
+		///     BaseAlarmTime + Random with AlarmVarianceRange
+		/// </summary>
+		public float CurrentAlarmTime { get; private set; }
 
-        public bool Ringing { get; private set; } = false;
+		public float ElapsedTime { get; private set; }
 
-        private IEnumerator Tick()
-        {
-            yield return new WaitForSeconds(CurrentAlarmTime);
+		public bool Running { get; private set; } = false;
 
-            Ringing = true;
-        }
+		public bool Ringing { get; private set; } = false;
 
-        public void GenerateAlarmTime()
-        {
-            CurrentAlarmTime
-                = BaseAlarmTime + UnityEngine.Random.Range(AlarmVarianceLowerBound, AlarmVarianceUpperBound);
-        }
+		public bool Active => Running || Ringing;
 
-        public void StartTimer()
-        {
-            GenerateAlarmTime();
-            Tick();
-        }
+		public void Init(float baseAlarmTime = 1f, Vector2 alarmVarianceRange = default)
+		{
+			BaseAlarmTime = baseAlarmTime;
+			AlarmVarianceRange = alarmVarianceRange;
+			Initialized = true;
+		}
 
-        public void RestartTimer()
-        {
-            StartTimer();
-        }
+		/// <summary>
+		///     Advances the timer. Call this once per frame (e.g. from MonoBehaviour.Update)
+		///     with Time.deltaTime, passing the relevant delta for your use case
+		///     (Time.deltaTime, Time.unscaledDeltaTime, etc).
+		/// </summary>
+		public void Tick(float deltaTime)
+		{
+			if (!Running || Ringing) return;
 
-        public void ResetTimer()
-        {
-            GenerateAlarmTime();
-        }
+			ElapsedTime += deltaTime;
 
-        public static List<Timer> FilterRinging(List<Timer> timers)
-        {
-            return timers.Where(timer => timer.Ringing).ToList();
-        }
+			if (!(ElapsedTime >= CurrentAlarmTime)) return;
 
-    }
+			ElapsedTime = CurrentAlarmTime;
+			Ringing = true;
+			Running = false;
+		}
+
+		public void StartNewTimer()
+		{
+			if (!Initialized) UnityEngine.Debug.LogWarning("Timer.StartNewTimer() called before Init().");
+			CurrentAlarmTime = BaseAlarmTime + Random.Range(AlarmVarianceRange.x, AlarmVarianceRange.y);
+			Dirty = true;
+			ElapsedTime = 0f;
+			Ringing = false;
+			Running = true;
+		}
+
+		public void ResumeTimer()
+		{
+			if (Dirty) Running = true;
+		}
+
+		public void StopTimer() => Running = false;
+
+		public void StopRinging()
+		{
+			Running = false;
+			Ringing = false;
+			ElapsedTime = 0f;
+		}
+	}
 }

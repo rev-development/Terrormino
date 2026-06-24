@@ -3,112 +3,106 @@ using UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation;
 
 namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
 {
-    /// <summary>
-    ///     Helper component that binds an <see cref="XRInteractableAffordanceStateProvider" /> to a
-    ///     <see cref="TeleportationMultiAnchorVolume" /> when the teleport volume sets its destination anchor to a child
-    ///     transform
-    ///     of the state provider's originally bound interactable.
-    /// </summary>
-    [RequireComponent(typeof(XRInteractableAffordanceStateProvider))]
-    public class TeleportVolumeAnchorAffordanceStateLink : MonoBehaviour
-    {
+	/// <summary>
+	///     Helper component that binds an <see cref="XRInteractableAffordanceStateProvider" /> to a
+	///     <see cref="TeleportationMultiAnchorVolume" /> when the teleport volume sets its destination anchor to a child
+	///     transform
+	///     of the state provider's originally bound interactable.
+	/// </summary>
+	[RequireComponent(typeof(XRInteractableAffordanceStateProvider))]
+	public class TeleportVolumeAnchorAffordanceStateLink : MonoBehaviour
+	{
+		[SerializeField]
+		[Tooltip(
+			"The teleport volume that will drive affordance states when its destination anchor belongs to this interactable."
+		)]
+		private TeleportationMultiAnchorVolume m_ContainingTeleportVolume;
 
-        [SerializeField]
-        [Tooltip(
-                "The teleport volume that will drive affordance states when its destination anchor belongs to this interactable."
-            )]
-        private TeleportationMultiAnchorVolume m_ContainingTeleportVolume;
+		private XRInteractableAffordanceStateProvider m_AffordanceStateProvider;
 
-        private XRInteractableAffordanceStateProvider m_AffordanceStateProvider;
+		private IXRInteractable m_Interactable;
 
-        private IXRInteractable m_Interactable;
+		/// <summary>
+		///     The teleport volume that will drive affordance states when its destination anchor belongs to the
+		///     state provider's originally bound interactable.
+		/// </summary>
+		public TeleportationMultiAnchorVolume containingTeleportVolume
+		{
+			get => m_ContainingTeleportVolume;
+			set => m_ContainingTeleportVolume = value;
+		}
 
-        /// <summary>
-        ///     The teleport volume that will drive affordance states when its destination anchor belongs to the
-        ///     state provider's originally bound interactable.
-        /// </summary>
-        public TeleportationMultiAnchorVolume containingTeleportVolume
-        {
-            get => m_ContainingTeleportVolume;
-            set => m_ContainingTeleportVolume = value;
-        }
+		/// <summary>
+		///     See <see cref="MonoBehaviour" />.
+		/// </summary>
+		protected void OnEnable()
+		{
+			m_AffordanceStateProvider = GetComponent<XRInteractableAffordanceStateProvider>();
 
-        /// <summary>
-        ///     See <see cref="MonoBehaviour" />.
-        /// </summary>
-        protected void OnEnable()
-        {
-            m_AffordanceStateProvider = GetComponent<XRInteractableAffordanceStateProvider>();
+			if (m_AffordanceStateProvider == null)
+			{
+				Debug.LogError($"Missing {nameof(XRInteractableAffordanceStateProvider)} on {gameObject.name}.", this);
+				enabled = false;
 
-            if (m_AffordanceStateProvider == null)
-            {
-                Debug.LogError($"Missing {nameof(XRInteractableAffordanceStateProvider)} on {gameObject.name}.", this);
-                enabled = false;
+				return;
+			}
 
-                return;
-            }
+			if (m_ContainingTeleportVolume == null)
+			{
+				Debug.LogError(
+					$"Missing {nameof(TeleportationMultiAnchorVolume)} reference on {gameObject.name}.",
+					this
+				);
 
-            if (m_ContainingTeleportVolume == null)
-            {
-                Debug.LogError(
-                        $"Missing {nameof(TeleportationMultiAnchorVolume)} reference on {gameObject.name}.",
-                        this
-                    );
+				enabled = false;
 
-                enabled = false;
+				return;
+			}
 
-                return;
-            }
+			var interactableSource = m_AffordanceStateProvider.interactableSource;
 
-            var interactableSource = m_AffordanceStateProvider.interactableSource;
+			m_Interactable = interactableSource != null && interactableSource is IXRInteractable interactable
+				? interactable
+				: m_AffordanceStateProvider.GetComponentInParent<IXRInteractable>();
 
-            m_Interactable = interactableSource != null && interactableSource is IXRInteractable interactable
-                ? interactable
-                : m_AffordanceStateProvider.GetComponentInParent<IXRInteractable>();
+			if (m_Interactable == null)
+			{
+				Debug.LogError($"Interactable source must be an {nameof(IXRInteractable)}.", this);
+				enabled = false;
 
-            if (m_Interactable == null)
-            {
-                Debug.LogError($"Interactable source must be an {nameof(IXRInteractable)}.", this);
-                enabled = false;
+				return;
+			}
 
-                return;
-            }
+			m_ContainingTeleportVolume.destinationAnchorChanged += OnDestinationAnchorChanged;
+		}
 
-            m_ContainingTeleportVolume.destinationAnchorChanged += OnDestinationAnchorChanged;
-        }
+		/// <summary>
+		///     See <see cref="MonoBehaviour" />.
+		/// </summary>
+		protected void OnDisable()
+		{
+			if (m_ContainingTeleportVolume != null)
+				m_ContainingTeleportVolume.destinationAnchorChanged -= OnDestinationAnchorChanged;
 
-        /// <summary>
-        ///     See <see cref="MonoBehaviour" />.
-        /// </summary>
-        protected void OnDisable()
-        {
-            if (m_ContainingTeleportVolume != null)
-            {
-                m_ContainingTeleportVolume.destinationAnchorChanged -= OnDestinationAnchorChanged;
-            }
+			if (m_AffordanceStateProvider != null)
+				m_AffordanceStateProvider.SetBoundInteractionReceiver(m_Interactable);
+		}
 
-            if (m_AffordanceStateProvider != null)
-            {
-                m_AffordanceStateProvider.SetBoundInteractionReceiver(m_Interactable);
-            }
-        }
+		private void OnDestinationAnchorChanged(TeleportationMultiAnchorVolume anchorVolume)
+		{
+			var anchor = anchorVolume.destinationAnchor;
 
-        private void OnDestinationAnchorChanged(TeleportationMultiAnchorVolume anchorVolume)
-        {
-            var anchor = anchorVolume.destinationAnchor;
+			if (anchor == null)
+			{
+				m_AffordanceStateProvider.SetBoundInteractionReceiver(m_Interactable);
 
-            if (anchor == null)
-            {
-                m_AffordanceStateProvider.SetBoundInteractionReceiver(m_Interactable);
+				return;
+			}
 
-                return;
-            }
-
-            // Use teleport volume to drive affordance states if its current anchor belongs to this interactable
-            m_AffordanceStateProvider.SetBoundInteractionReceiver(
-                    anchor.IsChildOf(m_Interactable.transform) ? m_ContainingTeleportVolume : m_Interactable
-                );
-        }
-
-    }
+			// Use teleport volume to drive affordance states if its current anchor belongs to this interactable
+			m_AffordanceStateProvider.SetBoundInteractionReceiver(
+				anchor.IsChildOf(m_Interactable.transform) ? m_ContainingTeleportVolume : m_Interactable
+			);
+		}
+	}
 }
