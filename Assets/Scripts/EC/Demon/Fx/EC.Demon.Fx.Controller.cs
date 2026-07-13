@@ -30,8 +30,12 @@ namespace EC.Demon.Fx
 		{
 			_animator = Helpers.Debug.TryFindComponent<Animator>(gameObject);
 			_audioSource = Helpers.Debug.TryFindComponent<AudioSource>(gameObject);
-			_eventBus = Helpers.Debug.TryFindComponentInParent<EventBus>(gameObject);
-			_controlPanel = Helpers.Debug.TryFindComponentInParent<ControlPanel>(gameObject);
+
+			if (gameObject.transform.parent.gameObject.activeInHierarchy)
+			{
+				_eventBus = Helpers.Debug.TryFindComponentInParent<EventBus>(gameObject);
+				_controlPanel = Helpers.Debug.TryFindComponentInParent<ControlPanel>(gameObject);
+			}
 		}
 
 		public void OnEnable()
@@ -51,24 +55,15 @@ namespace EC.Demon.Fx
 		/// <summary>
 		///     Only called during testing
 		/// </summary>
-		public void StopJumpscare()
-		{
-			_animator.SetTrigger(EndJumpscare);
-		}
+		public void StopJumpscare() => _animator.SetTrigger(EndJumpscare);
 
-		public void OnBanish(GameObject _)
-		{
-			_animator.SetTrigger(Banish);
-		}
+		public void OnBanish(GameObject _) => _animator.SetTrigger(Banish);
 
 		public void OnIlluminated(bool isIlluminated)
 		{
 			if (_animator.GetBool(Illuminated) != isIlluminated) _animator.SetBool(Illuminated, isIlluminated);
 		}
 
-		public void OnJumpscare(GameObject _)
-		{
-			_animator.SetTrigger(Jumpscare);
-		}
+		public void OnJumpscare(GameObject _) => _animator.SetTrigger(Jumpscare);
 	}
 }

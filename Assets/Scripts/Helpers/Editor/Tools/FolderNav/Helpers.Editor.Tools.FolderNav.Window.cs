@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
-using Helpers.Editor.Extensions;
+using Helpers.Editor.Ext;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -21,40 +21,35 @@ namespace Helpers.Editor.Tools.FolderNav
 		{
 			_folders ??= FolderNavigatorData.Load();
 
-			var root = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolRoot();
-			Style.SetAllPadding(root, 8);
+			var root = Helpers.Editor.Theming.SolarizedDark.Ele.SolRoot();
+			root.style.SetAllPadding(8);
 
 			root.Add(BuildHeader());
-			root.Add(Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolDivider());
+			root.Add(Helpers.Editor.Theming.SolarizedDark.Ele.SolDivider());
 
 			_listContainer = new VisualElement();
 			root.Add(_listContainer);
 
-			root.Add(Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolDivider());
+			root.Add(Helpers.Editor.Theming.SolarizedDark.Ele.SolDivider());
 			root.Add(BuildAddRow());
 
 			RefreshList();
 			rootVisualElement.Add(root);
 		}
 
-		[MenuItem("Tools/Helpers/Folder Navigator %#f")]
-		public static void Open()
-		{
-			GetWindow<Window>("Folders");
-		}
+		[MenuItem("Tools/Helpers/Folder Navigator %#f")] public static void Open() => GetWindow<Window>("Folders");
 
 		// ── Header ────────────────────────────────────────────────────────────
 
 		private VisualElement BuildHeader()
 		{
-			var editButton = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolButton(
-				_editMode ? "Done" : "Edit",
-				ToggleEditMode
+			var editButton = Helpers.Editor.Theming.SolarizedDark.Ele.SolButton(
+				evt => ToggleEditMode(),
+				_editMode ? "Done" : "Edit"
 			);
 
-			var resetButton = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolButton(
-				"Reset",
-				() =>
+			var resetButton = Helpers.Editor.Theming.SolarizedDark.Ele.SolButton(
+				evt =>
 				{
 					if (EditorUtility.DisplayDialog(
 							"Reset Folders",
@@ -67,14 +62,14 @@ namespace Helpers.Editor.Tools.FolderNav
 						_folders = FolderNavigatorData.Load();
 						RefreshList();
 					}
-				}
+				},
+				"Reset"
 			);
 
-			return Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolRow()
+			return Helpers.Editor.Theming.SolarizedDark.Ele.SolRow()
 						  .WithChildren(
-							   Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolLabel("Quick Nav", true),
-							   Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolRow()
-									  .WithChildren(editButton, resetButton)
+							   Helpers.Editor.Theming.SolarizedDark.Ele.SolLabel("Quick Nav", true),
+							   Helpers.Editor.Theming.SolarizedDark.Ele.SolRow().WithChildren(editButton, resetButton)
 						   )
 						  .WithStyle(r => r.justifyContent = Justify.SpaceBetween);
 		}
@@ -98,14 +93,14 @@ namespace Helpers.Editor.Tools.FolderNav
 			var entry = _folders[index];
 			var exists = AssetDatabase.IsValidFolder(entry.Path);
 
-			var label = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolLabel(entry.Label)
+			var label = Helpers.Editor.Theming.SolarizedDark.Ele.SolLabel(entry.Label)
 							   .WithClass(
 									exists
 										? Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassTextBody
 										: Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassAccentRed
 								);
 
-			var row = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolRow()
+			var row = Helpers.Editor.Theming.SolarizedDark.Ele.SolRow()
 							 .WithChildren(label)
 							 .WithStyle(r =>
 								  {
@@ -116,7 +111,7 @@ namespace Helpers.Editor.Tools.FolderNav
 								  }
 							  );
 
-			Style.SetAllBorderRadius(row, 3);
+			row.style.SetAllBorderRadius(3);
 
 			if (exists)
 			{
@@ -140,7 +135,7 @@ namespace Helpers.Editor.Tools.FolderNav
 					new Cursor
 					{
 						texture = null,
-						hotspot = Vector2.zero
+						hotspot = Vector2.zero,
 					}
 				);
 			}
@@ -192,10 +187,12 @@ namespace Helpers.Editor.Tools.FolderNav
 
 			var labelField = new TextField
 							 {
-								 value = entry.Label
+								 value = entry.Label,
+								 style =
+								 {
+									 width = 100,
+								 },
 							 };
-
-			labelField.style.width = 100;
 
 			labelField.RegisterValueChangedCallback(e =>
 				{
@@ -206,12 +203,14 @@ namespace Helpers.Editor.Tools.FolderNav
 
 			var pathField = new TextField
 							{
-								value = entry.Path
+								value = entry.Path,
+								style =
+								{
+									flexGrow = 1,
+									flexShrink = 1,
+									minWidth = 0,
+								},
 							};
-
-			pathField.style.flexGrow = 1;
-			pathField.style.flexShrink = 1;
-			pathField.style.minWidth = 0;
 
 			pathField.RegisterValueChangedCallback(e =>
 				{
@@ -233,43 +232,43 @@ namespace Helpers.Editor.Tools.FolderNav
 				}
 			);
 
-			var moveUpButton = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolButton(
-				"↑",
-				() =>
+			var moveUpButton = Helpers.Editor.Theming.SolarizedDark.Ele.SolButton(
+				evt =>
 				{
 					if (index <= 0) return;
 
 					(_folders[index], _folders[index - 1]) = (_folders[index - 1], _folders[index]);
 					FolderNavigatorData.Save(_folders);
 					RefreshList();
-				}
+				},
+				"↑"
 			);
 
-			var moveDownButton = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolButton(
-				"↓",
-				() =>
+			var moveDownButton = Helpers.Editor.Theming.SolarizedDark.Ele.SolButton(
+				evt =>
 				{
 					if (index >= _folders.Count - 1) return;
 
 					(_folders[index], _folders[index + 1]) = (_folders[index + 1], _folders[index]);
 					FolderNavigatorData.Save(_folders);
 					RefreshList();
-				}
+				},
+				"↓"
 			);
 
-			var deleteButton = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolButton(
-				"✕",
-				() =>
+			var deleteButton = Helpers.Editor.Theming.SolarizedDark.Ele.SolButton(
+				evt =>
 				{
 					_folders.RemoveAt(index);
 					FolderNavigatorData.Save(_folders);
 					RefreshList();
-				}
+				},
+				"✕"
 			);
 
 			deleteButton.WithClass(Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassAccentRed);
 
-			return Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolRow()
+			return Helpers.Editor.Theming.SolarizedDark.Ele.SolRow()
 						  .WithChildren(
 							   labelField,
 							   pathField,
@@ -309,7 +308,7 @@ namespace Helpers.Editor.Tools.FolderNav
 				}
 			);
 
-			var addButton = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolPrimaryButton(
+			var addButton = Helpers.Editor.Theming.SolarizedDark.Ele.SolPrimaryButton(
 				"Add Folder",
 				() =>
 				{
@@ -329,7 +328,7 @@ namespace Helpers.Editor.Tools.FolderNav
 						new FolderEntry
 						{
 							Label = label,
-							Path = path
+							Path = path,
 						}
 					);
 
@@ -351,12 +350,12 @@ namespace Helpers.Editor.Tools.FolderNav
 			addButton.style.width = 80;
 			addButton.style.flexShrink = 0;
 
-			var container = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolCard();
+			var container = Helpers.Editor.Theming.SolarizedDark.Ele.SolCard();
 			container.style.marginTop = 8;
-			container.Add(Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolLabel("Add Folder", true));
+			container.Add(Helpers.Editor.Theming.SolarizedDark.Ele.SolLabel("Add Folder", true));
 
 			container.Add(
-				Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolRow()
+				Helpers.Editor.Theming.SolarizedDark.Ele.SolRow()
 					   .WithChildren(labelField, pathField, addButton)
 					   .WithStyle(r =>
 							{
@@ -394,10 +393,15 @@ namespace Helpers.Editor.Tools.FolderNav
 
 		private static TextField MakeTextField(string placeholder, float width = -1, bool grow = false)
 		{
-			var field = new TextField();
-			field.style.flexGrow = grow ? 1 : 0;
-			field.style.flexShrink = grow ? 1 : 0;
-			field.style.minWidth = 0;
+			var field = new TextField
+						{
+							style =
+							{
+								flexGrow = grow ? 1 : 0,
+								flexShrink = grow ? 1 : 0,
+								minWidth = 0,
+							},
+						};
 
 			if (width > 0) field.style.width = width;
 
@@ -462,7 +466,7 @@ namespace Helpers.Editor.Tools.FolderNav
 						new object[]
 						{
 							obj.GetInstanceID(),
-							true
+							true,
 						}
 					);
 				else

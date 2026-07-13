@@ -496,6 +496,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EC.Demon
       objectReference: {fileID: 0}
+    - target: {fileID: 7016050918856958138, guid: a3548566adb47e84782b40f416631141, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7845095468570277842, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: PatrolState.AreaMask
       value: 0
@@ -1199,6 +1203,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 273122194917010831, guid: 44b34a20e4a5e4344867b895df93eb4e, type: 3}
+      propertyPath: _graceTimer._running
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 273122194917010831, guid: 44b34a20e4a5e4344867b895df93eb4e, type: 3}
+      propertyPath: _graceTimer._initialized
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5111840678269315788, guid: 44b34a20e4a5e4344867b895df93eb4e, type: 3}
       propertyPath: m_Name
       value: EC.DemonManager

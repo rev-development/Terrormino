@@ -1,12 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using EC.Demon;
 using EC.Demon.Pathing;
 using Helpers;
+using Helpers.Editor.Ext;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static Helpers.Editor.Theming.SolarizedDark.Ele;
 
 namespace Editor.DemonECEditors
 {
@@ -16,54 +19,73 @@ namespace Editor.DemonECEditors
 	{
 		public override VisualElement CreateInspectorGUI()
 		{
-			var root = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolRoot();
+			var root = SolRoot();
 
 			var controlPanel = (ControlPanel)target;
 
-			var flashlightTestingGroup = Helpers.Editor.Style.GenerateTestingGroup(
-				"Flashlight Testing",
-				root,
-				new List<(string, EventCallback<ClickEvent>, bool)>
+			VisualElement[][] flashlightTestingPanelItems =
+			{
+				new VisualElement[]
 				{
-					("Spawn and Test Flashlight", _ => controlPanel.SpawnAndTestFlashlight(),
-					 Application.isPlaying && controlPanel.FlashlightPrefab),
-					("Destroy Flashlight", _ => controlPanel.DestroyFlashlight(),
-					 Application.isPlaying && controlPanel.FlashlightPrefab && controlPanel.SpawnedFlashlight),
-				}
-			);
+					SolButton(
+						evt => controlPanel.SpawnAndTestFlashlight(),
+						"Spawn & Test Flashlight",
+						Application.isPlaying
+					),
+					SolButton(evt => controlPanel.DestroyFlashlight(), "Destroy Flashlight", Application.isPlaying),
+				},
+			};
 
-			Helpers.Editor.Style.GenerateTestingGroup(
-				"Jumpscare Testing",
-				root,
-				new List<(string, EventCallback<ClickEvent>, bool)>
-				{
-					("Path to Jumpscare Target", _ => controlPanel.TestJumpscare(),
-					 Application.isPlaying && controlPanel.JumpscareTarget),
-					("Reset Jumpscare", _ => controlPanel.ResetJumpscare(), Application.isPlaying),
-				}
-			);
+			var flashlightTestingPanel = SolGrid(flashlightTestingPanelItems, "Flashlight Testing");
+			root.Add(flashlightTestingPanel);
 
-			var pathingTestingGroup = Helpers.Editor.Style.GenerateTestingGroup(
-				"Pathing Testing",
-				root,
-				new List<(string, EventCallback<ClickEvent>, bool)>
+			VisualElement[][] jumpscareTestingItems =
+			{
+				new VisualElement[]
 				{
-					("Toggle Pathing", _ => controlPanel.TogglePathing(), Application.isPlaying),
-					("Enter State: Patrol", _ => controlPanel.Pathing.EnterState(StateType.Patrol),
-					 Application.isPlaying),
-					("Enter State: Chase", _ => controlPanel.Pathing.EnterState(StateType.Chase),
-					 Application.isPlaying),
-				}
-			);
+					SolButton(evt => controlPanel.TestJumpscare(), "Path to Jumpscare Target", Application.isPlaying),
+					SolButton(evt => controlPanel.ResetJumpscare(), "Reset Jumpscare", Application.isPlaying),
+				},
+			};
 
-			Helpers.Editor.Style.GenerateTestingGroup(
-				"Config Tools",
-				root,
-				new List<(string, EventCallback<ClickEvent>, bool)>
+			var jumpscareTestingPanel = SolGrid(jumpscareTestingItems, "Jumpscare Testing");
+			root.Add(jumpscareTestingPanel);
+
+			VisualElement[][] pathingTestingItems =
+			{
+				new VisualElement[]
 				{
-					("Initialize Components", _ => controlPanel.GetInitializedComponents(), !Application.isPlaying),
-				}
-			);
+					SolButton(evt => controlPanel.TogglePathing(), "Toggle Pathing", Application.isPlaying),
+					SolButton(
+						evt => controlPanel.Pathing.EnterState(StateType.Patrol),
+						"Enter State: Patrol",
+						Application.isPlaying
+					),
+					SolButton(
+						evt => controlPanel.Pathing.EnterState(StateType.Chase),
+						"Enter State: Chase",
+						Application.isPlaying
+					),
+				},
+			};
+
+			var pathingTestingPanel = SolGrid(pathingTestingItems, "Pathing Testing");
+			root.Add(pathingTestingPanel);
+
+			VisualElement[][] configTestingItems =
+			{
+				new VisualElement[]
+				{
+					SolButton(
+						evt => controlPanel.GetInitializedComponents(),
+						"Initialize Components",
+						!Application.isPlaying
+					),
+				},
+			};
+
+			var configTestingPanel = SolGrid(configTestingItems, "Config");
+			root.Add(configTestingPanel);
 
 			var controlPanelSO = new SerializedObject(controlPanel);
 
@@ -74,42 +96,41 @@ namespace Editor.DemonECEditors
 
 			// 3a. Generate divider and section label
 
-			root.Add(Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolDivider());
+			root.Add(SolDivider());
 
-			var componentLabel
-				= Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolLabel("Demon Components", true);
+			var componentLabel = SolLabel("Demon Components", true);
 
 			root.Add(componentLabel);
 
-			var components = controlPanel.GetInitializedComponents();
+			var subSOs = controlPanel.GetInitializedComponents().Select(comp => new SerializedObject(comp)).ToList();
 			// 3d. Generate Foldouts for subcomponents (GetInitializedSubcomponents() only returns non-null)
 
-			var subcomponentFoldouts = components.Select(comp => GenerateSubcomponentFoldout(
-														  comp,
-														  controlPanel.gameObject,
-														  components,
-														  root
-													  )
+			var subcomponentFoldouts = subSOs.Select(so => GenerateSubcomponentFoldout(
+													  so,
+													  controlPanel.gameObject,
+													  subSOs,
+													  root
 												  )
-												 .ToList();
+											  )
+											 .ToList();
 
-			// 4. Attach additional component-based props
-			GenerateHP(controlPanel, subcomponentFoldouts, flashlightTestingGroup);
-			GenerateCurrentStateType(controlPanel, subcomponentFoldouts, pathingTestingGroup);
-			GenerateNavBeacons(controlPanel, pathingTestingGroup);
+			// // 4. Attach additional component-based props
+			GenerateHP(controlPanel, subcomponentFoldouts, flashlightTestingPanel);
+			GenerateCurrentStateType(controlPanel, subcomponentFoldouts, pathingTestingPanel);
+			GenerateNavBeacons(controlPanel, pathingTestingPanel);
 
 			return root;
 		}
 
 		private void GenerateNavBeacons(ControlPanel controlPanel, VisualElement pathingTestingGroup)
 		{
-			pathingTestingGroup.Add(Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolDivider());
+			pathingTestingGroup.Add(SolDivider());
 
-			var navBeaconLabel = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolLabel("Nav Beacons");
+			var navBeaconLabel = SolLabel("Nav Beacons");
 
 			pathingTestingGroup.Add(navBeaconLabel);
 
-			var navBeaconRow = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolRow();
+			var navBeaconRow = SolRow(true);
 
 			pathingTestingGroup.Add(navBeaconRow);
 
@@ -118,16 +139,15 @@ namespace Editor.DemonECEditors
 									itemsSource = controlPanel.NavBeacons,
 									makeItem = () =>
 									{
-										var row = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolRow();
+										var row = SolRow(true);
 										row.name = "row";
 
-										var label = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolLabel("");
+										var label = SolLabel();
 										label.name = "label";
 
 										row.Add(label);
 
-										var button = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper
-															.SolButton("");
+										var button = SolButton();
 
 										button.name = "btn";
 
@@ -171,7 +191,7 @@ namespace Editor.DemonECEditors
 		private void GenerateCurrentStateType(
 			ControlPanel controlPanel,
 			List<Foldout> subcomponentFoldouts,
-			VisualElement pathingTestingGroup
+			VisualElement pathingTestingPanel
 		)
 		{
 			if (controlPanel.Pathing == null) return;
@@ -184,39 +204,41 @@ namespace Editor.DemonECEditors
 
 			var pathing = new SerializedObject(controlPanel.Pathing);
 
-			var currentStateTypeValueField = new EnumField
-											 {
-												 label = "Current State Type",
-												 style =
-												 {
-													 flexShrink = 1,
-												 },
-											 };
+			var currentStateTypeLabel = SolLabel(
+				"Current State Type: "
+				+ (Enum.GetNames(typeof(StateType)).Length > pathing.FindProperty("CurrentStateType").enumValueIndex
+				   && pathing.FindProperty("CurrentStateType").enumValueIndex >= 0
+					? Enum.GetNames(typeof(StateType))[pathing.FindProperty("CurrentStateType").enumValueIndex]
+					: "Undefined")
+			);
 
-			currentStateTypeValueField.BindProperty(pathing.FindProperty("CurrentStateType"));
+			currentStateTypeLabel.TrackPropertyValue(
+				pathing.FindProperty("CurrentStateType"),
+				p => currentStateTypeLabel.text = "Current State Type: "
+												  + (Enum.GetNames(typeof(StateType)).Length > p.enumValueIndex
+													 && p.enumValueIndex >= 0
+													  ? Enum.GetNames(typeof(StateType))[p.enumValueIndex]
+													  : "Undefined")
+			);
 
-			currentStateTypeValueField.SetEnabled(false);
+			pathingTestingPanel.Add(SolDivider());
 
-			var col = new VisualElement
-					  {
-						  style =
-						  {
-							  flexDirection = FlexDirection.Column,
-						  },
-					  };
+			VisualElement[][] appendedItems =
+			{
+				new VisualElement[]
+				{
+					currentStateTypeLabel,
+				},
+			};
 
-			col.Add(currentStateTypeValueField);
-			var row = Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolRow();
-			row.Add(col);
-			pathingTestingGroup.Add(Helpers.Editor.Theming.SolarizedDark.UIToolkitWrapper.SolDivider());
-			pathingTestingGroup.Add(row);
-			currentStateTypeValueField.Bind(pathing);
+			AppendSolGrid(pathingTestingPanel, appendedItems);
+			currentStateTypeLabel.Bind(pathing);
 		}
 
 		private void GenerateHP(
 			ControlPanel controlPanel,
 			List<Foldout> subcomponentFoldouts,
-			VisualElement flashlightTestingGroup
+			VisualElement flashlightTestingPanel
 		)
 		{
 			if (controlPanel.Health == null) return;
@@ -228,90 +250,50 @@ namespace Editor.DemonECEditors
 
 			var health = new SerializedObject(controlPanel.Health);
 
-			var hpValueField = new FloatField
-							   {
-								   label = "HP Value",
-							   };
+			var hpValueField = SolFloatField(health.FindProperty("HP").FindPropertyRelative("_value"), "HP Value");
 
-			hpValueField.BindProperty(health.FindProperty("HP").FindPropertyRelative("_value"));
+			var hpMaxField = SolFloatField(health.FindProperty("HP").FindPropertyRelative("Max"), "HP Max");
 
-			var hpMaxField = new FloatField
-							 {
-								 label = "HP Max",
-							 };
+			flashlightTestingPanel.Add(SolDivider());
 
-			hpMaxField.BindProperty(health.FindProperty("HP").FindPropertyRelative("Max"));
+			var appendedItems = new[]
+								{
+									new VisualElement[]
+									{
+										hpValueField,
+										hpMaxField,
+									},
+								};
 
-			var col = new VisualElement
-					  {
-						  style =
-						  {
-							  flexDirection = FlexDirection.Column,
-						  },
-					  };
-
-			col.Add(hpValueField);
-			col.Add(hpMaxField);
-			var row = Helpers.Editor.Style.Row();
-			row.Add(col);
-			Helpers.Editor.Style.GenerateDivider(flashlightTestingGroup);
-			flashlightTestingGroup.Add(row);
+			AppendSolGrid(flashlightTestingPanel, appendedItems);
 			hpValueField.Bind(health);
 		}
 
 		private Foldout GenerateSubcomponentFoldout(
-			Component comp,
+			SerializedObject so,
 			GameObject mainGO,
-			List<Component> subcomponents,
+			List<SerializedObject> subSOs,
 			VisualElement root
 		)
 		{
 			var foldout = new Foldout
 						  {
-							  text = comp.GetType().FullName,
-							  name = comp.GetType().FullName,
-							  viewDataKey = $"{mainGO.GetInstanceID()}_{comp.GetType().Name}_Foldout",
+							  text = so.targetObject.GetType().FullName,
+							  name = so.targetObject.GetType().FullName,
+							  viewDataKey = $"{mainGO.GetInstanceID()}_{so.targetObject.GetType().Name}_Foldout",
 						  };
 
-			IterateProps(comp, foldout, subcomponents.ToArray());
+			so.IterateProps(
+				foldout,
+				prop => prop.name == "m_Script"
+						|| (prop.propertyType == SerializedPropertyType.ObjectReference
+							&& (subSOs.Select(subSO => subSO.targetObject).Contains(prop.objectReferenceValue)
+								|| prop.objectReferenceValue == target))
+			);
 
 			root.Add(foldout);
 
 			return foldout;
-		}
-
-		private void IterateProps(
-			Component comp,
-			VisualElement ele,
-			params Component[] ignoreReferencesToTheseComponents
-		)
-		{
-			SerializedObject nestedSO = new(comp);
-
-			var prop = nestedSO.GetIterator();
-
-			if (prop.NextVisible(true))
-				do
-				{
-					// Skip if:
-					// Default Script Property
-					// Reference to Subcomponent being Iterated
-					// Reference to the Control Panel
-					if (prop.name == "m_Script"
-						|| (prop.propertyType == SerializedPropertyType.ObjectReference
-							&& (ignoreReferencesToTheseComponents.Contains(prop.objectReferenceValue)
-								|| prop.objectReferenceValue == target)))
-						continue;
-
-					ele.Add(
-						new PropertyField(prop)
-						{
-							name = prop.name,
-						}
-					);
-				} while (prop.NextVisible(false));
-
-			ele.Bind(nestedSO);
 		}
 	}
 }
