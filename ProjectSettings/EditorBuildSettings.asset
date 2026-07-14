@@ -6,40 +6,40 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Unorganized/Scenes/4_6_26/4_6_26_MainMenu.unity
+    path: Assets/Scenes/4_6_26_MainMenu.unity
     guid: 1b8b40a894a32674eb3cb193be21465b
   - enabled: 1
-    path: Assets/Unorganized/Scenes/4_6_26/4_6_26_N1_Animation.unity
+    path: Assets/Scenes/4_6_26_N1_Animation.unity
     guid: 1d6e7054502ef3d4fbbd2e761a16a6d0
   - enabled: 1
-    path: Assets/Unorganized/Scenes/4_6_26/4_6_26_N1.unity
+    path: Assets/Scenes/4_6_26_N1.unity
     guid: 31ff5d10cccdb9b4595832464ecbaafa
   - enabled: 1
-    path: Assets/Unorganized/Scenes/4_6_26/4_6_26_N2_Animation.unity
+    path: Assets/Scenes/4_6_26_N2_Animation.unity
     guid: fb117f75c28e3914eba3772b012e9300
   - enabled: 1
-    path: Assets/Unorganized/Scenes/4_6_26/4_6_26_N2.unity
+    path: Assets/Scenes/4_6_26_N2.unity
     guid: ca992441b5e3bfe4aac0df0623e63214
   - enabled: 1
-    path: Assets/Unorganized/Scenes/4_6_26/4_6_26_N3_Animation.unity
+    path: Assets/Scenes/4_6_26_N3_Animation.unity
     guid: 4cb4ed1f9b7844640b4789f48672fac4
   - enabled: 1
-    path: Assets/Unorganized/Scenes/4_6_26/4_6_26_N3.unity
+    path: Assets/Scenes/4_6_26_N3.unity
     guid: 1625fc18cbe07094cac5b909c7817029
   - enabled: 1
-    path: Assets/Unorganized/Scenes/4_6_26/4_6_26_N4_Animation.unity
+    path: Assets/Scenes/4_6_26_N4_Animation.unity
     guid: 8685b98765c2e9c458d6a328a1386cfa
   - enabled: 1
-    path: Assets/Unorganized/Scenes/4_6_26/4_6_26_N4.unity
+    path: Assets/Scenes/4_6_26_N4.unity
     guid: c3e90e4e8f7bead4e994c9ed33f249c1
   - enabled: 1
-    path: Assets/Unorganized/Scenes/4_6_26/4_6_26_N5_Animation.unity
+    path: Assets/Scenes/4_6_26_N5_Animation.unity
     guid: cfbc878d36425974f966ba2ef8a1b069
   - enabled: 1
-    path: Assets/Unorganized/Scenes/4_6_26/4_6_26_N5.unity
+    path: Assets/Scenes/4_6_26_N5.unity
     guid: b7ca9683ac2cebe4bbf3c488310fcec9
   - enabled: 1
-    path: Assets/Unorganized/Scenes/4_6_26/4_6_26_Final.unity
+    path: Assets/Scenes/4_6_26_Final.unity
     guid: 8d28681397140c54a84cbc043dc69b49
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
