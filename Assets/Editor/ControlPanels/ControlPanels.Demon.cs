@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using EC.Demon;
 using EC.Demon.Pathing;
-using Helpers;
 using Helpers.Editor.Ext;
+using Helpers.Editor.Theming.SolarizedDark;
+using Helpers.Ext;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Helpers.Editor.Theming.SolarizedDark.Ele;
 
-namespace Editor.DemonECEditors
+namespace Editor.ControlPanels
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(ControlPanel))]
-	public class ControlPanelEditor : UnityEditor.Editor
+	public class Demon : UnityEditor.Editor
 	{
 		public override VisualElement CreateInspectorGUI()
 		{
@@ -23,68 +24,73 @@ namespace Editor.DemonECEditors
 
 			var controlPanel = (ControlPanel)target;
 
-			VisualElement[][] flashlightTestingPanelItems =
-			{
+			var flashlightTestingPanel = SolGrid(
+				"Flashlight Testing",
 				new VisualElement[]
 				{
 					SolButton(
-						evt => controlPanel.SpawnAndTestFlashlight(),
+						_ => controlPanel.SpawnAndTestFlashlight(),
 						"Spawn & Test Flashlight",
 						Application.isPlaying
 					),
-					SolButton(evt => controlPanel.DestroyFlashlight(), "Destroy Flashlight", Application.isPlaying),
-				},
-			};
+					SolButton(_ => controlPanel.DestroyFlashlight(), "Destroy Flashlight", Application.isPlaying),
+				}
+			);
 
-			var flashlightTestingPanel = SolGrid(flashlightTestingPanelItems, "Flashlight Testing");
 			root.Add(flashlightTestingPanel);
 
-			VisualElement[][] jumpscareTestingItems =
-			{
+			var jumpscareTestingPanel = SolGrid(
+				"Jumpscare Testing",
 				new VisualElement[]
 				{
-					SolButton(evt => controlPanel.TestJumpscare(), "Path to Jumpscare Target", Application.isPlaying),
-					SolButton(evt => controlPanel.ResetJumpscare(), "Reset Jumpscare", Application.isPlaying),
+					SolButton(
+						_ => controlPanel.PathToJumpscareTarget(),
+						"Path to Jumpscare Target",
+						Application.isPlaying
+					),
+					SolButton(_ => controlPanel.ResetJumpscare(), "Fully Reset Jumpscare", Application.isPlaying),
 				},
-			};
+				new VisualElement[]
+				{
+					SolButton(_ => controlPanel.PositionForJumpscare(), "Position for Jumpscare"),
+					SolButton(_ => controlPanel.RevertPositionFromJumpscare(), "Revert Position from Jumpscare"),
+				}
+			);
 
-			var jumpscareTestingPanel = SolGrid(jumpscareTestingItems, "Jumpscare Testing");
 			root.Add(jumpscareTestingPanel);
 
-			VisualElement[][] pathingTestingItems =
-			{
+			var pathingTestingPanel = SolGrid(
+				"Pathing Testing",
 				new VisualElement[]
 				{
-					SolButton(evt => controlPanel.TogglePathing(), "Toggle Pathing", Application.isPlaying),
+					SolButton(_ => controlPanel.TogglePathing(), "Toggle Pathing", Application.isPlaying),
 					SolButton(
-						evt => controlPanel.Pathing.EnterState(StateType.Patrol),
+						_ => controlPanel.Pathing.EnterState(StateType.Patrol),
 						"Enter State: Patrol",
 						Application.isPlaying
 					),
 					SolButton(
-						evt => controlPanel.Pathing.EnterState(StateType.Chase),
+						_ => controlPanel.Pathing.EnterState(StateType.Chase),
 						"Enter State: Chase",
 						Application.isPlaying
 					),
-				},
-			};
+				}
+			);
 
-			var pathingTestingPanel = SolGrid(pathingTestingItems, "Pathing Testing");
 			root.Add(pathingTestingPanel);
 
-			VisualElement[][] configTestingItems =
-			{
+			var configTestingPanel = SolGrid(
+				"Config",
 				new VisualElement[]
 				{
 					SolButton(
-						evt => controlPanel.GetInitializedComponents(),
+						_ => controlPanel.GetInitializedComponents(),
 						"Initialize Components",
 						!Application.isPlaying
 					),
-				},
-			};
+				}
+			);
 
-			var configTestingPanel = SolGrid(configTestingItems, "Config");
 			root.Add(configTestingPanel);
 
 			var controlPanelSO = new SerializedObject(controlPanel);
@@ -98,21 +104,22 @@ namespace Editor.DemonECEditors
 
 			root.Add(SolDivider());
 
-			var componentLabel = SolLabel("Demon Components", true);
+			var componentLabel = SolLabel("Demon Components");
 
 			root.Add(componentLabel);
 
 			var subSOs = controlPanel.GetInitializedComponents().Select(comp => new SerializedObject(comp)).ToList();
 			// 3d. Generate Foldouts for subcomponents (GetInitializedSubcomponents() only returns non-null)
 
-			var subcomponentFoldouts = subSOs.Select(so => GenerateSubcomponentFoldout(
-													  so,
-													  controlPanel.gameObject,
-													  subSOs,
-													  root
-												  )
-											  )
-											 .ToList();
+			var subcomponentFoldouts = subSOs
+									  .Select(so => GenerateSubcomponentFoldout(
+											   so,
+											   controlPanel.gameObject,
+											   subSOs,
+											   root
+										   )
+									   )
+									  .ToList();
 
 			// // 4. Attach additional component-based props
 			GenerateHP(controlPanel, subcomponentFoldouts, flashlightTestingPanel);
@@ -130,62 +137,68 @@ namespace Editor.DemonECEditors
 
 			pathingTestingGroup.Add(navBeaconLabel);
 
-			var navBeaconRow = SolRow(true);
+			var navBeaconCol = SolCol();
 
-			pathingTestingGroup.Add(navBeaconRow);
+			pathingTestingGroup.Add(navBeaconCol);
 
-			var navBeaconList = new ListView
-								{
-									itemsSource = controlPanel.NavBeacons,
-									makeItem = () =>
-									{
-										var row = SolRow(true);
-										row.name = "row";
+			var navBeaconList = SolList(
+				controlPanel.NavBeacons,
+				makeItem: () =>
+				{
+					var row = SolRow(true)
+					   .WithStyle(r =>
+							{
+								r.marginLeft = 0;
+								r.marginLeft = 0;
+							}
+						);
 
-										var label = SolLabel();
-										label.name = "label";
+					row.name = "row";
 
-										row.Add(label);
+					var label = SolLabel();
+					label.name = "label";
 
-										var button = SolButton();
+					row.Add(label);
 
-										button.name = "btn";
+					var button = SolButton();
 
-										row.Add(button);
+					button.name = "btn";
 
-										return row;
-									},
-									bindItem = (element, index) =>
-									{
-										element.schedule.Execute(() =>
-											{
-												var qLabel = element.Q("label");
+					row.Add(button);
 
-												if (qLabel is Label label)
-													label.text = controlPanel.NavBeacons[index].name;
+					return row;
+				},
+				bindItem: (element, index) =>
+				{
+					element.schedule.Execute(() =>
+						{
+							var qLabel = element.Q("label");
 
-												var qBtn = element.Q("btn");
+							if (qLabel is Label label) label.text = controlPanel.NavBeacons[index].name;
 
-												if (qBtn is Button btn)
-												{
-													btn.text = "Go To";
+							var qBtn = element.Q("btn");
 
-													btn.RegisterCallback<ClickEvent>(evt =>
-														controlPanel.Pathing.NavMeshAgent.GoTo(
-															controlPanel.NavBeacons[index].transform.position
-														)
-													);
+							if (qBtn is Button btn)
+							{
+								btn.text = "Go To";
 
-													btn.SetEnabled(Application.isPlaying);
-												}
-											}
-										);
-									},
-									showAddRemoveFooter = false, // Disable modifications
-									reorderable = false,
-								};
+								btn.RegisterCallback<ClickEvent>(_ =>
+									controlPanel.Pathing.NavMeshAgent.GoTo(
+										controlPanel.NavBeacons[index].transform.position
+									)
+								);
 
-			navBeaconRow.Add(navBeaconList);
+								btn.SetEnabled(Application.isPlaying);
+							}
+						}
+					);
+				}
+			);
+
+			navBeaconList.showAddRemoveFooter = false;
+			navBeaconList.reorderable = false;
+
+			navBeaconCol.Add(navBeaconList);
 		}
 
 		private void GenerateCurrentStateType(
@@ -223,15 +236,14 @@ namespace Editor.DemonECEditors
 
 			pathingTestingPanel.Add(SolDivider());
 
-			VisualElement[][] appendedItems =
-			{
+			AppendSolGrid(
+				pathingTestingPanel,
 				new VisualElement[]
 				{
 					currentStateTypeLabel,
-				},
-			};
+				}
+			);
 
-			AppendSolGrid(pathingTestingPanel, appendedItems);
 			currentStateTypeLabel.Bind(pathing);
 		}
 
@@ -256,16 +268,15 @@ namespace Editor.DemonECEditors
 
 			flashlightTestingPanel.Add(SolDivider());
 
-			var appendedItems = new[]
-								{
-									new VisualElement[]
-									{
-										hpValueField,
-										hpMaxField,
-									},
-								};
+			AppendSolGrid(
+				flashlightTestingPanel,
+				new VisualElement[]
+				{
+					hpValueField,
+					hpMaxField,
+				}
+			);
 
-			AppendSolGrid(flashlightTestingPanel, appendedItems);
 			hpValueField.Bind(health);
 		}
 
@@ -276,19 +287,20 @@ namespace Editor.DemonECEditors
 			VisualElement root
 		)
 		{
-			var foldout = new Foldout
-						  {
-							  text = so.targetObject.GetType().FullName,
-							  name = so.targetObject.GetType().FullName,
-							  viewDataKey = $"{mainGO.GetInstanceID()}_{so.targetObject.GetType().Name}_Foldout",
-						  };
+			var foldout = SolFoldout(so.targetObject.GetType().FullName);
+			foldout.name = so.targetObject.GetType().FullName;
+			foldout.viewDataKey = $"{mainGO.GetInstanceID()}_{so.targetObject.GetType().Name}_Foldout";
 
 			so.IterateProps(
 				foldout,
 				prop => prop.name == "m_Script"
 						|| (prop.propertyType == SerializedPropertyType.ObjectReference
 							&& (subSOs.Select(subSO => subSO.targetObject).Contains(prop.objectReferenceValue)
-								|| prop.objectReferenceValue == target))
+								|| prop.objectReferenceValue == target)),
+				new[]
+				{
+					StyleHelper.VField,
+				}
 			);
 
 			root.Add(foldout);

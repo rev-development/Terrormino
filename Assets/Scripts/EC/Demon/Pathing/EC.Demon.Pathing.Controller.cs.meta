@@ -1,3 +1,15 @@
 fileFormatVersion: 2
 guid: 5e565e7cac9148fc98d31d057c538280
-timeCreated: 1781122590
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _eventBus: {instanceID: 0}
+  - NavMeshAgent: {instanceID: 0}
+  - Player: {instanceID: 0}
+  - NavBeaconEC: {fileID: 11400000, guid: 9ec024d2b89bae34d970bd64159f5487, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

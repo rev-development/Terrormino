@@ -1,5 +1,6 @@
 using System;
 using Helpers;
+using Helpers.Ext;
 using UnityEngine;
 
 namespace EC.Demon.Pathing.Patrol

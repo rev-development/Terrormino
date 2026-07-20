@@ -1,3 +1,5 @@
+using Helpers;
+using Helpers.Ext;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,17 +10,39 @@ namespace EC.Demon
 	[AddComponentMenu("EC.Demon.Jumpscare")]
 	public class Jumpscare : MonoBehaviour
 	{
-		[Helpers.DisableInEditorAttribute] [SerializeField] private EventBus _eventBus;
+		[DisableInEditor] [SerializeField] private EventBus _eventBus;
 
-		public float JumpscarePlacementDistance = 4.5f;
+		[SerializeField] private float _jumpscareFrameFitPercent = 0.8f;
 
-		[Helpers.DisableInEditorAttribute] private ControlPanel _controlPanel;
+		[DisableInEditor] private ControlPanel _controlPanel;
 
-		private Transform _mainCameraTransform;
+		private Camera _mainCamera;
 
 		private NavMeshAgent _navMeshAgent;
 
-		public void PositionForJumpscare(GameObject player)
+		public void Awake()
+		{
+			_eventBus = gameObject.TryFindComponent<EventBus>();
+			_controlPanel = gameObject.TryFindComponent<ControlPanel>();
+			_navMeshAgent = gameObject.TryFindComponent<NavMeshAgent>();
+
+			if (Camera.main != null) _mainCamera = Camera.main;
+		}
+
+		private void OnEnable()
+		{
+			_eventBus.JumpscareTriggered.AddListener(PrepJumpscare);
+
+			if (_controlPanel)
+				_controlPanel.ListenerTracker.Add(this, nameof(_eventBus.JumpscareTriggered), nameof(PrepJumpscare));
+		}
+
+		private void OnTriggerEnter(Collider other)
+		{
+			if (other.CompareTag("Player")) _eventBus.JumpscareTriggered.Invoke(other.gameObject);
+		}
+
+		private void RemoveJumpscareListeners()
 		{
 			_eventBus.JumpscareTriggered.RemoveListener(PositionForJumpscare);
 
@@ -28,52 +52,29 @@ namespace EC.Demon
 					nameof(_eventBus.JumpscareTriggered),
 					nameof(PositionForJumpscare)
 				);
+		}
 
-			Helpers.NavMeshAgentExtensions.TogglePathing(_navMeshAgent, false);
-			_navMeshAgent.ResetPath();
-			_navMeshAgent.enabled = false;
+		public void PositionForJumpscare(GameObject player)
+		{
+			var bounds = gameObject.TryFindComponentsInChildren<Collider>().GetAllBounds();
 
-			Helpers.Positioning.PositionInFrontOf(
-				gameObject.transform,
-				_mainCameraTransform,
-				JumpscarePlacementDistance
+			var newPosition = _mainCamera.GetPointInFrustum(
+				_mainCamera.GetDistanceToFitInFrame(bounds, _jumpscareFrameFitPercent)
 			);
 
-			Helpers.Positioning.AlignTops(gameObject, _mainCameraTransform.gameObject);
+			newPosition.y -= gameObject.TryFindComponentsInChildren<Collider>().GetAllBounds().extents.y;
 
-			var newRotation = Quaternion.LookRotation(-_mainCameraTransform.forward, _mainCameraTransform.up);
+			gameObject.transform.position = newPosition;
+
+			var newRotation = Quaternion.LookRotation(-_mainCamera.transform.forward, _mainCamera.transform.up);
 			gameObject.transform.rotation = newRotation;
 		}
 
-#region Event Functions
-
-		public void Awake()
+		public void PrepJumpscare(GameObject player)
 		{
-			_eventBus = Helpers.Debug.TryFindComponent<EventBus>(gameObject);
-			_controlPanel = Helpers.Debug.TryFindComponent<ControlPanel>(gameObject);
-
-			_navMeshAgent = Helpers.Debug.TryFindComponent<NavMeshAgent>(gameObject);
-
-			if (Camera.main != null) _mainCameraTransform = Camera.main.transform;
+			RemoveJumpscareListeners();
+			_navMeshAgent.StopResetDisable();
+			PositionForJumpscare(player);
 		}
-
-		private void OnEnable()
-		{
-			_eventBus.JumpscareTriggered.AddListener(PositionForJumpscare);
-
-			if (_controlPanel)
-				_controlPanel.ListenerTracker.Add(
-					this,
-					nameof(_eventBus.JumpscareTriggered),
-					nameof(PositionForJumpscare)
-				);
-		}
-
-		private void OnTriggerEnter(Collider other)
-		{
-			if (other.CompareTag("Player")) _eventBus.JumpscareTriggered.Invoke(other.gameObject);
-		}
-
-#endregion
 	}
 }

@@ -6,9 +6,6 @@ namespace Helpers
 	{
 		public Helpers.Events.Channels.GameObjectEC NavBeaconEC;
 
-		private void Awake()
-		{
-			NavBeaconEC.RaiseEvent(gameObject);
-		}
+		private void Awake() => NavBeaconEC.RaiseEvent(gameObject);
 	}
 }

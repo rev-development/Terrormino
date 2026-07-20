@@ -3,51 +3,43 @@ using UnityEngine;
 
 namespace GameLoop
 {
-    public class SaveManager : MonoBehaviour
-    {
+	public class SaveManager : MonoBehaviour
+	{
+		public string SavePath;
 
-        public string SavePath;
+		public static SaveManager Instance { get; private set; }
 
-        public static SaveManager Instance { get; private set; }
+		public void Awake()
+		{
+			if (Instance != null
+				&& Instance != this)
+			{
+				Destroy(gameObject);
 
-        public void Awake()
-        {
-            if (Instance != null
-                && Instance != this)
-            {
-                Destroy(gameObject);
+				return;
+			}
 
-                return;
-            }
+			Instance = this;
 
-            Instance = this;
+			DontDestroyOnLoad(this);
+		}
 
-            DontDestroyOnLoad(this);
-        }
+		private void Start() => SavePath = Path.Combine(Application.persistentDataPath, "savegame.json");
 
-        private void Start()
-        {
-            SavePath = Path.Combine(Application.persistentDataPath, "savegame.json");
-        }
+		public void SaveGame(SaveData data)
+		{
+			var json = JsonUtility.ToJson(data, true);
+			File.WriteAllText(SavePath, json);
+			Debug.Log($"Data saved to: {SavePath}");
+		}
 
-        public void SaveGame(SaveData data)
-        {
-            string json = JsonUtility.ToJson(data, true);
-            File.WriteAllText(SavePath, json);
-            Debug.Log($"Data saved to: {SavePath}");
-        }
+		public SaveData LoadGame()
+		{
+			if (!File.Exists(SavePath)) return null;
 
-        public SaveData LoadGame()
-        {
-            if (!File.Exists(SavePath))
-            {
-                return null;
-            }
+			var json = File.ReadAllText(SavePath);
 
-            string json = File.ReadAllText(SavePath);
-
-            return JsonUtility.FromJson<SaveData>(json);
-        }
-
-    }
+			return JsonUtility.FromJson<SaveData>(json);
+		}
+	}
 }

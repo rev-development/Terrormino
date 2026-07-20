@@ -1,3 +1,16 @@
 fileFormatVersion: 2
 guid: 883033e823df4954b7150cbcbe732f7d
-timeCreated: 1780890713
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _animator: {instanceID: 0}
+  - _audioSource: {instanceID: 0}
+  - _eventBus: {instanceID: 0}
+  - _controlPanel: {instanceID: 0}
+  - Scream: {fileID: 8300000, guid: f27850490a7d415469b505648b6a1d40, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

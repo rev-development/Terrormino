@@ -144,6 +144,7 @@ GameObject:
   - component: {fileID: 622570711}
   - component: {fileID: 622570710}
   - component: {fileID: 622570709}
+  - component: {fileID: 622570712}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -225,6 +226,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1052230797}
   m_LocalEulerAnglesHint: {x: 15, y: -15, z: 0}
+--- !u!136 &622570712
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 622570708}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 4
+  m_Height: 20
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &667191546
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,7 +377,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1052230797}
-  - component: {fileID: 1052230798}
   - component: {fileID: 1052230799}
   m_Layer: 0
   m_Name: Dev Player
@@ -378,29 +401,6 @@ Transform:
   - {fileID: 622570711}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &1052230798
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1052230796}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 4
-  m_Height: 20
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1052230799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -428,6 +428,59 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6791175842977998671, guid: c6c6a7c080df76c419880d897d117f94, type: 3}
   m_PrefabInstance: {fileID: 6866043550968224660}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1597196135
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1597196137}
+  - component: {fileID: 1597196136}
+  m_Layer: 0
+  m_Name: DemonSpawnCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1597196136
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597196135}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1597196137
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597196135}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1644009707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -439,6 +492,10 @@ PrefabInstance:
     - target: {fileID: 253537706936573021, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_Speed
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 253537706936573021, guid: a3548566adb47e84782b40f416631141, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 253537706936573021, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_AutoBraking
@@ -468,6 +525,10 @@ PrefabInstance:
       propertyPath: NavBeacons.Array.data[1]
       value: 
       objectReference: {fileID: 2021622691}
+    - target: {fileID: 1295109646027962146, guid: a3548566adb47e84782b40f416631141, type: 3}
+      propertyPath: JumpscarePlacementDistance
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2054372183984781843, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: _health
       value: 
@@ -554,19 +615,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9066433164670549038, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.13052626
+      value: 0.12940961
       objectReference: {fileID: 0}
     - target: {fileID: 9066433164670549038, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0.017037088
       objectReference: {fileID: 0}
     - target: {fileID: 9066433164670549038, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9914449
+      value: 0.9829629
       objectReference: {fileID: 0}
     - target: {fileID: 9066433164670549038, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: 0.1294095
       objectReference: {fileID: 0}
     - target: {fileID: 9066433164670549038, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1204,12 +1265,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 273122194917010831, guid: 44b34a20e4a5e4344867b895df93eb4e, type: 3}
-      propertyPath: _graceTimer._running
-      value: 0
+      propertyPath: _spawnColliders.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 273122194917010831, guid: 44b34a20e4a5e4344867b895df93eb4e, type: 3}
-      propertyPath: _graceTimer._initialized
-      value: 1
+      propertyPath: _spawnColliders.Array.data[0]
+      value: 
+      objectReference: {fileID: 1597196136}
+    - target: {fileID: 273122194917010831, guid: 44b34a20e4a5e4344867b895df93eb4e, type: 3}
+      propertyPath: <Config>k__BackingField.<PatrolConfig>k__BackingField.<PatrolDuration>k__BackingField
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5111840678269315788, guid: 44b34a20e4a5e4344867b895df93eb4e, type: 3}
       propertyPath: m_Name
@@ -1371,3 +1436,4 @@ SceneRoots:
   - {fileID: 1894558819}
   - {fileID: 6866043550968224660}
   - {fileID: 4365810565792590589}
+  - {fileID: 1597196137}

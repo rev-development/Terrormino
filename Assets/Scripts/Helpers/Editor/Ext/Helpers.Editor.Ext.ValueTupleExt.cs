@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Helpers.Editor.Extensions
+namespace Helpers.Editor.Ext
 {
 	public static class ValueTupleExt
 	{

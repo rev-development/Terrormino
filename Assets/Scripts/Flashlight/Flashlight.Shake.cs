@@ -1,3 +1,4 @@
+using Helpers.Ext;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -123,7 +124,7 @@ namespace Flashlight
 
 #region Lifecycle
 
-		public void Awake() => LightSource ??= Helpers.Debug.TryFindComponentInChildren<Light>(gameObject);
+		public void Awake() => LightSource ??= gameObject.TryFindComponentInChildren<Light>();
 
 		private void Start() => FlashlightToggled.Invoke(false);
 

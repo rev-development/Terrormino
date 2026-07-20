@@ -13,7 +13,7 @@ namespace Helpers
 	///     immediate repeat at the reshuffle boundary unless the source list has 1 element.
 	/// </summary>
 	[Serializable]
-	[AiGenerated("Claude", "Sonnet 4.6")]
+	[Helpers.Attributes.AiGeneratedAttribute("Claude", "Sonnet 4.6")]
 	public class RandomBag<T>
 	{
 		public bool AutoRefillOnExhaustion = true;
@@ -26,10 +26,7 @@ namespace Helpers
 		{
 		}
 
-		public RandomBag(IEnumerable<T> source)
-		{
-			Init(source);
-		}
+		public RandomBag(IEnumerable<T> source) => Init(source);
 
 		public int RemainingCount => Bag.Count;
 
@@ -67,7 +64,7 @@ namespace Helpers
 		{
 			if (!IsInitialized)
 			{
-				UnityEngine.Debug.LogWarning("RandomBag.Next called before Init().");
+				Debug.LogWarning("RandomBag.Next called before Init().");
 				result = default;
 
 				return false;
@@ -75,7 +72,7 @@ namespace Helpers
 
 			if (Source.Count == 0)
 			{
-				UnityEngine.Debug.LogWarning("RandomBag has no source elements to choose from.");
+				Debug.LogWarning("RandomBag has no source elements to choose from.");
 				result = default;
 
 				return false;
@@ -92,7 +89,7 @@ namespace Helpers
 				{
 					if (!AutoRefillOnExhaustion)
 					{
-						UnityEngine.Debug.LogWarning("RandomBag is exhausted and AutoRefillOnExhaustion is false.");
+						Debug.LogWarning("RandomBag is exhausted and AutoRefillOnExhaustion is false.");
 						result = default;
 
 						return false;
@@ -112,14 +109,14 @@ namespace Helpers
 					return true;
 				}
 
-				UnityEngine.Debug.LogWarning(
+				Debug.LogWarning(
 					"RandomBag skipped a destroyed/null entry. Consider calling RemoveItem to clean it up."
 				);
 
 				Source.Remove(candidate);
 			}
 
-			UnityEngine.Debug.LogWarning("RandomBag has no valid (non-destroyed) elements left to choose from.");
+			Debug.LogWarning("RandomBag has no valid (non-destroyed) elements left to choose from.");
 			result = default;
 
 			return false;
@@ -136,7 +133,7 @@ namespace Helpers
 
 			if (typeof(T).IsValueType) return true;
 
-			#pragma warning disable S2955 // Generic parameters not constrained to reference types should not be compared to null
+#pragma warning disable S2955 // Generic parameters not constrained to reference types should not be compared to null
 			return item != null;
 		}
 
@@ -149,7 +146,7 @@ namespace Helpers
 		{
 			if (!IsInitialized)
 			{
-				UnityEngine.Debug.LogError("RandomBag.AddItem called before Init(). Call Init(source) first.");
+				Debug.LogError("RandomBag.AddItem called before Init(). Call Init(source) first.");
 
 				return;
 			}
@@ -168,7 +165,7 @@ namespace Helpers
 		{
 			if (!IsInitialized)
 			{
-				UnityEngine.Debug.LogError("RandomBag.RemoveItem called before Init(). Call Init(source) first.");
+				Debug.LogError("RandomBag.RemoveItem called before Init(). Call Init(source) first.");
 
 				return false;
 			}
@@ -177,7 +174,7 @@ namespace Helpers
 
 			if (!removedFromSource)
 			{
-				UnityEngine.Debug.LogWarning("RandomBag.RemoveItem could not find a matching item in the source pool.");
+				Debug.LogWarning("RandomBag.RemoveItem could not find a matching item in the source pool.");
 
 				return false;
 			}

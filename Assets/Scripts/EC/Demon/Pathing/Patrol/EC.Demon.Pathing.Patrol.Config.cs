@@ -10,8 +10,8 @@ namespace EC.Demon.Pathing.Patrol
 
 		[field: SerializeField] public float IdleDuration { get; set; } = 3f;
 
-		[field: Helpers.Editor.NavMeshAreaMaskAttribute]
+		[field: Helpers.Attributes.NavMeshAreaMaskAttribute]
 		[field: SerializeField]
-		public int AreaMask { get; set; } = 0;
+		public int AreaMask { get; set; } = 1;
 	}
 }

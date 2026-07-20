@@ -66,10 +66,7 @@ namespace GameLoop
 			StartNight(NightIndex);
 		}
 
-		public void OnDisable()
-		{
-			TrueGameOver.RemoveAllListeners();
-		}
+		public void OnDisable() => TrueGameOver.RemoveAllListeners();
 
 		// Called by Board.ClearLines() each time lines are cleared
 		public void RegisterLineCleared(int linesJustCleared)

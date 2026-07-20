@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Helpers.Editor.Ext;
 using JetBrains.Annotations;
 using UnityEditor;
@@ -7,7 +8,8 @@ using UnityEngine.UIElements;
 
 namespace Helpers.Editor.Theming.SolarizedDark
 {
-	[AiGenerated("Claude", "Sonnet 4.6")]
+	[PublicAPI]
+	[Helpers.Attributes.AiGeneratedAttribute("Claude", "Sonnet 4.6")]
 	public static class Ele
 	{
 		public static Label SolLabel() => SolLabel("");
@@ -15,15 +17,31 @@ namespace Helpers.Editor.Theming.SolarizedDark
 		public static Label SolLabel(string text, bool emphasized = false)
 		{
 			var label = new Label(text);
-			label.AddToClassList(emphasized ? StyleHelper.ClassTextEmphasis : StyleHelper.ClassTextBody);
+			label.AddToClassList(StyleHelper.TextDefault);
+
+			if (emphasized)
+			{
+				label.AddToClassList(StyleHelper.FontBold);
+				label.AddToClassList(StyleHelper.TextBase2);
+			}
 
 			return label;
 		}
 
-		public static Label SolSecondaryLabel(string text)
+		public static Label SolSecondaryLabel(string text = null, bool emphasized = false)
 		{
 			var label = new Label(text);
-			label.AddToClassList(StyleHelper.ClassTextSecondary);
+
+			if (emphasized)
+			{
+				label.AddToClassList(StyleHelper.FontBold);
+				label.AddToClassList(StyleHelper.TextBase2);
+			}
+			else
+			{
+				label.AddToClassList(StyleHelper.TextBase01);
+				label.AddToClassList(StyleHelper.TextSm);
+			}
 
 			return label;
 		}
@@ -31,11 +49,11 @@ namespace Helpers.Editor.Theming.SolarizedDark
 		public static Button SolButton(string text = "", bool enabled = true)
 		{
 			var button = new Button
-						 {
-							 text = text,
-						 };
+			{
+				text = text,
+			};
 
-			button.AddToClassList(StyleHelper.ClassButton);
+			button.AddToClassList(StyleHelper.VBtn);
 			button.SetEnabled(enabled);
 
 			return button;
@@ -44,49 +62,51 @@ namespace Helpers.Editor.Theming.SolarizedDark
 		public static Button SolButton(EventCallback<ClickEvent> onClick, string text = "", bool enabled = true)
 		{
 			var button = new Button
-						 {
-							 text = text,
-						 };
+			{
+				text = text,
+			};
 
 			button.RegisterCallback(onClick);
-			button.AddToClassList(StyleHelper.ClassButton);
+			button.AddToClassList(StyleHelper.VBtn);
 			button.SetEnabled(enabled);
 
 			return button;
 		}
 
-		// public static Button SolButton(string text = "", EventCallback<ClickEvent> onClick = null, bool enabled = true)
-		// {
-		// 	var button = new Button
-		// 				 {
-		// 					 text = text,
-		// 				 };
-		//
-		// 	button.RegisterCallback(onClick);
-		// 	button.AddToClassList(StyleHelper.ClassButton);
-		// 	button.SetEnabled(enabled);
-		//
-		// 	return button;
-		// }
-
 		public static Button SolPrimaryButton(string text, Action onClick = null, bool enabled = true)
 		{
 			var button = new Button(onClick)
-						 {
-							 text = text,
-						 };
+			{
+				text = text,
+			};
 
-			button.AddToClassList(StyleHelper.ClassButtonPrimary);
-
+			button.AddToClassList(StyleHelper.VBtnPrimary);
 			button.SetEnabled(enabled);
 
 			return button;
+		}
+
+		public static VisualElement SolPaper()
+		{
+			var paper = new VisualElement();
+			paper.AddToClassList(StyleHelper.BgBase03);
+
+			return paper;
+		}
+
+		public static VisualElement SolContainer()
+		{
+			var container = new VisualElement();
+			container.AddToClassList(StyleHelper.VContainer);
+			container.AddToClassList(StyleHelper.BgBase03);
+
+			return container;
 		}
 
 		public static VisualElement SolCard()
 		{
 			var card = new VisualElement();
-			card.AddToClassList(StyleHelper.ClassCard);
+			card.AddToClassList(StyleHelper.VCard);
 
 			return card;
 		}
@@ -94,39 +114,25 @@ namespace Helpers.Editor.Theming.SolarizedDark
 		public static VisualElement SolDivider()
 		{
 			var divider = new VisualElement();
-			divider.AddToClassList(StyleHelper.ClassDivider);
+			divider.AddToClassList(StyleHelper.VDivider);
 
 			return divider;
 		}
 
 		public static VisualElement SolRow(bool highlighted = false)
 		{
-			var row = new VisualElement
-					  {
-						  style =
-						  {
-							  flexDirection = FlexDirection.Row,
-						  },
-					  };
-
-			row.AddToClassList(highlighted ? StyleHelper.ClassBgHighlight : StyleHelper.ClassBackground);
+			var row = new VisualElement();
+			row.AddToClassList(StyleHelper.VRow);
+			row.AddToClassList(highlighted ? StyleHelper.BgBase02 : StyleHelper.BgBase03);
 
 			return row;
 		}
 
 		public static VisualElement SolCol(bool highlighted = false)
 		{
-			var col = new VisualElement
-					  {
-						  style =
-						  {
-							  flexDirection = FlexDirection.Column,
-							  flexGrow = 1,
-						  },
-					  };
-
-			col.style.SetAllPadding(4);
-			col.AddToClassList(highlighted ? StyleHelper.ClassBgHighlight : StyleHelper.ClassBackground);
+			var col = new VisualElement();
+			col.AddToClassList(StyleHelper.VCol);
+			col.AddToClassList(highlighted ? StyleHelper.BgBase02 : StyleHelper.BgBase03);
 
 			return col;
 		}
@@ -136,8 +142,15 @@ namespace Helpers.Editor.Theming.SolarizedDark
 		{
 			var root = new VisualElement();
 			StyleHelper.ApplyTo(root);
-			root.AddToClassList(StyleHelper.ClassBackground);
-			root.style.flexGrow = 1;
+
+			root.WithClass(
+				StyleHelper.BgBase03,
+				StyleHelper.FlexGrow,
+				StyleHelper.VContainer,
+				StyleHelper.BorderRadiusRounded
+			);
+
+			root.style.marginTop = 4;
 
 			return root;
 		}
@@ -145,7 +158,7 @@ namespace Helpers.Editor.Theming.SolarizedDark
 		public static Toggle SolToggle(string label = null)
 		{
 			var field = new Toggle(label);
-			field.AddToClassList(StyleHelper.ClassToggle);
+			field.AddToClassList(StyleHelper.VSwitch);
 
 			return field;
 		}
@@ -153,11 +166,11 @@ namespace Helpers.Editor.Theming.SolarizedDark
 		public static IntegerField SolIntegerField(string label = null, bool readOnly = false)
 		{
 			var field = new IntegerField(label)
-						{
-							isReadOnly = readOnly,
-						};
+			{
+				isReadOnly = readOnly,
+			};
 
-			field.AddToClassList(StyleHelper.ClassInputField);
+			field.AddToClassList(StyleHelper.VField);
 
 			return field;
 		}
@@ -169,19 +182,11 @@ namespace Helpers.Editor.Theming.SolarizedDark
 		)
 		{
 			var field = new FloatField(string.IsNullOrEmpty(label) ? serializedProperty?.displayName : label)
-						{
-							isReadOnly = readOnly,
-						};
-
-			field.AddToClassList(StyleHelper.ClassInputField);
-
-			var fieldLabel = field.Q<Label>();
-
-			if (fieldLabel != null)
 			{
-				fieldLabel.style.minWidth = 0;
-				fieldLabel.style.flexShrink = 1;
-			}
+				isReadOnly = readOnly,
+			};
+
+			field.AddToClassList(StyleHelper.VField);
 
 			if (serializedProperty != null) field.BindProperty(serializedProperty);
 
@@ -198,11 +203,11 @@ namespace Helpers.Editor.Theming.SolarizedDark
 		public static TextField SolTextField(string label = null, bool readOnly = false)
 		{
 			var field = new TextField(label)
-						{
-							isReadOnly = readOnly,
-						};
+			{
+				isReadOnly = readOnly,
+			};
 
-			field.AddToClassList(StyleHelper.ClassInputField);
+			field.AddToClassList(StyleHelper.VField);
 
 			return field;
 		}
@@ -210,7 +215,7 @@ namespace Helpers.Editor.Theming.SolarizedDark
 		public static Vector3Field SolVector3Field(string label = null)
 		{
 			var field = new Vector3Field(label);
-			field.AddToClassList(StyleHelper.ClassInputField);
+			field.AddToClassList(StyleHelper.VField);
 
 			return field;
 		}
@@ -218,7 +223,7 @@ namespace Helpers.Editor.Theming.SolarizedDark
 		public static Vector3IntField SolVector3IntField(string label = null)
 		{
 			var field = new Vector3IntField(label);
-			field.AddToClassList(StyleHelper.ClassInputField);
+			field.AddToClassList(StyleHelper.VField);
 
 			return field;
 		}
@@ -227,7 +232,7 @@ namespace Helpers.Editor.Theming.SolarizedDark
 		{
 			var field = new ObjectField(label);
 			if (type != null) field.objectType = type;
-			field.AddToClassList(StyleHelper.ClassInputField);
+			field.AddToClassList(StyleHelper.VField);
 
 			return field;
 		}
@@ -235,32 +240,34 @@ namespace Helpers.Editor.Theming.SolarizedDark
 		public static EnumField SolEnumField(Enum defaultValue, string label = null)
 		{
 			var field = new EnumField(label, defaultValue);
-			field.AddToClassList(StyleHelper.ClassInputField);
+			field.AddToClassList(StyleHelper.VField);
 
 			return field;
 		}
 
-		public static VisualElement SolGrid([ItemCanBeNull] VisualElement[][] gridItems, string label = null)
+		public static VisualElement SolGrid([ItemCanBeNull] params VisualElement[][] rows) => SolGrid(null, rows);
+
+		public static VisualElement SolGrid(string label, [ItemCanBeNull] params VisualElement[][] rows)
 		{
-			var card = SolCard();
+			var container = SolContainer();
 
-			card.Add(SolLabel(label, true));
+			if (label != null) container.Add(SolLabel(label));
 
-			AppendSolGrid(card, gridItems);
+			AppendSolGrid(container, rows);
 
-			return card;
+			return container;
 		}
 
-		public static void AppendSolGrid(VisualElement solGrid, [ItemCanBeNull] VisualElement[][] gridItems)
+		public static void AppendSolGrid(VisualElement solGrid, [ItemCanBeNull] params VisualElement[][] rows)
 		{
-			foreach (var gridRow in gridItems)
+			foreach (var gridRow in rows)
 			{
-				var row = SolRow(true);
+				var row = SolRow();
 
 				if (gridRow != null)
 					foreach (var gridItem in gridRow)
 					{
-						var col = SolCol(true);
+						var col = SolCol();
 
 						if (gridItem != null) col.Add(gridItem);
 
@@ -271,23 +278,76 @@ namespace Helpers.Editor.Theming.SolarizedDark
 			}
 		}
 
-		public static Label SolBooleanLabel(
+		public static Foldout SolFoldout(string text = null, bool value = false)
+		{
+			var foldout = new Foldout
+			{
+				text = text,
+				value = value,
+			};
+
+			foldout.AddToClassList(StyleHelper.VField);
+			foldout.AddToClassList(StyleHelper.VFoldout);
+
+			return foldout;
+		}
+
+		public static ListView SolList(
+			IList itemsSource = null,
+			float itemHeight = 20f,
+			Func<VisualElement> makeItem = null,
+			Action<VisualElement, int> bindItem = null
+		)
+		{
+			var list = new ListView(
+				itemsSource,
+				itemHeight,
+				makeItem,
+				bindItem
+			);
+
+			list.AddToClassList(StyleHelper.VField);
+			list.AddToClassList(StyleHelper.VList);
+
+			return list;
+		}
+
+		public static VisualElement SolBooleanLabel(
 			SerializedProperty prop,
 			string trueValue = "True",
 			string falseValue = "False",
 			string label = null
 		)
 		{
-			var booleanLabel = SolSecondaryLabel($"{(string.IsNullOrEmpty(label) ? prop.displayName : label)}:");
+			var row = SolRow()
+					 .WithStyle(r =>
+						  {
+							  r.marginLeft = 0;
+							  r.marginRight = 0;
+						  }
+					  )
+					 .WithClass(StyleHelper.VBorder, StyleHelper.VBooleanLabel);
 
-			booleanLabel.TrackPropertyValue(prop, SetLabelTextFromBool);
-			SetLabelTextFromBool(prop);
+			var nameLabel = SolLabel((string.IsNullOrEmpty(label) ? prop.displayName : label) + ":")
+			   .WithClass(StyleHelper.BgBase02);
 
-			return booleanLabel;
+			var valueLabel = new Label().WithClass(StyleHelper.FontBold);
 
-			void SetLabelTextFromBool(SerializedProperty p)
+			row.Add(nameLabel);
+			row.Add(valueLabel);
+
+			row.TrackPropertyValue(prop, Update);
+			Update(prop);
+
+			return row;
+
+			void Update(SerializedProperty p)
 			{
-				booleanLabel.text = $"{label}: {(p.boolValue ? trueValue : falseValue)}";
+				var isTrue = p.boolValue;
+				valueLabel.text = isTrue ? trueValue : falseValue;
+				valueLabel.text = valueLabel.text.PadLeft(1);
+				valueLabel.EnableInClassList(StyleHelper.TextGreen, isTrue);
+				valueLabel.EnableInClassList(StyleHelper.TextRed, !isTrue);
 			}
 		}
 	}

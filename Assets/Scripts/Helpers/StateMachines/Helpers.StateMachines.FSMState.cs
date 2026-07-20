@@ -17,11 +17,17 @@ namespace Helpers.StateMachines
 
 		[field: SerializeField] public TController Controller { get; protected set; }
 
-		public virtual void Start() => Debug.InitializedWarn(Initialized, GetType().Name);
+		public virtual void Start()
+		{
+			Helpers.Initialized.Warn(Initialized, GetType().Name);
+#if UNITY_EDITOR
+			Debug.Log($"Entering State: {StateType}", Controller.gameObject);
+#endif
+		}
 
-		public virtual void Update() => Debug.InitializedWarn(Initialized, GetType().Name);
+		public virtual void Update() => Helpers.Initialized.Warn(Initialized, GetType().Name);
 
-		public virtual void Exit() => Debug.InitializedWarn(Initialized, GetType().Name);
+		public virtual void Exit() => Helpers.Initialized.Warn(Initialized, GetType().Name);
 
 		public FSMState<TStateType, TStateConfig, TController> Init(TController controller, TStateConfig stateConfig)
 		{

@@ -1,3 +1,4 @@
+using Helpers.Editor.Ext;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -42,10 +43,7 @@ namespace Editor
 							   reorderable = false,
 							   style =
 							   {
-								   backgroundColor
-									   = Helpers.Editor.Theming.SolarizedDark.StyleHelper.ParseColor(
-										   Helpers.Editor.Theming.SolarizedDark.Palette.Base00
-									   ),
+								   backgroundColor = Helpers.Editor.Theming.SolarizedDark.Palette.Base00.ToColor(),
 							   },
 						   };
 

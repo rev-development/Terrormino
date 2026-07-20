@@ -1,0 +1,3 @@
+# Packages/.editorconfig
+[*.cs]
+generated_code = true

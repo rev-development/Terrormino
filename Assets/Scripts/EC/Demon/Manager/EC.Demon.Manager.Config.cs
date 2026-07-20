@@ -13,7 +13,7 @@ namespace EC.Demon
 		[field: SerializeField] public Pathing.Patrol.Config PatrolConfig { get; set; } = new();
 
 		[field: SerializeField]
-		public Helpers.NavMeshAgentExtensions.SteeringConfig SteeringConfig { get; set; } = new()
+		public Helpers.Ext.NavMeshAgentExt.SteeringConfig SteeringConfig { get; set; } = new()
 			{
 				Speed = 2f,
 				AngularSpeed = 120f,

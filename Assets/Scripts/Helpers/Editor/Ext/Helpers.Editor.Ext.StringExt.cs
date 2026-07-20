@@ -1,4 +1,3 @@
-using Helpers.Editor.Extensions;
 using UnityEngine;
 using UnityEngine.UIElements;
 

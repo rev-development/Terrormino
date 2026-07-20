@@ -6,7 +6,7 @@ namespace EC.Demon
 
 		int DemonMax { get; set; }
 
-		Helpers.NavMeshAgentExtensions.SteeringConfig SteeringConfig { get; set; }
+		Helpers.Ext.NavMeshAgentExt.SteeringConfig SteeringConfig { get; set; }
 
 		Pathing.Patrol.Config PatrolConfig { get; set; }
 

@@ -5,10 +5,10 @@ using Random = UnityEngine.Random;
 namespace Helpers
 {
 	[Serializable]
-	[AiGenerated("Claude", "Sonnet 4.6")]
+	[Helpers.Attributes.AiGeneratedAttribute("Claude", "Sonnet 4.6")]
 	public class Timer
 	{
-		public bool Dirty;
+		public bool Dirty = false;
 
 		public float BaseAlarmTime = 1f;
 
@@ -70,7 +70,7 @@ namespace Helpers
 
 		public void StartNewTimer()
 		{
-			if (!Initialized) UnityEngine.Debug.LogWarning("Timer.StartNewTimer() called before Init().");
+			if (!Initialized) Debug.LogWarning("Timer.StartNewTimer() called before Init().");
 			AlarmTime = BaseAlarmTime + Random.Range(AlarmVarianceRange.x, AlarmVarianceRange.y);
 			Dirty = true;
 			ElapsedTime = 0f;

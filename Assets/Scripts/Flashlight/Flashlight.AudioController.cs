@@ -1,51 +1,37 @@
+using Helpers.Ext;
 using UnityEngine;
 
 namespace Flashlight
 {
-    public class AudioController : MonoBehaviour
-    {
+	public class AudioController : MonoBehaviour
+	{
+		public AudioSource ShakeSound;
 
-        public AudioSource ShakeSound;
+		public AudioSource NoChargeSound;
 
-        public AudioSource NoChargeSound;
+		public Shake Shake;
 
-        public Shake Shake;
+		public void OnEnable()
+		{
+			if (!Shake) return;
 
-        public void Start()
-        {
-            Shake ??= Helpers.Debug.TryFindComponent<Shake>(gameObject);
-        }
+			Shake.FlashlightToggled.AddListener(OnFlashlightToggle);
+			Shake.FlashlightShaking.AddListener(OnFlashlightShaking);
+		}
 
-        public void OnEnable()
-        {
-            if (!Shake)
-            {
-                return;
-            }
+		public void Start() => Shake ??= gameObject.TryFindComponent<Shake>();
 
-            Shake.FlashlightToggled.AddListener(OnFlashlightToggle);
-            Shake.FlashlightShaking.AddListener(OnFlashlightShaking);
-        }
+		private void OnFlashlightShaking(bool isShaking)
+		{
+			if (isShaking)
+				ShakeSound.Play();
+			else
+				ShakeSound.Stop();
+		}
 
-        private void OnFlashlightToggle(bool isActive)
-        {
-            if (!isActive)
-            {
-                NoChargeSound.Play();
-            }
-        }
-
-        private void OnFlashlightShaking(bool isShaking)
-        {
-            if (isShaking)
-            {
-                ShakeSound.Play();
-            }
-            else
-            {
-                ShakeSound.Stop();
-            }
-        }
-
-    }
+		private void OnFlashlightToggle(bool isActive)
+		{
+			if (!isActive) NoChargeSound.Play();
+		}
+	}
 }

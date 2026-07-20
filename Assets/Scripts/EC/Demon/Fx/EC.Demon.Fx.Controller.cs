@@ -1,3 +1,4 @@
+using Helpers.Ext;
 using UnityEngine;
 
 namespace EC.Demon.Fx
@@ -24,17 +25,15 @@ namespace EC.Demon.Fx
 
 		[Helpers.DisableInEditorAttribute] [SerializeField] private ControlPanel _controlPanel;
 
-		public AudioClip Scream;
-
 		public void Awake()
 		{
-			_animator = Helpers.Debug.TryFindComponent<Animator>(gameObject);
-			_audioSource = Helpers.Debug.TryFindComponent<AudioSource>(gameObject);
+			_animator = gameObject.TryFindComponent<Animator>();
+			_audioSource = gameObject.TryFindComponent<AudioSource>();
 
 			if (gameObject.transform.parent.gameObject.activeInHierarchy)
 			{
-				_eventBus = Helpers.Debug.TryFindComponentInParent<EventBus>(gameObject);
-				_controlPanel = Helpers.Debug.TryFindComponentInParent<ControlPanel>(gameObject);
+				_eventBus = gameObject.TryFindComponentInParent<EventBus>();
+				_controlPanel = gameObject.TryFindComponentInParent<ControlPanel>();
 			}
 		}
 

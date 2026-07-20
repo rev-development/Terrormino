@@ -84,24 +84,12 @@ namespace Demon.Manager
 			}
 		}
 
-		public void ClearAll()
-		{
-			Demons.ForEach(demon => demon.GetComponent<LightFear>().Banish.Invoke(demon));
-		}
+		public void ClearAll() => Demons.ForEach(demon => demon.GetComponent<LightFear>().Banish.Invoke(demon));
 
-		public void ApplyNightConfig(NightConfig nightConfig)
-		{
-			Config = nightConfig.DemonConfig;
-		}
+		public void ApplyNightConfig(NightConfig nightConfig) => Config = nightConfig.DemonConfig;
 
-		public void OnBanish(GameObject demon)
-		{
-			Demons.Remove(demon);
-		}
+		public void OnBanish(GameObject demon) => Demons.Remove(demon);
 
-		public void OnGameOver()
-		{
-			Demons.ForEach(Destroy);
-		}
+		public void OnGameOver() => Demons.ForEach(Destroy);
 	}
 }

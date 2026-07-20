@@ -59,8 +59,7 @@ namespace Controls
 			}
 		}
 
-		public void Update()
-		{
+		public void Update() =>
 			// Each frame, go through the list of enabled registed inputs and check if they were performed, if yes then pass to the events
 			_enabledActions.ForEach(action =>
 				{
@@ -68,7 +67,6 @@ namespace Controls
 						_aggregatedOutputs[action.id].ForEach(output => output.Invoke(action));
 				}
 			);
-		}
 
 		public void OnSelectEnter(SelectEnterEventArgs context)
 		{

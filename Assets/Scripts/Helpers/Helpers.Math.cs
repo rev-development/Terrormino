@@ -51,9 +51,7 @@ namespace Helpers
 			return chosen;
 		}
 
-		public static float RoundFloatToDecimalPlaces(float value, int decimals)
-		{
-			return Mathf.Round(value * 10 * decimals) / (10 * decimals);
-		}
+		public static float RoundFloatToDecimalPlaces(float value, int decimals) =>
+			Mathf.Round(value * 10 * decimals) / (10 * decimals);
 	}
 }

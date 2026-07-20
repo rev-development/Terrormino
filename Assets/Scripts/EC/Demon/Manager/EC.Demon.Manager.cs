@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Helpers.Ext;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,8 +15,8 @@ namespace EC.Demon
 
 		[SerializeField] private Helpers.Events.Channels.VoidEC _gameOver;
 
-		[Helpers.Editor.NavMeshAreaMaskAttribute] [SerializeField]
-		private int _spawnAreaMask = 0; // 0 is always Walkable
+		[Helpers.Attributes.NavMeshAreaMaskAttribute] [SerializeField]
+		private int _spawnAreaMask = 1; // 0 is always Nothing, 1 is always Walkable
 
 		[SerializeField] private List<Collider> _spawnColliders = new();
 
@@ -27,6 +28,8 @@ namespace EC.Demon
 
 		[field: SerializeField] public Config Config { get; private set; } = new();
 
+		private int _startFrame;
+
 		public void OnEnable()
 		{
 			_removeDemon.OnEventRaised += OnRemoveDemon;
@@ -35,6 +38,8 @@ namespace EC.Demon
 
 		private void Start()
 		{
+			_startFrame = Time.frameCount;
+			gameObject.CheckIfEmptyListInInspector(_spawnColliders, "Spawn Colliders");
 			_graceTimer.Init(Config.SpawnGracePeriod);
 			_spawnTimer.Init(Config.SpawnInterval);
 		}
@@ -44,7 +49,9 @@ namespace EC.Demon
 			_graceTimer.Tick(Time.deltaTime);
 			_spawnTimer.Tick(Time.deltaTime);
 
-			if (!_graceTimer.Dirty) _graceTimer.StartNewTimer();
+			if (Time.frameCount != _startFrame
+				&& !_graceTimer.Dirty)
+				_graceTimer.StartNewTimer();
 
 			if (_graceTimer.Ringing
 				&& !_spawnTimer.Active)
@@ -66,32 +73,18 @@ namespace EC.Demon
 
 		public void SpawnDemon()
 		{
-			if (_demons.Count != Config.DemonMax) return;
+			if (_demons.Count == Config.DemonMax) return;
+
+			if (_spawnColliders.Count == 0) return;
 
 			// 1. Pick one of X colliders to build bounds from
 			var selectedSpawnCollider = _spawnColliders[Random.Range(0, _spawnColliders.Count)];
 			// 2. Create mutable bounds
 			Bounds spawnBounds = new(selectedSpawnCollider.bounds.center, selectedSpawnCollider.bounds.size);
-			// 2a. Shrink by the collider size to space away from edges (Commented out because NavMeshes automatically subtract Agent width from Walkable
-// 			if (!DemonPrefab.TryGetComponent(out Collider _))
-// 			{
-// #if UNITY_EDITOR
-// 				Debug.LogWarning("DemonPrefab has no Collider component.", gameObject);
-// #endif
-// 				return;
-// 			}
-			// spawnBounds.Expand(-demonCollider.bounds.extents);
 
-			// 3. Randomize XZ location within bounds
-			Vector3 spawnLocation = new(
-				Random.Range(spawnBounds.min.x, spawnBounds.max.x),
-				spawnBounds.center.y,
-				Random.Range(spawnBounds.min.z, spawnBounds.max.z)
-			);
-
-			// 4. NavMesh.SamplePosition is just a RayCast down that detects NavMesh Areas
+			// 3. NavMesh.SamplePosition is just a RayCast down that detects NavMesh Areas
 			if (!NavMesh.SamplePosition(
-					spawnLocation,
+					spawnBounds.SampleRandom2DPosition(),
 					out var hit,
 					10f,
 					_spawnAreaMask
@@ -126,7 +119,10 @@ namespace EC.Demon
 			}
 		}
 
-		public void ClearAll() => _demons.ForEach(OnRemoveDemon);
+		public void ClearAll()
+		{
+			for (var i = 0; i < _demons.Count; i++) OnRemoveDemon(_demons[i]);
+		}
 
 		/// <summary>
 		///     Not necessary at the moment, but preventing raw Config assignment is good practice.

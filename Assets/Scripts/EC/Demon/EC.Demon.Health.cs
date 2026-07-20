@@ -1,4 +1,5 @@
 using Flashlight;
+using Helpers.Ext;
 using UnityEngine;
 
 namespace EC.Demon
@@ -12,10 +13,7 @@ namespace EC.Demon
 
 		[field: SerializeField] public Helpers.ClampedFloat HP = new(3f, 3f);
 
-		public void Awake()
-		{
-			_eventBus = Helpers.Debug.TryFindComponent<EventBus>(gameObject);
-		}
+		public void Awake() => _eventBus = gameObject.TryFindComponent<EventBus>();
 
 		private void OnTriggerExit(Collider other)
 		{

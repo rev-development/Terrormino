@@ -10,10 +10,7 @@ public class CutsceneLoader : MonoBehaviour
 	[Tooltip("Name of the scene to load after the cutscene finishes.")]
 	public string NextSceneName = "Gameplay";
 
-	private void Start()
-	{
-		StartCoroutine(LoadAfterDelay());
-	}
+	private void Start() => StartCoroutine(LoadAfterDelay());
 
 	private IEnumerator LoadAfterDelay()
 	{

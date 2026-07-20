@@ -10,7 +10,9 @@ namespace Helpers.Editor.Ext
 		public static void IterateProps(
 			this SerializedObject so,
 			VisualElement ele,
-			Func<SerializedProperty, bool> skip = null
+			Func<SerializedProperty, bool> skip = null,
+			string[] classNames = null,
+			Action<IStyle>[] styleActions = null
 		)
 		{
 			var prop = so.GetIterator();
@@ -22,9 +24,10 @@ namespace Helpers.Editor.Ext
 
 					ele.Add(
 						new PropertyField(prop)
-						{
-							name = prop.name,
-						}
+							{
+								name = prop.name,
+							}.WithClass(classNames)
+							 .WithStyle(styleActions)
 					);
 				} while (prop.NextVisible(false));
 

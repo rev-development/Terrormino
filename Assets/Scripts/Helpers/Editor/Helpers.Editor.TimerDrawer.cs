@@ -1,3 +1,4 @@
+using Helpers.Editor.Ext;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -17,9 +18,10 @@ namespace Helpers.Editor
 		/// </returns>
 		public override VisualElement CreatePropertyGUI(SerializedProperty property)
 		{
-			var root = SolRoot();
+			var root = SolRoot().WithClass(Helpers.Editor.Theming.SolarizedDark.StyleHelper.VBorder);
 
 			var elapsedTimeFloatField = SolFloatField(property.FindPropertyRelative("_elapsedTime"), true);
+			elapsedTimeFloatField.style.marginLeft = 0;
 
 			var currentAlarmTimeFloatField = SolFloatField(property.FindPropertyRelative("_alarmTime"), true);
 
@@ -28,23 +30,22 @@ namespace Helpers.Editor
 			var runningBoolLabel = SolBooleanLabel(property.FindPropertyRelative("_running"));
 			var ringingBoolLabel = SolBooleanLabel(property.FindPropertyRelative("_ringing"));
 
-			var solGridItems = new[]
-							   {
-								   new VisualElement[]
-								   {
-									   elapsedTimeFloatField,
-									   currentAlarmTimeFloatField,
-								   },
-								   new VisualElement[]
-								   {
-									   initializedBoolLabel,
-									   dirtyBoolLabel,
-									   runningBoolLabel,
-									   ringingBoolLabel,
-								   },
-							   };
+			var solGrid = SolGrid(
+				property.displayName,
+				new[]
+				{
+					elapsedTimeFloatField,
+					currentAlarmTimeFloatField,
+				},
+				new[]
+				{
+					initializedBoolLabel,
+					dirtyBoolLabel,
+					runningBoolLabel,
+					ringingBoolLabel,
+				}
+			);
 
-			var solGrid = SolGrid(solGridItems, property.displayName);
 			root.Add(solGrid);
 
 			root.Bind(property.serializedObject);

@@ -1,99 +1,262 @@
 
-.sol-bg {
-    background-color: #002B36;
-}
+            /* ── Background ─────────────────────────────────────────────────── */
+            .sol-bg-base03 { background-color: #002B36; }
+            .sol-bg-base02 { background-color: #073642; }
+            .sol-bg-base01 { background-color: #586E75; }
+            .sol-bg-base00 { background-color: #657B83; }
+            .sol-bg-base0  { background-color: #839496; }
+            .sol-bg-base1  { background-color: #93A1A1; }
+            .sol-bg-base2  { background-color: #EEE8D5; }
+            .sol-bg-base3  { background-color: #FDF6E3; }
 
-.sol-bg-highlight {
-    background-color: #073642;
-}
+            /* ── Text color — base scale ─────────────────────────────────────── */
+            .sol-text-base03 { color: #002B36; }
+            .sol-text-base02 { color: #073642; }
+            .sol-text-base01 { color: #586E75; }
+            .sol-text-base00 { color: #657B83; }
+            .sol-text-base0  { color: #839496; }
+            .sol-text-base1  { color: #93A1A1; }
+            .sol-text-base2  { color: #EEE8D5; }
+            .sol-text-base3  { color: #FDF6E3; }
 
-.sol-text-body {
-    color: #839496;
-    -unity-font-style: normal;
-}
+            /* ── Text color — accents ────────────────────────────────────────── */
+            .sol-text-blue    { color: #268BD2; }
+            .sol-text-cyan    { color: #2AA198; }
+            .sol-text-yellow  { color: #B58900; }
+            .sol-text-orange  { color: #CB4B16; }
+            .sol-text-green   { color: #859900; }
+            .sol-text-red     { color: #DC322F; }
+            .sol-text-magenta { color: #D33682; }
+            .sol-text-violet  { color: #6C71C4; }
 
-.sol-text-emphasis {
-    color: #93A1A1;
-    -unity-font-style: bold;
-}
+            /* ── Text color — special ────────────────────────────────────────── */
+            .sol-text-default { color: #C4C4C4; }
 
-.sol-text-secondary {
-    color: #586E75;
-    font-size: 11px;
-}
+            /* ── Font ────────────────────────────────────────────────────────── */
+            .sol-font-bold   { -unity-font-style: bold; }
+            .sol-font-normal { -unity-font-style: normal; }
+            .sol-text-sm     { font-size: 11px; }
 
-.sol-accent-blue {
-    color: #268BD2;
-}
+            /* ── Layout ──────────────────────────────────────────────────────── */
+            .sol-flex-row  { flex-direction: row; }
+            .sol-flex-col  { flex-direction: column; }
+            .sol-flex-grow { flex-grow: 1; }
 
-.sol-accent-cyan {
-    color: #2AA198;
-}
+            /* ── Spacing ─────────────────────────────────────────────────────── */
+            .sol-pa-1 { padding: 4px; }
+            .sol-pa-2 { padding: 8px; }
 
-.sol-accent-yellow {
-    color: #B58900;
-}
+            /* ── Component — container ───────────────────────────────────────── */
+            .sol-v-container {
+                padding: 4px;
+            }
 
-.sol-accent-green {
-    color: #859900;
-}
+            /* ── Component — row ─────────────────────────────────────────────── */
+            .sol-v-row {
+                flex-direction: row;
+                margin: 0px -4px;
+            }
 
-.sol-accent-red {
-    color: #DC322F;
-}
+            /* ── Component — col ─────────────────────────────────────────────── */
+            .sol-v-col {
+                flex-direction: column;
+                flex-grow: 1;
+                padding: 4px;
+            }
 
-.sol-card {
-    background-color: #073642;
-    border-radius: 4px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-right-width: 1px;
-    border-top-color: #586E75;
-    border-bottom-color: #586E75;
-    border-left-color: #586E75;
-    border-right-color: #586E75;
-    padding: 8px;
-    margin-bottom: 4px;
-}
+            /* ── Component — card ────────────────────────────────────────────── */
+            .sol-v-card {
+                background-color:    #073642;
+                border-radius:       3px;
+                border-top-width:    1px;
+                border-bottom-width: 1px;
+                border-left-width:   1px;
+                border-right-width:  1px;
+                border-top-color:    #586E75;
+                border-bottom-color: #586E75;
+                border-left-color:   #586E75;
+                border-right-color:  #586E75;
+                padding:             8px;
+                margin-bottom:       4px;
+            }
 
-.sol-divider {
-    height: 1px;
-    background-color: #586E75;
-    margin-top: 4px;
-    margin-bottom: 4px;
-}
+            /* ── Component — divider ─────────────────────────────────────────── */
+            .sol-v-divider {
+                height:           1px;
+                background-color: #586E75;
+                margin-top:       4px;
+                margin-bottom:    4px;
+            }
 
-.sol-button {
-    background-color: #073642;
-    color: #839496;
-    border-radius: 3px;
-    border-top-color: #586E75;
-    border-bottom-color: #586E75;
-    border-left-color: #586E75;
-    border-right-color: #586E75;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-right-width: 1px;
-}
+            /* ── Component — border ──────────────────────────────────────────── */
+            .sol-v-border {
+                border-top-color:    #586E75;
+                border-bottom-color: #586E75;
+                border-left-color:   #586E75;
+                border-right-color:  #586E75;
+                border-top-width:    1px;
+                border-bottom-width: 1px;
+                border-left-width:   1px;
+                border-right-width:  1px;
+            }
 
-.sol-button:hover {
-    background-color: #586E75;
-    color: #93A1A1;
-}
+            /* ── Component — button ──────────────────────────────────────────── */
+            .sol-v-btn {
+                background-color:    #073642;
+                color:               #839496;
+                border-radius:       3px;
+                border-top-color:    #586E75;
+                border-bottom-color: #586E75;
+                border-left-color:   #586E75;
+                border-right-color:  #586E75;
+                border-top-width:    1px;
+                border-bottom-width: 1px;
+                border-left-width:   1px;
+                border-right-width:  1px;
+				overflow: Visible;
+				white-space: Normal;
+				flex-grow: 1;
+            }
 
-.sol-button-primary {
-    background-color: #268BD2;
-    color: #002B36;
-    border-top-width: 0;
-    border-bottom-width: 0;
-    border-left-width: 0;
-    border-right-width: 0;
-    border-radius: 3px;
-}
+            .sol-v-btn:hover {
+                background-color: #586E75;
+                color:            #93A1A1;
+            }
 
-.sol-button-primary:hover {
-    background-color: #2AA198;
-}
+            .sol-v-btn-primary {
+                background-color:    #268BD2;
+                color:               #002B36;
+                border-top-width:    0;
+                border-bottom-width: 0;
+                border-left-width:   0;
+                border-right-width:  0;
+                border-radius:       3px;
+            }
+
+            .sol-v-btn-primary:hover {
+                background-color: #2AA198;
+            }
+
+            /* ── Component — field ───────────────────────────────────────────── */
+            /* Bare .sol-v-field intentionally carries no border/background — it's also used as a
+               plain wrapper around PropertyField, and a wrapper + its generated inner field
+               both matching would double up the border. Border/background only apply to the
+               concrete field type, whether VField is on that field directly (Sol*Field() self-
+               applies it — compound type.class selector) or on an ancestor wrapper around a
+               PropertyField-generated field (descendant selector). */
+            TextField.sol-v-field,
+            FloatField.sol-v-field,
+            IntegerField.sol-v-field,
+            Vector3Field.sol-v-field,
+            Vector3IntField.sol-v-field,
+            ObjectField.sol-v-field,
+            EnumField.sol-v-field,
+            Foldout.sol-v-field,
+            ListView.sol-v-field,
+            .sol-v-field TextField,
+            .sol-v-field FloatField,
+            .sol-v-field IntegerField,
+            .sol-v-field Vector3Field,
+            .sol-v-field Vector3IntField,
+            .sol-v-field ObjectField,
+            .sol-v-field EnumField,
+            .sol-v-field Foldout,
+            .sol-v-field ListView {
+                color:         #C4C4C4;
+                border-radius: 3px;
+            }
+
+            /* FloatField intentionally excluded — no background tint on top of the base surface. */
+            TextField.sol-v-field,
+            IntegerField.sol-v-field,
+            Vector3Field.sol-v-field,
+            Vector3IntField.sol-v-field,
+            ObjectField.sol-v-field,
+            EnumField.sol-v-field,
+            Foldout.sol-v-field,
+            ListView.sol-v-field,
+            .sol-v-field TextField,
+            .sol-v-field IntegerField,
+            .sol-v-field Vector3Field,
+            .sol-v-field Vector3IntField,
+            .sol-v-field ObjectField,
+            .sol-v-field EnumField,
+            .sol-v-field Foldout,
+            .sol-v-field ListView {
+                background-color: #073642;
+            }
+
+            /* Foldout keeps its border — applies only to the top-level Foldout element itself,
+               not the field/value rows nested inside it. */
+            Foldout.sol-v-field,
+            .sol-v-field Foldout {
+                border-top-color:    #586E75;
+                border-bottom-color: #586E75;
+                border-left-color:   #586E75;
+                border-right-color:  #586E75;
+                border-top-width:    1px;
+                border-bottom-width: 1px;
+                border-left-width:   1px;
+                border-right-width:  1px;
+            }
+
+            /* ── Component — list border ─────────────────────────────────────── */
+            /* Own class, not VField — VField's compound/descendant selectors were matching
+               ListView's internal Unity-built rows/elements downstream, not just the outer
+               ListView itself. SolList() applies this directly alongside VField. */
+            .sol-v-list {
+                border-top-color:    #586E75;
+                border-bottom-color: #586E75;
+                border-left-color:   #586E75;
+                border-right-color:  #586E75;
+                border-top-width:    1px;
+                border-bottom-width: 1px;
+                border-left-width:   1px;
+                border-right-width:  1px;
+            }
+
+            .sol-v-field Label {
+                color:       #C4C4C4;
+                min-width:   0;
+                flex-shrink: 1;
+            }
+
+            /* ── Component — switch ──────────────────────────────────────────── */
+            .sol-v-switch {
+                color: #C4C4C4;
+            }
+
+            .sol-v-switch > .unity-toggle__checkmark {
+                background-color:    #073642;
+                border-top-color:    #586E75;
+                border-bottom-color: #586E75;
+                border-left-color:   #586E75;
+                border-right-color:  #586E75;
+                border-top-width:    1px;
+                border-bottom-width: 1px;
+                border-left-width:   1px;
+                border-right-width:  1px;
+            }
+
+            .sol-v-switch:checked > .unity-toggle__checkmark {
+                background-color: #268BD2;
+            }
+
+            /* ── Component — boolean label ───────────────────────────────────── */
+            .sol-v-boolean-label {
+               	border-radius: 3px;
+            }
+
+			.sol-border-radius-rounded {
+		        border-radius: 3px;
+			}
+
+            /* ── Component — foldout ─────────────────────────────────────────── */
+            .sol-v-foldout > .unity-toggle {
+                margin-left: 0;
+            }
+
+            .sol-v-container .unity-foldout > .unity-toggle {
+                margin-left: 0;
+            }
         

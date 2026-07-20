@@ -6,7 +6,7 @@ namespace EC.Demon.Pathing.Chase
 	[Serializable]
 	public class Config
 	{
-		[field: Helpers.Editor.NavMeshAreaMaskAttribute]
+		[field: Helpers.Attributes.NavMeshAreaMaskAttribute]
 		[field: SerializeField]
 		public int AreaMask { get; set; } = 0;
 	}

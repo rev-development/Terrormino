@@ -1,3 +1,14 @@
 fileFormatVersion: 2
 guid: e509fac19a5942e695dc747849c53334
-timeCreated: 1782062851
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _demonPrefab: {fileID: 919132149155446097, guid: 2b359b2ade2b90b4b85f00e1e969bbeb, type: 3}
+  - _removeDemon: {fileID: 11400000, guid: 7df8db95bd0b2084ea0725e89cf89b09, type: 2}
+  - _gameOver: {fileID: 11400000, guid: cfcdf534d691df64d90d7722a7a3991f, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

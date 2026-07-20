@@ -1,4 +1,5 @@
 using System;
+using Helpers.Attributes;
 using UnityEngine.UIElements;
 
 namespace Helpers.Editor.Ext
@@ -21,18 +22,22 @@ namespace Helpers.Editor.Ext
 			return parent;
 		}
 
-		public static T WithClass<T>(this T el, string className)
+		public static T WithClass<T>(this T el, params string[] classNames)
 			where T : VisualElement
 		{
-			el.AddToClassList(className);
+			if (classNames == null) return el;
+
+			foreach (var className in classNames) el.AddToClassList(className);
 
 			return el;
 		}
 
-		public static T WithStyle<T>(this T el, Action<IStyle> styleAction)
+		public static T WithStyle<T>(this T el, params Action<IStyle>[] styleActions)
 			where T : VisualElement
 		{
-			styleAction(el.style);
+			if (styleActions == null) return el;
+
+			foreach (var styleAction in styleActions) styleAction(el.style);
 
 			return el;
 		}

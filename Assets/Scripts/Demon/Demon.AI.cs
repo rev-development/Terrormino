@@ -316,7 +316,7 @@ namespace Demon
 
 			Chasing,
 
-			Frozen
+			Frozen,
 		}
 	}
 }

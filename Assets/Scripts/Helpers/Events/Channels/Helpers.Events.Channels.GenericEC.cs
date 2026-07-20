@@ -15,10 +15,7 @@ namespace Helpers.Events.Channels
 		[Tooltip("The action to perform; Listeners subscribe to this UnityAction")]
 		public UnityAction<T> OnEventRaised;
 
-		public void OnDisable()
-		{
-			OnEventRaised = null;
-		}
+		public void OnDisable() => OnEventRaised = null;
 
 		public void RaiseEvent(T parameter)
 		{

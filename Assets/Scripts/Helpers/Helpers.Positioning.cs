@@ -1,3 +1,5 @@
+using System.Linq;
+using Helpers.Ext;
 using UnityEngine;
 
 namespace Helpers
@@ -5,32 +7,27 @@ namespace Helpers
 	public static class Positioning
 	{
 		/// <summary>
-		///     Positions an object in front of another object, based on that object's forward vector.
-		/// </summary>
-		/// <param name="toBePositioned"></param>
-		/// <param name="toBePositionedInFrontOf"></param>
-		/// <param name="howFarInFront"></param>
-		public static void PositionInFrontOf(
-			Transform toBePositioned,
-			Transform toBePositionedInFrontOf,
-			float howFarInFront
-		)
-		{
-			var newPosition = toBePositionedInFrontOf.transform.position
-							  + toBePositionedInFrontOf.transform.position * howFarInFront;
-
-			toBePositioned.transform.position = newPosition;
-		}
-
-		/// <summary>
 		///     Aligns the top of one object's bounds to the top of another object's bounds.
 		/// </summary>
 		/// <param name="toBeAligned"></param>
 		/// <param name="toBeAlignedTo"></param>
 		public static void AlignTops(GameObject toBeAligned, GameObject toBeAlignedTo)
 		{
-			var topOfToBeAligned = Bounds.GetComplexBounds(toBeAligned).max.y;
-			var topOfToBeAlignedTo = Bounds.GetComplexBounds(toBeAlignedTo).max.y;
+			var collidersA = toBeAligned.GetComponentsInChildren<Collider>();
+			var collidersB = toBeAlignedTo.GetComponentsInChildren<Collider>();
+
+			if (collidersA.Length == 0
+				|| collidersB.Length == 0)
+			{
+				Debug.LogWarning("AlignTops: one or both objects have no colliders.");
+
+				return;
+			}
+
+			var topOfToBeAligned = collidersA.Select(collider => collider.bounds).EncapsulateMany().max.y;
+
+			var topOfToBeAlignedTo = collidersB.Select(collider => collider.bounds).EncapsulateMany().max.y;
+
 			var heightDiff = topOfToBeAlignedTo - topOfToBeAligned;
 
 			var newPosition = toBeAligned.transform.position;
@@ -45,7 +42,16 @@ namespace Helpers
 		/// <param name="toBeAlignedTo"></param>
 		public static void AlignTops(GameObject toBeAligned, float toBeAlignedTo)
 		{
-			var topOfToBeAligned = Bounds.GetComplexBounds(toBeAligned).max.y;
+			var colliders = toBeAligned.GetComponentsInChildren<Collider>();
+
+			if (colliders.Length == 0)
+			{
+				Debug.LogWarning("AlignTops: object has no colliders.");
+
+				return;
+			}
+
+			var topOfToBeAligned = colliders.Select(collider => collider.bounds).EncapsulateMany().max.y;
 			var heightDiff = toBeAlignedTo - topOfToBeAligned;
 
 			var newPosition = toBeAligned.transform.position;

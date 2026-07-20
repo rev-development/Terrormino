@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Helpers;
+using Helpers.Ext;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AI;
 using State = EC.Demon.Pathing.Patrol.State;
@@ -13,17 +14,17 @@ namespace EC.Demon.Pathing
 	[AddComponentMenu("EC.Demon.Pathing.Controller")]
 	public class Controller : MonoBehaviour
 	{
-		[DisableInEditor] [SerializeField] private EventBus _eventBus;
+		[Helpers.DisableInEditorAttribute] [SerializeField] private EventBus _eventBus;
 
-		[DisableInEditor] [SerializeField] public NavMeshAgent NavMeshAgent;
+		[Helpers.DisableInEditorAttribute] [SerializeField] public NavMeshAgent NavMeshAgent;
 
-		[DisableInEditor] [SerializeField] public GameObject Player;
+		[Helpers.DisableInEditorAttribute] [SerializeField] public GameObject Player;
 
 		public Helpers.Events.Channels.GameObjectEC NavBeaconEC;
 
-		public StateType CurrentStateType;
+		[PublicAPI] public StateType CurrentStateType; // For inspector
 
-		[SerializeField] public RandomBag<GameObject> NavBeaconsBag = new();
+		[SerializeField] public Helpers.RandomBag<GameObject> NavBeaconsBag = new();
 
 		public Config Config => _eventBus.Config;
 
@@ -39,9 +40,9 @@ namespace EC.Demon.Pathing
 
 		public void Awake()
 		{
-			NavMeshAgent = Helpers.Debug.TryFindComponent<NavMeshAgent>(gameObject);
+			NavMeshAgent = gameObject.TryFindComponent<NavMeshAgent>();
 
-			_eventBus = Helpers.Debug.TryFindComponent<EventBus>(gameObject);
+			_eventBus = gameObject.TryFindComponent<EventBus>();
 		}
 
 		public void OnEnable()
@@ -55,7 +56,7 @@ namespace EC.Demon.Pathing
 
 		public void Start()
 		{
-			Player = Helpers.Debug.TryFindByTag("Player");
+			Player = Helpers.TryFind.ByTag("Player");
 			NavMeshAgent.ApplySteeringConfig(Config.SteeringConfig);
 			EnterState(NavBeaconsBag.HasItems ? StateType.Patrol : StateType.Chase);
 		}

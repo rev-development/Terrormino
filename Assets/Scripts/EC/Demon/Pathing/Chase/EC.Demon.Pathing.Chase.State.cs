@@ -1,5 +1,6 @@
 using System;
 using Helpers;
+using Helpers.Ext;
 
 namespace EC.Demon.Pathing.Chase
 {

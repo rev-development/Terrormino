@@ -8,7 +8,7 @@ using Cursor = UnityEngine.UIElements.Cursor;
 
 namespace Helpers.Editor.Tools.FolderNav
 {
-	[AiGenerated("Claude", "Sonnet 4.6")]
+	[Helpers.Attributes.AiGeneratedAttribute("Claude", "Sonnet 4.6")]
 	public class Window : EditorWindow
 	{
 		private bool _editMode;
@@ -68,7 +68,7 @@ namespace Helpers.Editor.Tools.FolderNav
 
 			return Helpers.Editor.Theming.SolarizedDark.Ele.SolRow()
 						  .WithChildren(
-							   Helpers.Editor.Theming.SolarizedDark.Ele.SolLabel("Quick Nav", true),
+							   Helpers.Editor.Theming.SolarizedDark.Ele.SolLabel("Quick Nav"),
 							   Helpers.Editor.Theming.SolarizedDark.Ele.SolRow().WithChildren(editButton, resetButton)
 						   )
 						  .WithStyle(r => r.justifyContent = Justify.SpaceBetween);
@@ -96,8 +96,8 @@ namespace Helpers.Editor.Tools.FolderNav
 			var label = Helpers.Editor.Theming.SolarizedDark.Ele.SolLabel(entry.Label)
 							   .WithClass(
 									exists
-										? Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassTextBody
-										: Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassAccentRed
+										? Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextBase1
+										: Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextRed
 								);
 
 			var row = Helpers.Editor.Theming.SolarizedDark.Ele.SolRow()
@@ -118,17 +118,11 @@ namespace Helpers.Editor.Tools.FolderNav
 				row.RegisterCallback<ClickEvent>(_ => SelectFolder(entry.Path));
 
 				row.RegisterCallback<MouseEnterEvent>(_ =>
-					row.style.backgroundColor
-						= Helpers.Editor.Theming.SolarizedDark.StyleHelper.ParseColor(
-							Helpers.Editor.Theming.SolarizedDark.Palette.Base02
-						)
+					row.style.backgroundColor = Helpers.Editor.Theming.SolarizedDark.Palette.Base02.ToColor()
 				);
 
 				row.RegisterCallback<MouseLeaveEvent>(_ =>
-					row.style.backgroundColor
-						= Helpers.Editor.Theming.SolarizedDark.StyleHelper.ParseColor(
-							Helpers.Editor.Theming.SolarizedDark.Palette.Base03
-						)
+					row.style.backgroundColor = Helpers.Editor.Theming.SolarizedDark.Palette.Base03.ToColor()
 				);
 
 				row.style.cursor = new StyleCursor(
@@ -266,7 +260,7 @@ namespace Helpers.Editor.Tools.FolderNav
 				"✕"
 			);
 
-			deleteButton.WithClass(Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassAccentRed);
+			deleteButton.WithClass(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextRed);
 
 			return Helpers.Editor.Theming.SolarizedDark.Ele.SolRow()
 						  .WithChildren(
@@ -299,11 +293,9 @@ namespace Helpers.Editor.Tools.FolderNav
 					{
 						pathField.value = DragAndDrop.paths[0];
 
-						pathField.RemoveFromClassList(
-							Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassTextSecondary
-						);
-
-						pathField.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassTextBody);
+						pathField.RemoveFromClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextBase01);
+						pathField.RemoveFromClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextSm);
+						pathField.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextBase1);
 					}
 				}
 			);
@@ -319,7 +311,7 @@ namespace Helpers.Editor.Tools.FolderNav
 					if (string.IsNullOrWhiteSpace(label)
 						|| string.IsNullOrWhiteSpace(path))
 					{
-						UnityEngine.Debug.LogWarning("FolderNavigator: Label and Path must both be filled in");
+						Debug.LogWarning("FolderNavigator: Label and Path must both be filled in");
 
 						return;
 					}
@@ -336,12 +328,14 @@ namespace Helpers.Editor.Tools.FolderNav
 
 					// Reset both fields back to placeholder state
 					labelField.value = "Label";
-					labelField.RemoveFromClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassTextBody);
-					labelField.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassTextSecondary);
+					labelField.RemoveFromClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextBase1);
+					labelField.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextBase01);
+					labelField.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextSm);
 
 					pathField.value = "Assets/...";
-					pathField.RemoveFromClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassTextBody);
-					pathField.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassTextSecondary);
+					pathField.RemoveFromClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextBase1);
+					pathField.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextBase01);
+					pathField.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextSm);
 
 					RefreshList();
 				}
@@ -352,7 +346,7 @@ namespace Helpers.Editor.Tools.FolderNav
 
 			var container = Helpers.Editor.Theming.SolarizedDark.Ele.SolCard();
 			container.style.marginTop = 8;
-			container.Add(Helpers.Editor.Theming.SolarizedDark.Ele.SolLabel("Add Folder", true));
+			container.Add(Helpers.Editor.Theming.SolarizedDark.Ele.SolLabel("Add Folder"));
 
 			container.Add(
 				Helpers.Editor.Theming.SolarizedDark.Ele.SolRow()
@@ -407,15 +401,17 @@ namespace Helpers.Editor.Tools.FolderNav
 
 			// Placeholder simulation
 			field.value = placeholder;
-			field.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassTextSecondary);
+			field.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextBase01);
+			field.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextSm);
 
 			field.RegisterCallback<FocusInEvent>(_ =>
 				{
 					if (field.value == placeholder)
 					{
 						field.value = string.Empty;
-						field.RemoveFromClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassTextSecondary);
-						field.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassTextBody);
+						field.RemoveFromClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextBase01);
+						field.RemoveFromClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextSm);
+						field.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextBase1);
 					}
 				}
 			);
@@ -425,8 +421,9 @@ namespace Helpers.Editor.Tools.FolderNav
 					if (string.IsNullOrWhiteSpace(field.value))
 					{
 						field.value = placeholder;
-						field.RemoveFromClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassTextBody);
-						field.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.ClassTextSecondary);
+						field.RemoveFromClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextBase1);
+						field.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextBase01);
+						field.AddToClassList(Helpers.Editor.Theming.SolarizedDark.StyleHelper.TextSm);
 					}
 				}
 			);
@@ -440,7 +437,7 @@ namespace Helpers.Editor.Tools.FolderNav
 
 			if (obj == null)
 			{
-				UnityEngine.Debug.LogWarning($"FolderNavigator: Could not load folder at '{path}'");
+				Debug.LogWarning($"FolderNavigator: Could not load folder at '{path}'");
 
 				return;
 			}
@@ -470,7 +467,7 @@ namespace Helpers.Editor.Tools.FolderNav
 						}
 					);
 				else
-					UnityEngine.Debug.LogWarning(
+					Debug.LogWarning(
 						"FolderNavigator: Could not find ShowFolderContents — Unity may have changed internals"
 					);
 			};

@@ -87,5 +87,22 @@ namespace Helpers.Editor.Ext
 			style.SetAllBorderColor(color);
 			style.SetAllBorderRadius(radius);
 		}
+
+		public static void MergeFrom(this IStyle target, IStyle source)
+		{
+			foreach (var prop in typeof(IStyle).GetProperties())
+			{
+				var value = prop.GetValue(source);
+				var keywordProp = value?.GetType().GetProperty("keyword");
+
+				if (keywordProp == null) continue;
+
+				var keyword = (StyleKeyword)keywordProp.GetValue(value);
+
+				if (keyword == StyleKeyword.Undefined) continue;
+
+				prop.SetValue(target, value);
+			}
+		}
 	}
 }

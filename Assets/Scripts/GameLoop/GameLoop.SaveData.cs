@@ -2,16 +2,11 @@ using System;
 
 namespace GameLoop
 {
-    [Serializable]
-    public class SaveData
-    {
+	[Serializable]
+	public class SaveData
+	{
+		public int NightIndex;
 
-        public int NightIndex;
-
-        public SaveData(int nightIndex)
-        {
-            NightIndex = nightIndex;
-        }
-
-    }
+		public SaveData(int nightIndex) => NightIndex = nightIndex;
+	}
 }

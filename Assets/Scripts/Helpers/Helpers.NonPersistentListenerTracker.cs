@@ -9,10 +9,8 @@ namespace Helpers
 	{
 		[SerializeField] public List<NonPersistentListenerDisplay> NonPersistentListeners = new();
 
-		public void Add(Component component, string unityEvent, string unityAction)
-		{
+		public void Add(Component component, string unityEvent, string unityAction) =>
 			NonPersistentListeners.Add(new NonPersistentListenerDisplay(component, unityEvent, unityAction));
-		}
 
 		public void Remove(Component component, string unityEvent, string unityAction)
 		{

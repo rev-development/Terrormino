@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/hooks/ai_attribution_check.py 2>/dev/null || true",
+            "statusMessage": "Checking AI attribution..."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/hooks/signature_change_check.py 2>/dev/null || true",
+            "statusMessage": "Checking for signature changes..."
+          }
+        ]
+      }
+    ]
+  }
+}

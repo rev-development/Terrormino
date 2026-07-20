@@ -1,9 +1,10 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
-namespace Helpers.Editor
+namespace Helpers.Editor.AttributeDrawers
 {
-	[CustomPropertyDrawer(typeof(NavMeshAreaMaskAttribute))]
+	[CustomPropertyDrawer(typeof(Helpers.Attributes.NavMeshAreaMaskAttribute))]
 	public class NavMeshAreaMaskDrawer : PropertyDrawer
 	{
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -12,7 +13,7 @@ namespace Helpers.Editor
 			{
 				EditorGUI.HelpBox(
 					position,
-					$"{nameof(NavMeshAreaMaskAttribute)} requires an int field.",
+					$"{nameof(Helpers.Attributes.NavMeshAreaMaskAttribute)} requires an int field.",
 					MessageType.Error
 				);
 
@@ -25,7 +26,7 @@ namespace Helpers.Editor
 
 			for (var i = 0; i < areaNames.Length; i++)
 			{
-				areaIndices[i] = UnityEngine.AI.NavMesh.GetAreaFromName(areaNames[i]);
+				areaIndices[i] = NavMesh.GetAreaFromName(areaNames[i]);
 				if ((property.intValue & (1 << areaIndices[i])) != 0) maskValue |= 1 << i;
 			}
 

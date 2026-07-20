@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using EC.Demon.Fx;
 using Flashlight;
 using Helpers;
+using Helpers.Events.Channels;
+using Helpers.Ext;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -26,7 +28,7 @@ namespace EC.Demon
 
 		[HideInInspector] public Health Health;
 
-		public Helpers.Events.Channels.GameObjectEC NavBeaconEC;
+		public GameObjectEC NavBeaconEC;
 
 		public NonPersistentListenerTracker ListenerTracker = new();
 
@@ -34,9 +36,11 @@ namespace EC.Demon
 
 		private NavMeshAgent _navMeshAgent;
 
+		public Vector3? CachedPositionPreJumpscare;
+
 		[NonSerialized] public List<GameObject> NavBeacons = new();
 
-		private void Awake() => _navMeshAgent = Helpers.Debug.TryFindComponent<NavMeshAgent>(gameObject);
+		private void Awake() => _navMeshAgent = gameObject.TryFindComponent<NavMeshAgent>();
 
 		public void TogglePathing() => _navMeshAgent.TogglePathing();
 
@@ -135,7 +139,7 @@ namespace EC.Demon
 			SpawnedFlashlight = null;
 		}
 
-		public void TestJumpscare()
+		public void PathToJumpscareTarget()
 		{
 			if (_navMeshAgent
 				&& Camera.main != null
@@ -155,6 +159,24 @@ namespace EC.Demon
 
 			Controller.StopJumpscare();
 			_navMeshAgent.ResetPath();
+		}
+
+		public void PositionForJumpscare()
+		{
+			if (JumpscareTarget)
+			{
+				if (CachedPositionPreJumpscare == null) CachedPositionPreJumpscare = gameObject.transform.position;
+				Jumpscare.PositionForJumpscare(JumpscareTarget);
+			}
+		}
+
+		public void RevertPositionFromJumpscare()
+		{
+			if (CachedPositionPreJumpscare != null)
+			{
+				gameObject.transform.position = CachedPositionPreJumpscare.Value;
+				CachedPositionPreJumpscare = null;
+			}
 		}
 	}
 }

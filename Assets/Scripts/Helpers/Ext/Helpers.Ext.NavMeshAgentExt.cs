@@ -4,9 +4,9 @@ using UnityEngine.AI;
 
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace Helpers
+namespace Helpers.Ext
 {
-	public static class NavMeshAgentExtensions
+	public static class NavMeshAgentExt
 	{
 		/// <summary>
 		///     Sets isStopped to either opposite val then sets velocity to 0 if isStopped.
@@ -17,6 +17,13 @@ namespace Helpers
 			navMeshAgent.isStopped = !navMeshAgent.isStopped;
 
 			if (navMeshAgent.isStopped) navMeshAgent.velocity = Vector3.zero;
+		}
+
+		public static void StopResetDisable(this NavMeshAgent navMeshAgent)
+		{
+			navMeshAgent.TogglePathing(false);
+			navMeshAgent.ResetPath();
+			navMeshAgent.enabled = false;
 		}
 
 		/// <summary>

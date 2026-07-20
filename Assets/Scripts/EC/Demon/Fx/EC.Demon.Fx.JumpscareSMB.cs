@@ -1,3 +1,4 @@
+using Helpers.Ext;
 using UnityEngine;
 
 namespace EC.Demon.Fx
@@ -6,18 +7,18 @@ namespace EC.Demon.Fx
 	{
 		public AudioClip Scream;
 
-		[Helpers.DisableInEditor]
+		[Helpers.DisableInEditorAttribute]
 		private AudioSource
 			_audioSource; // Do not assign in Editor, it will create a global reference to a single Demon's component
 
-		[Helpers.DisableInEditor]
+		[Helpers.DisableInEditorAttribute]
 		private EventBus
 			_eventBus; // Do not assign in Editor, it will create a global reference to a single Demon's component
 
 		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
-			_audioSource = Helpers.Debug.TryFindComponent<AudioSource>(animator.gameObject);
-			_eventBus = Helpers.Debug.TryFindComponentInParent<EventBus>(animator.gameObject);
+			_audioSource = animator.gameObject.TryFindComponent<AudioSource>();
+			_eventBus = animator.gameObject.TryFindComponentInParent<EventBus>();
 
 			if (_audioSource && Scream) _audioSource.PlayOneShot(Scream);
 		}
