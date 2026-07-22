@@ -130,7 +130,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Demon
+  m_Name: Animator_EvilHuey
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: IsIlluminated
@@ -239,7 +239,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 2742372877967049497, guid: 6bca2b60cb19e584da8e1834053acbec, type: 3}
+  m_Motion: {fileID: -5025532004651870653, guid: 84b2df59cfdd1434c9a4c5718278e639, type: 3}
   m_Tag: CoverEyes
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -266,7 +266,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -1597436693635735132, guid: 6bca2b60cb19e584da8e1834053acbec, type: 3}
+  m_Motion: {fileID: -3890653870177620053, guid: 84b2df59cfdd1434c9a4c5718278e639, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
