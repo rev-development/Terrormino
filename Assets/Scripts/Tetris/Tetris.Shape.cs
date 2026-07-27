@@ -43,85 +43,85 @@ namespace Tetris
 	[Serializable]
 	public static class ShapeVecs
 	{
-		// This looks complicated but it's just matrix math for rotating things
-		public static readonly float cos = Mathf.Cos(Mathf.PI / 2f);
+		// This looks complicated, but it's just matrix math for rotating things
+		public static readonly float Cos = Mathf.Cos(Mathf.PI / 2f);
 
-		public static readonly float sin = Mathf.Sin(Mathf.PI / 2f);
+		public static readonly float Sin = Mathf.Sin(Mathf.PI / 2f);
 
 		public static readonly float[] RotationMatrix =
 		{
-			cos,
-			sin,
-			-sin,
-			cos,
+			Cos,
+			Sin,
+			-Sin,
+			Cos,
 		};
 
 		public static readonly Dictionary<ShapeKeys, Vector2Int[]> Cells = new()
-																		   {
-																			   {
-																				   ShapeKeys.I, new[]
-																					   {
-																						   new Vector2Int(-1, 1),
-																						   new Vector2Int(0, 1),
-																						   new Vector2Int(1, 1),
-																						   new Vector2Int(2, 1),
-																					   }
-																			   },
-																			   {
-																				   ShapeKeys.J, new[]
-																					   {
-																						   new Vector2Int(-1, 1),
-																						   new Vector2Int(-1, 0),
-																						   new Vector2Int(0, 0),
-																						   new Vector2Int(1, 0),
-																					   }
-																			   },
-																			   {
-																				   ShapeKeys.L, new[]
-																					   {
-																						   new Vector2Int(1, 1),
-																						   new Vector2Int(-1, 0),
-																						   new Vector2Int(0, 0),
-																						   new Vector2Int(1, 0),
-																					   }
-																			   },
-																			   {
-																				   ShapeKeys.O, new[]
-																					   {
-																						   new Vector2Int(0, 1),
-																						   new Vector2Int(1, 1),
-																						   new Vector2Int(0, 0),
-																						   new Vector2Int(1, 0),
-																					   }
-																			   },
-																			   {
-																				   ShapeKeys.S, new[]
-																					   {
-																						   new Vector2Int(0, 1),
-																						   new Vector2Int(1, 1),
-																						   new Vector2Int(-1, 0),
-																						   new Vector2Int(0, 0),
-																					   }
-																			   },
-																			   {
-																				   ShapeKeys.T, new[]
-																					   {
-																						   new Vector2Int(0, 1),
-																						   new Vector2Int(-1, 0),
-																						   new Vector2Int(0, 0),
-																						   new Vector2Int(1, 0),
-																					   }
-																			   },
-																			   {
-																				   ShapeKeys.Z, new[]
-																					   {
-																						   new Vector2Int(-1, 1),
-																						   new Vector2Int(0, 1),
-																						   new Vector2Int(0, 0),
-																						   new Vector2Int(1, 0),
-																					   }
-																			   },
-																		   };
+		{
+			{
+				ShapeKeys.I, new[]
+				{
+					new Vector2Int(-1, 1),
+					new Vector2Int(0, 1),
+					new Vector2Int(1, 1),
+					new Vector2Int(2, 1),
+				}
+			},
+			{
+				ShapeKeys.J, new[]
+				{
+					new Vector2Int(-1, 1),
+					new Vector2Int(-1, 0),
+					new Vector2Int(0, 0),
+					new Vector2Int(1, 0),
+				}
+			},
+			{
+				ShapeKeys.L, new[]
+				{
+					new Vector2Int(1, 1),
+					new Vector2Int(-1, 0),
+					new Vector2Int(0, 0),
+					new Vector2Int(1, 0),
+				}
+			},
+			{
+				ShapeKeys.O, new[]
+				{
+					new Vector2Int(0, 1),
+					new Vector2Int(1, 1),
+					new Vector2Int(0, 0),
+					new Vector2Int(1, 0),
+				}
+			},
+			{
+				ShapeKeys.S, new[]
+				{
+					new Vector2Int(0, 1),
+					new Vector2Int(1, 1),
+					new Vector2Int(-1, 0),
+					new Vector2Int(0, 0),
+				}
+			},
+			{
+				ShapeKeys.T, new[]
+				{
+					new Vector2Int(0, 1),
+					new Vector2Int(-1, 0),
+					new Vector2Int(0, 0),
+					new Vector2Int(1, 0),
+				}
+			},
+			{
+				ShapeKeys.Z, new[]
+				{
+					new Vector2Int(-1, 1),
+					new Vector2Int(0, 1),
+					new Vector2Int(0, 0),
+					new Vector2Int(1, 0),
+				}
+			},
+		};
 
 		private static readonly Vector2Int[,] _wallKicksI =
 		{
@@ -244,15 +244,15 @@ namespace Tetris
 		};
 
 		public static readonly Dictionary<ShapeKeys, Vector2Int[,]> WallKicks = new()
-			{
-				{ ShapeKeys.I, _wallKicksI },
-				{ ShapeKeys.J, _wallKicksJLOSTZ },
-				{ ShapeKeys.L, _wallKicksJLOSTZ },
-				{ ShapeKeys.O, _wallKicksJLOSTZ },
-				{ ShapeKeys.S, _wallKicksJLOSTZ },
-				{ ShapeKeys.T, _wallKicksJLOSTZ },
-				{ ShapeKeys.Z, _wallKicksJLOSTZ },
-			};
+		{
+			{ ShapeKeys.I, _wallKicksI },
+			{ ShapeKeys.J, _wallKicksJLOSTZ },
+			{ ShapeKeys.L, _wallKicksJLOSTZ },
+			{ ShapeKeys.O, _wallKicksJLOSTZ },
+			{ ShapeKeys.S, _wallKicksJLOSTZ },
+			{ ShapeKeys.T, _wallKicksJLOSTZ },
+			{ ShapeKeys.Z, _wallKicksJLOSTZ },
+		};
 	}
 
 	[Serializable]

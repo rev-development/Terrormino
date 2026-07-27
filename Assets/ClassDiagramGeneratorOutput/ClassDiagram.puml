@@ -1,62 +1,61 @@
 @startuml
-class Controller {
-    - Illuminated : int
-    - Banish : int
-    - Jumpscare : int
-    - EndJumpscare : int
-    + Scream : AudioClip
+class ActivePiece {
+    + Shape : IShape
+    + Position : Vector2Int
+    + RotationIndex : int
+    + CurrentState : ShapeState
 }
-class JumpscareSMB {
-    + Scream : AudioClip
-    - _audioSource : AudioSource
-    - _eventBus : EventBus
+class Board {
+    - _grid : bool[,]
+}
+class BoardRenderer {
 }
 class Config {
-    + AgentSteeringConfig : Helpers.Nav.AgentSteeringConfig
-}
-class Manager {
-    + Demons : List<GameObject>
-    + DemonPrefab : GameObject
-    + SpawnColliders : List<Collider>
-    - _graceEndTime : float
-    - _nextSpawnTime : float
-    + Config : Config
-}
-interface IConfigDto {
-}
-class ChaseState {
-}
-class StateConfig {
 }
 class Controller {
-    + NavBeaconEC : Helpers.Events.Channels.GameObjectEC
-    + NavBeaconsBag : Helpers.RandomBag<GameObject>
-    + TogglePathing : Action<bool>
-    + IsAtDestination : Func<bool>
-    + ApplyAreaMask : Action<int>
-    + GoTo : Action<GameObject>
+    - _bag : RandomBag<Shape>
+    - _gravityAccumulator : float
+    - _isGrounded : bool
+    - _lockAccumulator : float
+    + Level : int
 }
-class PatrolState {
-    + PatrolTimer : Helpers.Timer
-    + IdleTimer : Helpers.Timer
+class EventBus {
+    + OnPieceMoved : UnityEvent<Vector2Int>
+    + OnPieceRotated : UnityEvent<int>
+    + OnHardDrop : UnityEvent
+    + OnPieceSpawned : UnityEvent<ActivePiece>
+    + OnPieceLocked : UnityEvent<Board>
+    + OnBoardChanged : UnityEvent<Board>
+    + OnGameOver : UnityEvent
+    + Config : IConfig
 }
-class StateConfig {
+interface IConfig {
 }
-class NightConfig {
-    + Label : string
-    + LinesRequired : int
-    + CutsceneName : string
-    + DemonConfig : Config
+class InputAdapter {
+    - _dasTimer : float
+    - _heldDirection : Vector2Int
 }
+interface IShape {
+}
+class Rules {
+}
+class Shape {
+    + Tile : Tile
+    + ShapeStates : ShapeState[]
+}
+class ShapeState {
+    + Cells : Vector2Int[]
+    + CW : Vector2Int[]
+    + CCW : Vector2Int[]
+}
+MonoBehaviour <|-- BoardRenderer
+IConfig <|-- Config
 MonoBehaviour <|-- Controller
-StateMachineBehaviour <|-- JumpscareSMB
-IConfigDto <|-- Config
-Helpers.SingletonMonoBehaviour <|-- Manager
-Helpers.StateMachines.FSMState <|-- ChaseState
-MonoBehaviour <|-- Controller
-Helpers.StateMachines.FSMState <|-- PatrolState
-ScriptableObject <|-- NightConfig
-ITetrisConfig <|.. NightConfig
-Manager --> Config : Config
-NightConfig --> Config : DemonConfig
+MonoBehaviour <|-- EventBus
+MonoBehaviour <|-- InputAdapter
+ScriptableObject <|-- Shape
+IShape <|.. Shape
+ActivePiece --> IShape : Shape
+ActivePiece --> ShapeState : CurrentState
+EventBus --> IConfig : Config
 @enduml

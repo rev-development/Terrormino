@@ -9,11 +9,7 @@ namespace Helpers.Attributes
 	///     since a single member may be touched by more than one tool over its lifetime —
 	///     add a new attribute instance per contribution rather than overwriting the last one.
 	/// </summary>
-	[AttributeUsage(
-		AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Method | AttributeTargets.Constructor,
-		AllowMultiple = true,
-		Inherited = false
-	)]
+	[AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = false)]
 	public class AiGeneratedAttribute : Attribute
 	{
 		public AiGeneratedAttribute(string tool, string version = null, string note = null)

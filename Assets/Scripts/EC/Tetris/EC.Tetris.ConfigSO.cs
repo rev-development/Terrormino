@@ -1,20 +1,12 @@
-using System;
-using EC.Demon;
+using Helpers;
 using UnityEngine;
 
-namespace EC.GameLoop
+namespace EC.Tetris
 {
-	[Serializable]
-	public class NightConfig : ScriptableObject, EC.Tetris.IConfig
+	[CreateAssetMenu(fileName = "TetrisConfig", menuName = "Terrormino/Tetris/Config")]
+	public class ConfigSO : InjectableSO<ConfigSO, Config, IConfig>, IConfig
+
 	{
-		public string Label;
-
-		public int LinesRequired;
-
-		public string CutsceneName;
-
-		public Config DemonConfig;
-
 		[field: SerializeField] public float LockDelay { get; set; }
 
 		[field: SerializeField] public float MoveDelay { get; set; }
