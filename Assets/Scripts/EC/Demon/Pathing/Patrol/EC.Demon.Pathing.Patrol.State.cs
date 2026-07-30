@@ -6,7 +6,7 @@ using UnityEngine;
 namespace EC.Demon.Pathing.Patrol
 {
 	[Serializable]
-	public class State : Helpers.StateMachines.FSMState<StateType, Config, Controller>
+	public class State : FSMState<StateType, IConfig, Controller>
 	{
 		private Timer _idleTimer = new();
 
@@ -14,7 +14,7 @@ namespace EC.Demon.Pathing.Patrol
 
 		public override StateType StateType => StateType.Patrol;
 
-		public override Config Config { get; protected set; } = new();
+		public override IConfig Config { get; protected set; }
 
 		public override void Start()
 		{
@@ -72,7 +72,7 @@ namespace EC.Demon.Pathing.Patrol
 			Controller.gameObject.transform.rotation = Quaternion.RotateTowards(
 				Controller.transform.rotation,
 				Quaternion.LookRotation(directionToPlayer),
-				Controller.Config.SteeringConfig.AngularSpeed * Time.deltaTime
+				Controller.ConfigSO.SteeringConfig.AngularSpeed * Time.deltaTime
 			);
 		}
 	}

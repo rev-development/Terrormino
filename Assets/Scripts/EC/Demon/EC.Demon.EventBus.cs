@@ -1,3 +1,5 @@
+using Helpers;
+using Helpers.Events.Channels;
 using Helpers.Ext;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,9 +10,9 @@ namespace EC.Demon
 	[AddComponentMenu("EC.Demon.EventBus")]
 	public class EventBus : MonoBehaviour
 	{
-		[SerializeField] private Helpers.Events.Channels.GameObjectEC _removeDemon;
+		[SerializeField] private GameObjectEC _removeDemon;
 
-		[SerializeField] private Helpers.Events.Channels.VoidEC _gameOver;
+		[SerializeField] private VoidEC _gameOver;
 
 		public UnityEvent<GameObject> BanishTriggered = new();
 
@@ -22,9 +24,9 @@ namespace EC.Demon
 
 		public UnityEvent<bool> Illuminated = new();
 
-		[field: SerializeField] public Config Config { get; private set; } = new();
+		[field: SerializeField] public ConfigSO ConfigSO { get; private set; }
 
-		[Helpers.DisableInEditorAttribute] [SerializeField] private ControlPanel _controlPanel;
+		[DisableInEditor] [SerializeField] private ControlPanel _controlPanel;
 
 		public void Awake() => _controlPanel = gameObject.TryFindComponent<ControlPanel>();
 
@@ -54,8 +56,8 @@ namespace EC.Demon
 		///     Not necessary at the moment, but preventing raw Config assignment is good practice.
 		///     Ensures any cascading changes are enforced.
 		/// </summary>
-		/// <param name="config"></param>
-		public void ApplyConfig(Config config) => Config = config;
+		/// <param name="configSO"></param>
+		public void ApplyConfig(ConfigSO configSO) => ConfigSO = configSO;
 
 		private void OnBanishFxCompleted() => _removeDemon.RaiseEvent(gameObject);
 

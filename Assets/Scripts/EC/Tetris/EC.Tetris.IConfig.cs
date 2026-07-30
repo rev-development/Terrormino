@@ -1,30 +1,24 @@
-using Helpers.Attributes;
-using UnityEngine;
-
 namespace EC.Tetris
 {
 	/// <summary>
-	///     Every tunable Tetris value (timing, board size, spawn point, feature flags)
-	///     in one contract, so both the plain Config struct and ScriptableObject-backed
-	///     assets like EC.GameLoop.NightConfig can supply it interchangeably via
-	///     EventBus.ApplyConfig. Gravity is intentionally absent — it's computed from
-	///     Level via Rules.GetGravityDelay, not stored as config.
+	///     Every tunable Tetris value (timing, board size, feature flags) in one
+	///     contract. Gravity and spawn position are intentionally absent — both are
+	///     computed from board dimensions via Rules, not stored as config.
 	/// </summary>
-	[AiGenerated("Claude", "claude-sonnet-4-6")]
 	public interface IConfig
 	{
-		float LockDelay { get; set; }
+		int BoardWidth { get; set; }
 
-		float MoveDelay { get; set; }
+		int BoardHeight { get; set; }
 
 		bool HardDropEnabled { get; set; }
 
 		bool GhostEnabled { get; set; }
 
-		int BoardWidth { get; set; }
+		float LockDelay { get; set; }
 
-		int BoardHeight { get; set; }
+		float DASDelay { get; set; }
 
-		Vector2Int SpawnPosition { get; set; }
+		int LockResetLimit { get; set; }
 	}
 }

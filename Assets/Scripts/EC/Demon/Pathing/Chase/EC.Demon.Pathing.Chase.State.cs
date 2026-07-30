@@ -5,9 +5,9 @@ using Helpers.Ext;
 namespace EC.Demon.Pathing.Chase
 {
 	[Serializable]
-	public class State : Helpers.StateMachines.FSMState<StateType, Config, Controller>
+	public class State : FSMState<StateType, IConfig, Controller>
 	{
-		public override Config Config { get; protected set; } = new();
+		public override IConfig Config { get; protected set; }
 
 		public override StateType StateType => StateType.Chase;
 

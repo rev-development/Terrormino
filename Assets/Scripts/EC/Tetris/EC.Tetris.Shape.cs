@@ -11,12 +11,12 @@ namespace EC.Tetris
 	[CreateAssetMenu(fileName = "Shape", menuName = "Terrormino/Tetris/Shape")]
 	public class Shape : ScriptableObject, IShape
 	{
-		[SerializeField] private Tile _tile = null;
+		[SerializeField] private TileBase _tile;
 
-		[SerializeField] private ShapeState[] _shapeStates;
+		[SerializeField] private RotationState[] _shapeStates;
 
-		public Tile Tile => _tile;
+		public RotationState[] ShapeStates => _shapeStates;
 
-		public ShapeState[] ShapeStates => _shapeStates;
+		public TileBase Tile => _tile;
 	}
 }

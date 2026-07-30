@@ -10,7 +10,7 @@ namespace EC.Tetris
 	///     into the controller. Computed properties (CurrentState, BoardSpaceCells)
 	///     derive only from these three fields, nothing external.
 	/// </summary>
-	[AiGenerated("Claude", "claude-sonnet-4-6")]
+	[AiGenerated("Claude", "claude-sonnet-4-6", "Reviewed by Rev 7-28-26")]
 	public struct ActivePiece
 	{
 		public IShape Shape;
@@ -19,7 +19,7 @@ namespace EC.Tetris
 
 		public int RotationIndex;
 
-		public ShapeState CurrentState => Shape.ShapeStates[RotationIndex];
+		public RotationState CurrentState => Shape.ShapeStates[RotationIndex];
 
 		public Vector2Int[] BoardSpaceCells
 		{

@@ -34,9 +34,9 @@ namespace EC.Tetris
 
 			_dasTimer += Time.deltaTime;
 
-			if (_dasTimer < _eventBus.Config.MoveDelay) return;
+			if (_dasTimer < _eventBus.Config.DASDelay) return;
 
-			_dasTimer -= _eventBus.Config.MoveDelay;
+			_dasTimer -= _eventBus.Config.DASDelay;
 
 			_controller.Move(_heldDirection);
 		}

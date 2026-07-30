@@ -1,5 +1,4 @@
 using System;
-using EC.Demon;
 using UnityEngine;
 
 namespace EC.GameLoop
@@ -13,11 +12,13 @@ namespace EC.GameLoop
 
 		public string CutsceneName;
 
-		public Config DemonConfig;
+		public EC.Demon.ConfigSO DemonConfigSO;
+
+		public EC.Tetris.ConfigSO TetrisConfig;
 
 		[field: SerializeField] public float LockDelay { get; set; }
 
-		[field: SerializeField] public float MoveDelay { get; set; }
+		[field: SerializeField] public float DASDelay { get; set; }
 
 		[field: SerializeField] public bool HardDropEnabled { get; set; }
 
@@ -27,6 +28,6 @@ namespace EC.GameLoop
 
 		[field: SerializeField] public int BoardHeight { get; set; }
 
-		[field: SerializeField] public Vector2Int SpawnPosition { get; set; }
+		[field: SerializeField] public int LockResetLimit { get; set; }
 	}
 }

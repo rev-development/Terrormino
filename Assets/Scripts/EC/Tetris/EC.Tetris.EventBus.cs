@@ -1,5 +1,6 @@
 using Helpers.Attributes;
 using Helpers.Events.Channels;
+using Helpers.Ext;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -13,7 +14,7 @@ namespace EC.Tetris
 	///     cleared, game over). Future mechanics that need to intercept or react to
 	///     these events hook directly into this bus — there is no separate stage.
 	/// </summary>
-	[AiGenerated("Claude", "claude-sonnet-5")]
+	[AiGenerated("Claude", "claude-sonnet-5", "Reviewed by Rev 7-28-26")]
 	public class EventBus : MonoBehaviour
 	{
 		// EventChannels for the outward-facing audience of these two events
@@ -22,6 +23,8 @@ namespace EC.Tetris
 		[SerializeField] private IntEC _linesClearedEC;
 
 		[SerializeField] private VoidEC _gameOverEC;
+
+		[field: SerializeField] public ConfigSO Config { get; private set; }
 
 		public UnityEvent<Vector2Int> OnPieceMoved = new();
 
@@ -35,24 +38,13 @@ namespace EC.Tetris
 
 		public UnityEvent<Board, int> OnLinesCleared = new();
 
-		public UnityEvent<Board> OnBoardChanged = new();
-
 		public UnityEvent OnGameOver = new();
 
-		// Gravity is computed from Level via Rules.GetGravityDelay (Guideline formula),
-		// not stored here. Lock delay and DAS aren't level-scaled — 0.5s lock is the
-		// Guideline constant across all levels, and 0.1s reuses the classic NES repeat
-		// rate for MoveDelay since this config has no separate initial-DAS-charge field.
-		public IConfig Config { get; private set; } = new Config
+		private void Awake()
 		{
-			LockDelay = 0.5f,
-			MoveDelay = 0.1f,
-			HardDropEnabled = true,
-			GhostEnabled = true,
-			BoardWidth = 10,
-			BoardHeight = 20,
-			SpawnPosition = new Vector2Int(4, 18),
-		};
+			gameObject.CheckIfSetInInspector(_linesClearedEC, "Lines Cleared Event Channel");
+			gameObject.CheckIfSetInInspector(_gameOverEC, "Game Over Event Channel");
+		}
 
 		private void OnEnable()
 		{
@@ -68,11 +60,10 @@ namespace EC.Tetris
 			OnPieceSpawned.RemoveAllListeners();
 			OnPieceLocked.RemoveAllListeners();
 			OnLinesCleared.RemoveAllListeners();
-			OnBoardChanged.RemoveAllListeners();
 			OnGameOver.RemoveAllListeners();
 		}
 
-		public void ApplyConfig(IConfig config) => Config = config;
+		public void ApplyConfig(ConfigSO config) => Config = config;
 
 		private void RaiseLinesClearedEC(Board board, int lines) => _linesClearedEC.RaiseEvent(lines);
 

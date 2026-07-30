@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using Helpers;
+using Helpers.Attributes;
+using Helpers.Events.Channels;
 using Helpers.Ext;
 using UnityEngine;
 using UnityEngine.AI;
@@ -7,26 +10,25 @@ namespace EC.Demon
 {
 	[DisallowMultipleComponent]
 	[AddComponentMenu("EC.Demon.Manager")]
-	public class Manager : Helpers.SingletonMonoBehaviour<Manager>
+	public class Manager : SingletonMonoBehaviour<Manager>
 	{
 		[SerializeField] private GameObject _demonPrefab;
 
-		[SerializeField] private Helpers.Events.Channels.GameObjectEC _removeDemon;
+		[SerializeField] private GameObjectEC _removeDemon;
 
-		[SerializeField] private Helpers.Events.Channels.VoidEC _gameOver;
+		[SerializeField] private VoidEC _gameOver;
 
-		[Helpers.Attributes.NavMeshAreaMaskAttribute] [SerializeField]
-		private int _spawnAreaMask = 1; // 0 is always Nothing, 1 is always Walkable
+		[NavMeshAreaMask] [SerializeField] private int _spawnAreaMask = 1; // 0 is always Nothing, 1 is always Walkable
 
 		[SerializeField] private List<Collider> _spawnColliders = new();
 
-		[Helpers.DisableInEditorAttribute] [SerializeField] private List<GameObject> _demons = new();
+		[DisableInEditor] [SerializeField] private List<GameObject> _demons = new();
 
-		[SerializeField] private Helpers.Timer _graceTimer = new();
+		[SerializeField] private Timer _graceTimer = new();
 
-		[SerializeField] private Helpers.Timer _spawnTimer = new();
+		[SerializeField] private Timer _spawnTimer = new();
 
-		[field: SerializeField] public Config Config { get; private set; } = new();
+		[field: SerializeField] public ConfigSO ConfigSO { get; private set; }
 
 		private int _startFrame;
 
@@ -40,8 +42,8 @@ namespace EC.Demon
 		{
 			_startFrame = Time.frameCount;
 			gameObject.CheckIfEmptyListInInspector(_spawnColliders, "Spawn Colliders");
-			_graceTimer.Init(Config.SpawnGracePeriod);
-			_spawnTimer.Init(Config.SpawnInterval);
+			_graceTimer.Init(ConfigSO.SpawnGracePeriod);
+			_spawnTimer.Init(ConfigSO.SpawnInterval);
 		}
 
 		public void Update()
@@ -73,7 +75,7 @@ namespace EC.Demon
 
 		public void SpawnDemon()
 		{
-			if (_demons.Count == Config.DemonMax) return;
+			if (_demons.Count == ConfigSO.DemonMax) return;
 
 			if (_spawnColliders.Count == 0) return;
 
@@ -106,7 +108,7 @@ namespace EC.Demon
 			// 6. Pass config to EventBus bc it's a hub-type component
 			if (demon.TryGetComponent(out EventBus eventBus))
 			{
-				eventBus.ApplyConfig(Config);
+				eventBus.ApplyConfig(ConfigSO);
 
 				_demons.Add(demon);
 			}
@@ -130,8 +132,8 @@ namespace EC.Demon
 		///     If a GameObject has a hub-style component, only that one needs an assignment function.
 		///     The rest can just forward the property (public ConfigType Config => HubComponent.Config).
 		/// </summary>
-		/// <param name="config"></param>
-		public void ApplyConfig(Config config) => Config = config;
+		/// <param name="configSO"></param>
+		public void ApplyConfig(ConfigSO configSO) => ConfigSO = configSO;
 
 		public void OnGameOver() => ClearAll();
 

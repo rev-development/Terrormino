@@ -1,8 +1,21 @@
 using System;
 using UnityEngine;
 
-namespace Helpers.StateMachines
+namespace Helpers
 {
+	public interface IFSMState<out TState, out TController>
+		where TState : Enum
+		where TController : MonoBehaviour
+	{
+		public TState StateType { get; }
+
+		public TController Controller { get; }
+
+		public void Start();
+		public void Update();
+		public void Exit();
+	}
+
 	[Serializable]
 	public abstract class FSMState<TStateType, TStateConfig, TController> : IFSMState<TStateType, TController>
 		where TStateType : Enum
@@ -29,7 +42,10 @@ namespace Helpers.StateMachines
 
 		public virtual void Exit() => Helpers.Initialized.Warn(Initialized, GetType().Name);
 
-		public FSMState<TStateType, TStateConfig, TController> Init(TController controller, TStateConfig stateConfig)
+		public virtual FSMState<TStateType, TStateConfig, TController> Init(
+			TController controller,
+			TStateConfig stateConfig
+		)
 		{
 			Controller = controller;
 			Config = stateConfig;

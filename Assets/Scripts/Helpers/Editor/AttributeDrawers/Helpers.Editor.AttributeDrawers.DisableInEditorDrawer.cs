@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Helpers.Editor
+namespace Helpers.Editor.AttributeDrawers
 {
 	[CustomPropertyDrawer(typeof(DisableInEditorAttribute))]
 	public class DisableInEditorDrawer : PropertyDrawer

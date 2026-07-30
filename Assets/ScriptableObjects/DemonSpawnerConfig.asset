@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7942ab48636a4643a69b80596032e124, type: 3}
+  m_Name: DemonSpawnerConfig
+  m_EditorClassIdentifier: 
+  <PatrolConfigSO>k__BackingField: {fileID: 11400000, guid: ebe06cf84020f1244aa1e39057c380eb, type: 2}
+  <ChaseConfigSO>k__BackingField: {fileID: 11400000, guid: 70b9f07daca48064e9c18f2e30c61825, type: 2}
+  <MaxHealth>k__BackingField: 0
+  <DemonMax>k__BackingField: 0
+  <SpawnGracePeriod>k__BackingField: 0
+  <SpawnInterval>k__BackingField: 0
+  <SteeringConfig>k__BackingField:
+    <Speed>k__BackingField: 3.5
+    <AngularSpeed>k__BackingField: 120
+    <Acceleration>k__BackingField: 8
+    <StoppingDistance>k__BackingField: 0
+    <AutoBraking>k__BackingField: 1

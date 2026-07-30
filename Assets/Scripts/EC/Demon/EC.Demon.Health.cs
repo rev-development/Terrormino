@@ -1,4 +1,5 @@
 using Flashlight;
+using Helpers;
 using Helpers.Ext;
 using UnityEngine;
 
@@ -9,9 +10,9 @@ namespace EC.Demon
 	[AddComponentMenu("EC.Demon.Health")]
 	public class Health : MonoBehaviour
 	{
-		[Helpers.DisableInEditorAttribute] [SerializeField] private EventBus _eventBus;
+		[DisableInEditor] [SerializeField] private EventBus _eventBus;
 
-		[field: SerializeField] public Helpers.ClampedFloat HP = new(3f, 3f);
+		[field: SerializeField] public ClampedFloat HP = new(3f, 3f);
 
 		public void Awake() => _eventBus = gameObject.TryFindComponent<EventBus>();
 

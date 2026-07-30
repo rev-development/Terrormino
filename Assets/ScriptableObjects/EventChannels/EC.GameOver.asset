@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0694b9b0ce3645aa8f4a2bd53956fdd4, type: 3}
-  m_Name: DemonEC.PathNavBeacons
+  m_Script: {fileID: 11500000, guid: 0efd4041982c4e4b888c26cda5d02ef1, type: 3}
+  m_Name: EC.GameOver
   m_EditorClassIdentifier: 
-  CollectParams: 1

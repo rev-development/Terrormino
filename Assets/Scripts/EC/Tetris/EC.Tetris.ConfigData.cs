@@ -1,6 +1,4 @@
 using System;
-using Helpers.Attributes;
-using UnityEngine;
 
 namespace EC.Tetris
 {
@@ -10,21 +8,20 @@ namespace EC.Tetris
 	///     via ApplyConfig.
 	/// </summary>
 	[Serializable]
-	[AiGenerated("Claude", "claude-sonnet-4-6")]
-	public struct Config : IConfig
+	public class ConfigData : IConfig
 	{
-		public float LockDelay { get; set; }
+		public int BoardWidth { get; set; }
 
-		public float MoveDelay { get; set; }
+		public int BoardHeight { get; set; }
 
 		public bool HardDropEnabled { get; set; }
 
 		public bool GhostEnabled { get; set; }
 
-		public int BoardWidth { get; set; }
+		public float LockDelay { get; set; }
 
-		public int BoardHeight { get; set; }
+		public float DASDelay { get; set; }
 
-		public Vector2Int SpawnPosition { get; set; }
+		public int LockResetLimit { get; set; }
 	}
 }

@@ -1,41 +1,49 @@
 using System;
 using System.Collections.Generic;
+using Helpers;
+using Helpers.Events.Channels;
 using Helpers.Ext;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AI;
-using State = EC.Demon.Pathing.Patrol.State;
 
 namespace EC.Demon.Pathing
 {
+	[Serializable]
+	public enum StateType
+	{
+		Patrol,
+
+		Chase,
+	}
+
 	[DisallowMultipleComponent]
 	[RequireComponent(typeof(EventBus))]
 	[RequireComponent(typeof(NavMeshAgent))]
 	[AddComponentMenu("EC.Demon.Pathing.Controller")]
 	public class Controller : MonoBehaviour
 	{
-		[Helpers.DisableInEditorAttribute] [SerializeField] private EventBus _eventBus;
+		[DisableInEditor] [SerializeField] private EventBus _eventBus;
 
-		[Helpers.DisableInEditorAttribute] [SerializeField] public NavMeshAgent NavMeshAgent;
+		[DisableInEditor] [SerializeField] public NavMeshAgent NavMeshAgent;
 
-		[Helpers.DisableInEditorAttribute] [SerializeField] public GameObject Player;
+		[DisableInEditor] [SerializeField] public GameObject Player;
 
-		public Helpers.Events.Channels.GameObjectEC NavBeaconEC;
+		public GameObjectEC NavBeaconEC;
 
 		[PublicAPI] public StateType CurrentStateType; // For inspector
 
-		[SerializeField] public Helpers.RandomBag<GameObject> NavBeaconsBag = new();
+		[SerializeField] public RandomBag<GameObject> NavBeaconsBag = new();
 
-		public Config Config => _eventBus.Config;
+		public ConfigSO ConfigSO => _eventBus.ConfigSO;
 
-		[field: SerializeField]
-		public Helpers.StateMachines.IFSMState<StateType, Controller> CurrentState { get; private set; }
+		[field: SerializeField] public IFSMState<StateType, Controller> CurrentState { get; private set; }
 
-		public Dictionary<StateType, Func<Helpers.StateMachines.IFSMState<StateType, Controller>>> States =>
+		public Dictionary<StateType, Func<IFSMState<StateType, Controller>>> States =>
 			new()
 			{
-				{ StateType.Patrol, () => new State().Init(this, Config.PatrolConfig) },
-				{ StateType.Chase, () => new Chase.State().Init(this, Config.ChaseConfig) },
+				{ StateType.Patrol, () => new EC.Demon.Pathing.Patrol.State().Init(this, ConfigSO.PatrolConfigSO) },
+				{ StateType.Chase, () => new EC.Demon.Pathing.Chase.State().Init(this, ConfigSO.ChaseConfigSO) },
 			};
 
 		public void Awake()
@@ -56,8 +64,8 @@ namespace EC.Demon.Pathing
 
 		public void Start()
 		{
-			Player = Helpers.TryFind.ByTag("Player");
-			NavMeshAgent.ApplySteeringConfig(Config.SteeringConfig);
+			Player = TryFind.ByTag("Player");
+			NavMeshAgent.ApplySteeringConfig(ConfigSO.SteeringConfig);
 			EnterState(NavBeaconsBag.HasItems ? StateType.Patrol : StateType.Chase);
 		}
 
