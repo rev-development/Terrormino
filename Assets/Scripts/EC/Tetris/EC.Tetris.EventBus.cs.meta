@@ -3,7 +3,10 @@ guid: e86962ad813156b4bb01a68d6b3ecca4
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _linesClearedEC: {fileID: 11400000, guid: b98f26449f746a7408a912b61766d9e7, type: 2}
+  - _gameOverEC: {fileID: 11400000, guid: cfcdf534d691df64d90d7722a7a3991f, type: 2}
+  - <Config>k__BackingField: {fileID: 11400000, guid: 1f1ba3f8fd7ad9f45947aca787ecd5f4, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

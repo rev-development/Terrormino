@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace EC.Tetris
 {
 	/// <summary>
@@ -7,9 +9,7 @@ namespace EC.Tetris
 	/// </summary>
 	public interface IConfig
 	{
-		int BoardWidth { get; set; }
-
-		int BoardHeight { get; set; }
+		Vector2Int PlayfieldSize { get; set; }
 
 		bool HardDropEnabled { get; set; }
 

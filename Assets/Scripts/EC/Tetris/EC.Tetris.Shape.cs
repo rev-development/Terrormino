@@ -13,9 +13,22 @@ namespace EC.Tetris
 	{
 		[SerializeField] private TileBase _tile;
 
-		[SerializeField] private RotationState[] _shapeStates;
+		[SerializeField] private RotationState _orientationZero = new();
 
-		public RotationState[] ShapeStates => _shapeStates;
+		[SerializeField] private RotationState _orientationRight = new();
+
+		[SerializeField] private RotationState _orientationTwo = new();
+
+		[SerializeField] private RotationState _orientationLeft = new();
+
+		public RotationState[] RotationStates =>
+			new[]
+			{
+				_orientationZero,
+				_orientationRight,
+				_orientationTwo,
+				_orientationLeft,
+			};
 
 		public TileBase Tile => _tile;
 	}

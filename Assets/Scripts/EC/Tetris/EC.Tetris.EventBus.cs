@@ -34,9 +34,9 @@ namespace EC.Tetris
 
 		public UnityEvent<ActivePiece> OnPieceSpawned = new();
 
-		public UnityEvent<Board> OnPieceLocked = new();
+		public UnityEvent<Playfield> OnPieceLocked = new();
 
-		public UnityEvent<Board, int> OnLinesCleared = new();
+		public UnityEvent<Playfield, int> OnLinesCleared = new();
 
 		public UnityEvent OnGameOver = new();
 
@@ -65,7 +65,7 @@ namespace EC.Tetris
 
 		public void ApplyConfig(ConfigSO config) => Config = config;
 
-		private void RaiseLinesClearedEC(Board board, int lines) => _linesClearedEC.RaiseEvent(lines);
+		private void RaiseLinesClearedEC(Playfield playfield, int lines) => _linesClearedEC.RaiseEvent(lines);
 
 		private void RaiseGameOverEC() => _gameOverEC.RaiseEvent();
 	}

@@ -2,13 +2,15 @@
 
 using System.IO;
 using Helpers.Attributes;
+using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Helpers.Editor.Theming.SolarizedDark
 {
-	[AiGenerated("Claude", "Sonnet 4.6")]
+	[PublicAPI]
+	[AiGenerated("Claude", "Sonnet 4.6", "Reviewed by Rev 7-30-26")]
 	public static class StyleHelper
 	{
 		// ── Background ────────────────────────────────────────────────────────
@@ -28,6 +30,24 @@ namespace Helpers.Editor.Theming.SolarizedDark
 		public const string BgBase2 = "sol-bg-base2";
 
 		public const string BgBase3 = "sol-bg-base3";
+
+		// ── Background — accents ──────────────────────────────────────────────
+
+		public const string BgBlue = "sol-bg-blue";
+
+		public const string BgCyan = "sol-bg-cyan";
+
+		public const string BgYellow = "sol-bg-yellow";
+
+		public const string BgOrange = "sol-bg-orange";
+
+		public const string BgGreen = "sol-bg-green";
+
+		public const string BgRed = "sol-bg-red";
+
+		public const string BgMagenta = "sol-bg-magenta";
+
+		public const string BgViolet = "sol-bg-violet";
 
 		// ── Text color — base scale ───────────────────────────────────────────
 
@@ -125,7 +145,7 @@ namespace Helpers.Editor.Theming.SolarizedDark
 
 		// ── RuntimeStyleSheet generation ─────────────────────────────────────
 
-		private static string UnityDefaultTextColor => OriginalUnity.Palette.DefaultText;
+		private static string _unityDefaultTextColor => OriginalUnity.Palette.DefaultText;
 
 		public static string USSPath
 		{
@@ -135,9 +155,7 @@ namespace Helpers.Editor.Theming.SolarizedDark
 
 				if (guids.Length == 0)
 				{
-					Debug.LogWarning(
-						"SolarizedDark.StyleHelper script asset not found — USS path could not be resolved."
-					);
+					Debug.LogWarning("SolarizedDark.StyleHelper script asset not found — USS path could not be resolved.");
 
 					return null;
 				}
@@ -180,6 +198,18 @@ namespace Helpers.Editor.Theming.SolarizedDark
             .{BgBase2}  {{ background-color: {Palette.Base2}; }}
             .{BgBase3}  {{ background-color: {Palette.Base3}; }}
 
+            /* ── Background — accents ────────────────────────────────────────── */
+            /* Type-qualified variants outrank component rules (e.g. .sol-v-btn's own
+               background) so accents stay visible on buttons regardless of rule order. */
+            .{BgBlue},    Button.{BgBlue}    {{ background-color: {Palette.Blue}; }}
+            .{BgCyan},    Button.{BgCyan}    {{ background-color: {Palette.Cyan}; }}
+            .{BgYellow},  Button.{BgYellow}  {{ background-color: {Palette.Yellow}; }}
+            .{BgOrange},  Button.{BgOrange}  {{ background-color: {Palette.Orange}; }}
+            .{BgGreen},   Button.{BgGreen}   {{ background-color: {Palette.Green}; }}
+            .{BgRed},     Button.{BgRed}     {{ background-color: {Palette.Red}; }}
+            .{BgMagenta}, Button.{BgMagenta} {{ background-color: {Palette.Magenta}; }}
+            .{BgViolet},  Button.{BgViolet}  {{ background-color: {Palette.Violet}; }}
+
             /* ── Text color — base scale ─────────────────────────────────────── */
             .{TextBase03} {{ color: {Palette.Base03}; }}
             .{TextBase02} {{ color: {Palette.Base02}; }}
@@ -201,7 +231,7 @@ namespace Helpers.Editor.Theming.SolarizedDark
             .{TextViolet}  {{ color: {Palette.Violet}; }}
 
             /* ── Text color — special ────────────────────────────────────────── */
-            .{TextDefault} {{ color: {UnityDefaultTextColor}; }}
+            .{TextDefault} {{ color: {_unityDefaultTextColor}; }}
 
             /* ── Font ────────────────────────────────────────────────────────── */
             .{FontBold}   {{ -unity-font-style: bold; }}
@@ -284,9 +314,9 @@ namespace Helpers.Editor.Theming.SolarizedDark
                 border-bottom-width: 1px;
                 border-left-width:   1px;
                 border-right-width:  1px;
-				overflow: Visible;
-				white-space: Normal;
-				flex-grow: 1;
+								overflow: Visible;
+								white-space: Normal;
+								flex-grow: 1;
             }}
 
             .{VBtn}:hover {{
@@ -294,19 +324,6 @@ namespace Helpers.Editor.Theming.SolarizedDark
                 color:            {Palette.Base1};
             }}
 
-            .{VBtnPrimary} {{
-                background-color:    {Palette.Blue};
-                color:               {Palette.Base03};
-                border-top-width:    0;
-                border-bottom-width: 0;
-                border-left-width:   0;
-                border-right-width:  0;
-                border-radius:       {OriginalUnity.Palette.BorderRadiusRounded}px;
-            }}
-
-            .{VBtnPrimary}:hover {{
-                background-color: {Palette.Cyan};
-            }}
 
             /* ── Component — field ───────────────────────────────────────────── */
             /* Bare .{VField} intentionally carries no border/background — it's also used as a
@@ -333,7 +350,7 @@ namespace Helpers.Editor.Theming.SolarizedDark
             .{VField} EnumField,
             .{VField} Foldout,
             .{VField} ListView {{
-                color:         {UnityDefaultTextColor};
+                color:         {_unityDefaultTextColor};
                 border-radius: {OriginalUnity.Palette.BorderRadiusRounded}px;
             }}
 
@@ -387,14 +404,14 @@ namespace Helpers.Editor.Theming.SolarizedDark
             }}
 
             .{VField} Label {{
-                color:       {UnityDefaultTextColor};
+                color:       {_unityDefaultTextColor};
                 min-width:   0;
                 flex-shrink: 1;
             }}
 
             /* ── Component — switch ──────────────────────────────────────────── */
             .{VSwitch} {{
-                color: {UnityDefaultTextColor};
+                color: {_unityDefaultTextColor};
             }}
 
             .{VSwitch} > .unity-toggle__checkmark {{
@@ -443,7 +460,9 @@ namespace Helpers.Editor.Theming.SolarizedDark
 
 			var directory = Path.GetDirectoryName(path);
 
-			if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+			if (!Directory.Exists(directory)
+					&& directory != null)
+				Directory.CreateDirectory(directory);
 
 			File.WriteAllText(path, BuildUSS());
 

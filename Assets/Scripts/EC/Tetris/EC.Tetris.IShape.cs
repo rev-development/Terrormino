@@ -1,4 +1,5 @@
 using System;
+using Helpers.Attributes;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -13,18 +14,21 @@ namespace EC.Tetris
 	public class RotationState
 	{
 		/// <summary>
-		///     The counter-clockwise set of 'wall kick' vectors. (Should be 5)
-		/// </summary>
-		public Vector2Int[] CCW;
-		/// <summary>
 		///     The coordinates for the base shape in a single orientation.
+		///     Origin (0,0) is bottom-left; Y increases upward.
 		/// </summary>
-		public Vector2Int[] Cells;
-
+		[CellGrid(5, 5)] public Vector2Int[] Cells =
+			{ };
 		/// <summary>
 		///     The clockwise set of 'wall kick' vectors. (Should be 5)
 		/// </summary>
-		public Vector2Int[] CW;
+		[SerializeField] public Vector2Int[] CW =
+			{ };
+		/// <summary>
+		///     The counter-clockwise set of 'wall kick' vectors. (Should be 5)
+		/// </summary>
+		[SerializeField] public Vector2Int[] CCW =
+			{ };
 	}
 
 	/// <summary>
@@ -36,6 +40,6 @@ namespace EC.Tetris
 	{
 		TileBase Tile { get; }
 
-		RotationState[] ShapeStates { get; }
+		RotationState[] RotationStates { get; }
 	}
 }

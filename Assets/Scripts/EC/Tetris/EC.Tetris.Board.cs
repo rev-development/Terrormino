@@ -1,5 +1,6 @@
 using System;
 using Helpers.Attributes;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace EC.Tetris
@@ -10,16 +11,16 @@ namespace EC.Tetris
 	///     Update, no Inspector fields, no lifecycle to hook into.
 	/// </summary>
 	[AiGenerated("Claude", "claude-sonnet-5", "Reviewed by Rev 7-28-26")]
-	public class Board
+	public class Playfield
 	{
 		// null = empty, non-null = occupied (stores the tile for rendering).
 		private readonly TileBase[,] _grid;
 
-		public Board(int width, int height)
+		public Playfield(Vector2Int size)
 		{
-			Width = width;
-			Height = height;
-			_grid = new TileBase[width, height];
+			Width = size.x;
+			Height = size.y;
+			_grid = new TileBase[size.x, size.y];
 		}
 
 		public int Width { get; }
@@ -61,8 +62,9 @@ namespace EC.Tetris
 		private bool IsRowFull(int row)
 		{
 			for (var x = 0; x < Width; x++)
-				if (_grid[x, row] == null)
-					return false;
+			{
+				if (_grid[x, row] == null) return false;
+			}
 
 			return true;
 		}

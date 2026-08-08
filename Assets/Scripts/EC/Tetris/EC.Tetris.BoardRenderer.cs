@@ -40,32 +40,32 @@ namespace EC.Tetris
 		private void OnEnable()
 		{
 			_eventBus.OnPieceMoved.AddListener(OnPieceMoved);
-			_eventBus.OnPieceMoved.AddListener(RenderBoard);
+			_eventBus.OnPieceMoved.AddListener(RenderPlayfield);
 			_eventBus.OnPieceRotated.AddListener(OnPieceRotated);
-			_eventBus.OnPieceRotated.AddListener(RenderBoard);
+			_eventBus.OnPieceRotated.AddListener(RenderPlayfield);
 			_eventBus.OnPieceSpawned.AddListener(OnPieceSpawned);
-			_eventBus.OnPieceSpawned.AddListener(RenderBoard);
+			_eventBus.OnPieceSpawned.AddListener(RenderPlayfield);
 			_eventBus.OnPieceLocked.AddListener(OnPieceLocked);
-			_eventBus.OnPieceLocked.AddListener(RenderBoard);
-			_eventBus.OnLinesCleared.AddListener(RenderBoard);
+			_eventBus.OnPieceLocked.AddListener(RenderPlayfield);
+			_eventBus.OnLinesCleared.AddListener(RenderPlayfield);
 		}
 
 		private void OnDisable()
 		{
 			_eventBus.OnPieceMoved.RemoveListener(OnPieceMoved);
-			_eventBus.OnPieceMoved.RemoveListener(RenderBoard);
+			_eventBus.OnPieceMoved.RemoveListener(RenderPlayfield);
 			_eventBus.OnPieceRotated.RemoveListener(OnPieceRotated);
-			_eventBus.OnPieceRotated.RemoveListener(RenderBoard);
+			_eventBus.OnPieceRotated.RemoveListener(RenderPlayfield);
 			_eventBus.OnPieceSpawned.RemoveListener(OnPieceSpawned);
-			_eventBus.OnPieceSpawned.RemoveListener(RenderBoard);
+			_eventBus.OnPieceSpawned.RemoveListener(RenderPlayfield);
 			_eventBus.OnPieceLocked.RemoveListener(OnPieceLocked);
-			_eventBus.OnPieceLocked.RemoveListener(RenderBoard);
-			_eventBus.OnLinesCleared.RemoveListener(RenderBoard);
+			_eventBus.OnPieceLocked.RemoveListener(RenderPlayfield);
+			_eventBus.OnLinesCleared.RemoveListener(RenderPlayfield);
 		}
 
-		private void RenderBoard()
+		private void RenderPlayfield()
 		{
-			var board = _controller.Board;
+			var board = _controller.Playfield;
 			_boardTilemap.ClearAllTiles();
 
 			for (var x = 0; x < board.Width; x++)
@@ -79,11 +79,11 @@ namespace EC.Tetris
 
 		// Typed listener shims — C# method group resolution picks the right overload
 		// per event so RenderBoard can be added directly without lambdas.
-		private void RenderBoard(Vector2Int _) => RenderBoard();
-		private void RenderBoard(int _) => RenderBoard();
-		private void RenderBoard(ActivePiece _) => RenderBoard();
-		private void RenderBoard(Board _) => RenderBoard();
-		private void RenderBoard(Board _, int __) => RenderBoard();
+		private void RenderPlayfield(Vector2Int _) => RenderPlayfield();
+		private void RenderPlayfield(int _) => RenderPlayfield();
+		private void RenderPlayfield(ActivePiece _) => RenderPlayfield();
+		private void RenderPlayfield(Playfield _) => RenderPlayfield();
+		private void RenderPlayfield(Playfield _, int __) => RenderPlayfield();
 
 		private void RenderActivePiece()
 		{
@@ -93,8 +93,7 @@ namespace EC.Tetris
 
 			var tile = piece.Shape.Tile;
 
-			foreach (var cell in piece.BoardSpaceCells)
-				_activePieceTilemap.SetTile(new Vector3Int(cell.x, cell.y), tile);
+			foreach (var cell in piece.BoardSpaceCells) _activePieceTilemap.SetTile(new Vector3Int(cell.x, cell.y), tile);
 
 			RenderGhost();
 		}
@@ -104,10 +103,10 @@ namespace EC.Tetris
 			_ghostTilemap.ClearAllTiles();
 
 			if (!_eventBus.Config.GhostEnabled
-				|| _controller.ActivePiece is not { } piece)
+					|| _controller.ActivePiece is not { } piece)
 				return; // The "_controller.ActivePiece is not { } piece" syntax checks for null and if it is not null, then it unwraps _controller.ActivePice.Value as piece
 
-			var ghostDistance = Rules.GetGhostDistance(_controller.Board, piece);
+			var ghostDistance = Rules.GetGhostDistance(_controller.Playfield, piece);
 			var tile = piece.Shape.Tile;
 
 			foreach (var cell in piece.BoardSpaceCells)
@@ -120,7 +119,7 @@ namespace EC.Tetris
 			RenderGhost();
 		}
 
-		private void OnPieceLocked(Board _) => ClearActivePieceLayers();
+		private void OnPieceLocked(Playfield _) => ClearActivePieceLayers();
 		private void OnPieceMoved(Vector2Int _) => RenderActivePiece();
 		private void OnPieceRotated(int _) => RenderActivePiece();
 		private void OnPieceSpawned(ActivePiece _) => RenderActivePiece();

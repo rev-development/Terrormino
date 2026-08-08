@@ -9,6 +9,18 @@
             .sol-bg-base2  { background-color: #EEE8D5; }
             .sol-bg-base3  { background-color: #FDF6E3; }
 
+            /* ── Background — accents ────────────────────────────────────────── */
+            /* Type-qualified variants outrank component rules (e.g. .sol-v-btn's own
+               background) so accents stay visible on buttons regardless of rule order. */
+            .sol-bg-blue,    Button.sol-bg-blue    { background-color: #268BD2; }
+            .sol-bg-cyan,    Button.sol-bg-cyan    { background-color: #2AA198; }
+            .sol-bg-yellow,  Button.sol-bg-yellow  { background-color: #B58900; }
+            .sol-bg-orange,  Button.sol-bg-orange  { background-color: #CB4B16; }
+            .sol-bg-green,   Button.sol-bg-green   { background-color: #859900; }
+            .sol-bg-red,     Button.sol-bg-red     { background-color: #DC322F; }
+            .sol-bg-magenta, Button.sol-bg-magenta { background-color: #D33682; }
+            .sol-bg-violet,  Button.sol-bg-violet  { background-color: #6C71C4; }
+
             /* ── Text color — base scale ─────────────────────────────────────── */
             .sol-text-base03 { color: #002B36; }
             .sol-text-base02 { color: #073642; }
@@ -113,9 +125,9 @@
                 border-bottom-width: 1px;
                 border-left-width:   1px;
                 border-right-width:  1px;
-				overflow: Visible;
-				white-space: Normal;
-				flex-grow: 1;
+								overflow: Visible;
+								white-space: Normal;
+								flex-grow: 1;
             }
 
             .sol-v-btn:hover {
@@ -123,19 +135,6 @@
                 color:            #93A1A1;
             }
 
-            .sol-v-btn-primary {
-                background-color:    #268BD2;
-                color:               #002B36;
-                border-top-width:    0;
-                border-bottom-width: 0;
-                border-left-width:   0;
-                border-right-width:  0;
-                border-radius:       3px;
-            }
-
-            .sol-v-btn-primary:hover {
-                background-color: #2AA198;
-            }
 
             /* ── Component — field ───────────────────────────────────────────── */
             /* Bare .sol-v-field intentionally carries no border/background — it's also used as a

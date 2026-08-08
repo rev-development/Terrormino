@@ -32,7 +32,7 @@ namespace EC.Tetris
 
 		private float _gravityDelay => Rules.GetGravityDelay(Level);
 
-		public Board Board { get; private set; }
+		public Playfield Playfield { get; private set; }
 
 		// Gameplay stays idle until some other system (e.g. NightManager) calls
 		// StartGame() — the component itself is active from scene load as normal.
@@ -57,7 +57,7 @@ namespace EC.Tetris
 
 		public void StartGame()
 		{
-			Board = new Board(_eventBus.Config.BoardWidth, _eventBus.Config.BoardHeight);
+			Playfield = new Playfield(_eventBus.Config.PlayfieldSize);
 			IsRunning = true;
 
 			SpawnNext();
@@ -68,13 +68,13 @@ namespace EC.Tetris
 			var next = new ActivePiece
 			{
 				Shape = _bag.Next(),
-				Position = Rules.GetSpawnPosition(Board),
+				PlayfieldPosition = Rules.GetSpawnPosition(Playfield),
 				RotationIndex = 0,
 			};
 
-			if (!Rules.IsValidPosition(Board, next))
+			if (!Rules.IsValidPosition(Playfield, next))
 			{
-				Board.Clear();
+				Playfield.Clear();
 				IsRunning = false;
 				_eventBus.OnGameOver.Invoke();
 
@@ -105,8 +105,8 @@ namespace EC.Tetris
 				-= _gravityDelay; // Overshoot preservation, instead of resetting the timer it subtracts the delay value and keeps the clock running
 
 			if (!Move(
-					Vector2Int.down
-				)) // Don't convert to TryMove, the side effect of Move (actually translating the piece) is important here
+						Vector2Int.down
+					)) // Don't convert to TryMove, the side effect of Move (actually translating the piece) is important here
 			{
 				UpdateGrounding();
 				HandleLock();
@@ -118,13 +118,13 @@ namespace EC.Tetris
 			if (ActivePiece is not { } candidate) return;
 
 			var canFall = Rules.TryMove(
-				Board,
+				Playfield,
 				ref candidate,
 				Vector2Int.down
 			); // A failed down move means the space below the piece is occupied or out of bounds
 
 			if (!canFall
-				&& !_isGrounded) // If it hasn't been marked as grounded yet, timestamp when it becomes grounded
+					&& !_isGrounded) // If it hasn't been marked as grounded yet, timestamp when it becomes grounded
 			{
 				_isGrounded = true;
 				_groundedAt = Time.time;
@@ -163,14 +163,14 @@ namespace EC.Tetris
 		private void LockPiece()
 		{
 			var piece = ActivePiece!.Value;
-			foreach (var cell in piece.BoardSpaceCells) Board.SetCell(cell.x, cell.y, piece.Shape.Tile);
+			foreach (var cell in piece.BoardSpaceCells) Playfield.SetCell(cell.x, cell.y, piece.Shape.Tile);
 
 			ClearActivePiece();
-			_eventBus.OnPieceLocked.Invoke(Board);
+			_eventBus.OnPieceLocked.Invoke(Playfield);
 
-			var linesCleared = Board.ClearFullRows();
+			var linesCleared = Playfield.ClearFullRows();
 
-			if (linesCleared > 0) _eventBus.OnLinesCleared.Invoke(Board, linesCleared);
+			if (linesCleared > 0) _eventBus.OnLinesCleared.Invoke(Playfield, linesCleared);
 
 			SpawnNext();
 		}
@@ -209,7 +209,7 @@ namespace EC.Tetris
 		{
 			if (ActivePiece is not { } candidate) return false;
 
-			if (!Rules.TryMove(Board, ref candidate, direction)) return false;
+			if (!Rules.TryMove(Playfield, ref candidate, direction)) return false;
 
 			ActivePiece = candidate;
 
@@ -227,7 +227,7 @@ namespace EC.Tetris
 		{
 			if (ActivePiece is not { } candidate) return;
 
-			if (!Rules.TryRotate(Board, ref candidate, direction)) return;
+			if (!Rules.TryRotate(Playfield, ref candidate, direction)) return;
 
 			ActivePiece = candidate;
 
@@ -248,7 +248,7 @@ namespace EC.Tetris
 		{
 			if (ActivePiece is not { } candidate) return;
 
-			Rules.DropToBottom(Board, ref candidate);
+			Rules.DropToBottom(Playfield, ref candidate);
 
 			ActivePiece = candidate;
 

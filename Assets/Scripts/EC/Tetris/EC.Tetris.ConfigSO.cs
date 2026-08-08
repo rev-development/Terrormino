@@ -6,9 +6,7 @@ namespace EC.Tetris
 	[CreateAssetMenu(fileName = "TetrisConfig", menuName = "Terrormino/Tetris/Config")]
 	public class ConfigSO : InjectableSO<ConfigSO, ConfigData, IConfig>, IConfig
 	{
-		[field: SerializeField] public int BoardWidth { get; set; } = 10;
-
-		[field: SerializeField] public int BoardHeight { get; set; } = 20;
+		[field: SerializeField] public Vector2Int PlayfieldSize { get; set; } = new(10, 20);
 
 		[field: SerializeField] public bool HardDropEnabled { get; set; } = true;
 

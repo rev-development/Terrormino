@@ -177,13 +177,13 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 0.36
+    width: 0.4175
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10.0625
+  orthographic size: 10.125
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -191,7 +191,7 @@ Camera:
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
-  m_TargetEye: 3
+  m_TargetEye: 0
   m_HDR: 1
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
@@ -2528,7 +2528,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _eventBus: {fileID: 763360003}
-  _shapes: []
+  _shapes:
+  - {fileID: 11400000, guid: 9fe58f07bf27684499b389670cb6d163, type: 2}
 --- !u!114 &763360002
 MonoBehaviour:
   m_ObjectHideFlags: 0

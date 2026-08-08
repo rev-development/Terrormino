@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace EC.Tetris
 {
@@ -10,9 +11,7 @@ namespace EC.Tetris
 	[Serializable]
 	public class ConfigData : IConfig
 	{
-		public int BoardWidth { get; set; }
-
-		public int BoardHeight { get; set; }
+		public Vector2Int PlayfieldSize { get; set; }
 
 		public bool HardDropEnabled { get; set; }
 

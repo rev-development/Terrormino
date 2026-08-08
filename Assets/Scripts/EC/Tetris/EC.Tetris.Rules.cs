@@ -13,33 +13,33 @@ namespace EC.Tetris
 	[AiGenerated("Claude", "claude-sonnet-5")]
 	public static class Rules
 	{
-		public static bool IsValidPosition(Board board, ActivePiece piece)
+		public static bool IsValidPosition(Playfield playfield, ActivePiece piece)
 		{
 			foreach (var cell in piece.BoardSpaceCells)
 			{
-				if (!board.IsInBounds(cell.x, cell.y)) return false;
+				if (!playfield.IsInBounds(cell.x, cell.y)) return false;
 
-				if (board.IsOccupied(cell.x, cell.y)) return false;
+				if (playfield.IsOccupied(cell.x, cell.y)) return false;
 			}
 
 			return true;
 		}
 
-		public static bool TryMove(Board board, ref ActivePiece piece, Vector2Int delta)
+		public static bool TryMove(Playfield playfield, ref ActivePiece piece, Vector2Int delta)
 		{
 			var candidate = piece;
-			candidate.Position += delta;
+			candidate.PlayfieldPosition += delta;
 
-			if (!IsValidPosition(board, candidate)) return false;
+			if (!IsValidPosition(playfield, candidate)) return false;
 
 			piece = candidate;
 
 			return true;
 		}
 
-		public static bool TryRotate(Board board, ref ActivePiece piece, int direction)
+		public static bool TryRotate(Playfield playfield, ref ActivePiece piece, int direction)
 		{
-			var count = piece.Shape.ShapeStates.Length;
+			var count = piece.Shape.RotationStates.Length;
 			var nextRotation = (piece.RotationIndex + direction + count) % count;
 
 			var kicks = direction > 0 ? piece.CurrentState.CW : piece.CurrentState.CCW;
@@ -48,9 +48,9 @@ namespace EC.Tetris
 			{
 				var candidate = piece;
 				candidate.RotationIndex = nextRotation;
-				candidate.Position += kick;
+				candidate.PlayfieldPosition += kick;
 
-				if (IsValidPosition(board, candidate))
+				if (IsValidPosition(playfield, candidate))
 				{
 					piece = candidate;
 
@@ -61,24 +61,24 @@ namespace EC.Tetris
 			return false;
 		}
 
-		public static void DropToBottom(Board board, ref ActivePiece piece)
+		public static void DropToBottom(Playfield playfield, ref ActivePiece piece)
 		{
 			var candidate = piece;
-			candidate.Position += Vector2Int.down;
+			candidate.PlayfieldPosition += Vector2Int.down;
 
-			while (IsValidPosition(board, candidate))
+			while (IsValidPosition(playfield, candidate))
 			{
 				piece = candidate;
-				candidate.Position += Vector2Int.down;
+				candidate.PlayfieldPosition += Vector2Int.down;
 			}
 		}
 
-		public static int GetGhostDistance(Board board, ActivePiece piece)
+		public static int GetGhostDistance(Playfield playfield, ActivePiece piece)
 		{
 			var distance = 0;
 			var candidate = piece;
 
-			while (TryMove(board, ref candidate, Vector2Int.down))
+			while (TryMove(playfield, ref candidate, Vector2Int.down))
 			{
 				distance++;
 			}
@@ -93,7 +93,8 @@ namespace EC.Tetris
 		public static Vector2Int GetSpawnPosition(int boardWidth, int boardHeight) =>
 			new(boardWidth / 2 - 1, boardHeight - 2);
 
-		public static Vector2Int GetSpawnPosition(Board board) => GetSpawnPosition(board.Width, board.Height);
+		public static Vector2Int GetSpawnPosition(Playfield playfield) =>
+			GetSpawnPosition(playfield.Width, playfield.Height);
 
 		// Tetris Guideline gravity formula. Always evaluates to exactly 1s at level 1
 		// (anything^0 == 1), so there's no separate base value to configure. Level is

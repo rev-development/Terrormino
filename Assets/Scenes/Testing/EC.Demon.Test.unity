@@ -601,6 +601,10 @@ PrefabInstance:
       propertyPath: <Config>k__BackingField.<PatrolConfig>k__BackingField.<AreaMask>k__BackingField
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8327578364097951205, guid: a3548566adb47e84782b40f416631141, type: 3}
+      propertyPath: <ConfigSO>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: ecc7d8c15d88406448e1998d57fc643c, type: 2}
     - target: {fileID: 9066433164670549038, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10
@@ -1264,6 +1268,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 273122194917010831, guid: 44b34a20e4a5e4344867b895df93eb4e, type: 3}
+      propertyPath: <ConfigSO>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: ecc7d8c15d88406448e1998d57fc643c, type: 2}
     - target: {fileID: 273122194917010831, guid: 44b34a20e4a5e4344867b895df93eb4e, type: 3}
       propertyPath: _spawnColliders.Array.size
       value: 1

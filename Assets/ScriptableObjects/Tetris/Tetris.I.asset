@@ -12,34 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd53914636bf47788bafae544f9e89bc, type: 3}
   m_Name: Tetris.I
   m_EditorClassIdentifier: 
-  _shapeState0:
-    Cells:
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    CW:
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    CCW:
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-  _shapeStateR:
+  _tile: {fileID: 11400000, guid: 6f217ac4ab7e16c409b25c7f222f6892, type: 2}
+  _orientationZero:
     Cells: []
     CW: []
     CCW: []
-  _shapeState2:
+  _orientationRight:
     Cells: []
     CW: []
     CCW: []
-  _shapeStateL:
+  _orientationTwo:
     Cells: []
     CW: []
     CCW: []
-  _tile: {fileID: 0}
+  _orientationLeft:
+    Cells: []
+    CW: []
+    CCW: []

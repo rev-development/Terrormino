@@ -15,11 +15,11 @@ namespace EC.Tetris
 	{
 		public IShape Shape;
 
-		public Vector2Int Position;
+		public Vector2Int PlayfieldPosition;
 
 		public int RotationIndex;
 
-		public RotationState CurrentState => Shape.ShapeStates[RotationIndex];
+		public RotationState CurrentState => Shape.RotationStates[RotationIndex];
 
 		public Vector2Int[] BoardSpaceCells
 		{
@@ -27,7 +27,7 @@ namespace EC.Tetris
 			{
 				var cells = CurrentState.Cells;
 				var result = new Vector2Int[cells.Length];
-				for (var i = 0; i < cells.Length; i++) result[i] = cells[i] + Position;
+				for (var i = 0; i < cells.Length; i++) result[i] = cells[i] + PlayfieldPosition;
 
 				return result;
 			}

@@ -11,6 +11,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Helpers.Editor.Theming.SolarizedDark.Ele;
+using Object = UnityEngine.Object;
 
 namespace Editor.ControlPanels
 {
@@ -21,10 +22,31 @@ namespace Editor.ControlPanels
 		public override VisualElement CreateInspectorGUI()
 		{
 			var root = SolRoot();
-
 			var controlPanel = (ControlPanel)target;
+			var subSOs = controlPanel.GetInitializedComponents().Select(comp => new SerializedObject(comp)).ToList();
 
-			var flashlightTestingPanel = SolGrid(
+			root.Add(GenerateFlashlightPanel(controlPanel));
+			root.Add(GenerateJumpscarePanel(controlPanel));
+			root.Add(GeneratePathingPanel(controlPanel));
+			root.Add(GenerateConfigPanel(controlPanel));
+
+			var controlPanelSO = new SerializedObject(controlPanel);
+			InspectorElement.FillDefaultInspector(root, controlPanelSO, this);
+
+			root.Add(SolDivider());
+			root.Add(SolLabel("Demon Components"));
+
+			subSOs
+				.Select(so => GenerateSubcomponentFoldout(so, controlPanel.gameObject, subSOs))
+				.ToList()
+				.ForEach(root.Add);
+
+			return root;
+		}
+
+		private VisualElement GenerateFlashlightPanel(ControlPanel controlPanel)
+		{
+			var panel = SolGrid(
 				"Flashlight Testing",
 				new VisualElement[]
 				{
@@ -37,9 +59,13 @@ namespace Editor.ControlPanels
 				}
 			);
 
-			root.Add(flashlightTestingPanel);
+			GenerateHP(controlPanel, panel);
 
-			var jumpscareTestingPanel = SolGrid(
+			return panel;
+		}
+
+		private static VisualElement GenerateJumpscarePanel(ControlPanel controlPanel) =>
+			SolGrid(
 				"Jumpscare Testing",
 				new VisualElement[]
 				{
@@ -57,9 +83,9 @@ namespace Editor.ControlPanels
 				}
 			);
 
-			root.Add(jumpscareTestingPanel);
-
-			var pathingTestingPanel = SolGrid(
+		private VisualElement GeneratePathingPanel(ControlPanel controlPanel)
+		{
+			var panel = SolGrid(
 				"Pathing Testing",
 				new VisualElement[]
 				{
@@ -77,9 +103,14 @@ namespace Editor.ControlPanels
 				}
 			);
 
-			root.Add(pathingTestingPanel);
+			GenerateCurrentStateType(controlPanel, panel);
+			GenerateNavBeacons(controlPanel, panel);
 
-			var configTestingPanel = SolGrid(
+			return panel;
+		}
+
+		private static VisualElement GenerateConfigPanel(ControlPanel controlPanel) =>
+			SolGrid(
 				"Config",
 				new VisualElement[]
 				{
@@ -91,51 +122,10 @@ namespace Editor.ControlPanels
 				}
 			);
 
-			root.Add(configTestingPanel);
-
-			var controlPanelSO = new SerializedObject(controlPanel);
-
-			// 2. Generate default inspector
-			InspectorElement.FillDefaultInspector(root, controlPanelSO, this);
-
-			// 3. Creating Property Display Drawers for other components
-
-			// 3a. Generate divider and section label
-
-			root.Add(SolDivider());
-
-			var componentLabel = SolLabel("Demon Components");
-
-			root.Add(componentLabel);
-
-			var subSOs = controlPanel.GetInitializedComponents().Select(comp => new SerializedObject(comp)).ToList();
-			// 3d. Generate Foldouts for subcomponents (GetInitializedSubcomponents() only returns non-null)
-
-			var subcomponentFoldouts = subSOs
-									  .Select(so => GenerateSubcomponentFoldout(
-											   so,
-											   controlPanel.gameObject,
-											   subSOs,
-											   root
-										   )
-									   )
-									  .ToList();
-
-			// // 4. Attach additional component-based props
-			GenerateHP(controlPanel, subcomponentFoldouts, flashlightTestingPanel);
-			GenerateCurrentStateType(controlPanel, subcomponentFoldouts, pathingTestingPanel);
-			GenerateNavBeacons(controlPanel, pathingTestingPanel);
-
-			return root;
-		}
-
 		private void GenerateNavBeacons(ControlPanel controlPanel, VisualElement pathingTestingGroup)
 		{
 			pathingTestingGroup.Add(SolDivider());
-
-			var navBeaconLabel = SolLabel("Nav Beacons");
-
-			pathingTestingGroup.Add(navBeaconLabel);
+			pathingTestingGroup.Add(SolLabel("Nav Beacons"));
 
 			var navBeaconCol = SolCol();
 
@@ -145,24 +135,24 @@ namespace Editor.ControlPanels
 				controlPanel.NavBeacons,
 				makeItem: () =>
 				{
-					var row = SolRow(true)
-					   .WithStyle(r =>
-							{
-								r.marginLeft = 0;
-								r.marginLeft = 0;
-							}
-						);
+					var row = SolRow(true).WithStyle(r => r.marginLeft = 0);
 
 					row.name = "row";
 
 					var label = SolLabel();
 					label.name = "label";
-
 					row.Add(label);
 
 					var button = SolButton();
-
 					button.name = "btn";
+					button.userData = -1;
+
+					button.RegisterCallback<ClickEvent>(_ =>
+						{
+							if (button.userData is int i and >= 0)
+								controlPanel.Pathing.NavMeshAgent.GoTo(controlPanel.NavBeacons[i].transform.position);
+						}
+					);
 
 					row.Add(button);
 
@@ -176,19 +166,13 @@ namespace Editor.ControlPanels
 
 							if (qLabel is Label label) label.text = controlPanel.NavBeacons[index].name;
 
-							var qBtn = element.Q("btn");
+							var qBtn = element.Q<Button>("btn");
 
-							if (qBtn is Button btn)
+							if (qBtn != null)
 							{
-								btn.text = "Go To";
-
-								btn.RegisterCallback<ClickEvent>(_ =>
-									controlPanel.Pathing.NavMeshAgent.GoTo(
-										controlPanel.NavBeacons[index].transform.position
-									)
-								);
-
-								btn.SetEnabled(Application.isPlaying);
+								qBtn.text = "Go To";
+								qBtn.userData = index;
+								qBtn.SetEnabled(Application.isPlaying);
 							}
 						}
 					);
@@ -201,109 +185,80 @@ namespace Editor.ControlPanels
 			navBeaconCol.Add(navBeaconList);
 		}
 
-		private void GenerateCurrentStateType(
-			ControlPanel controlPanel,
-			List<Foldout> subcomponentFoldouts,
-			VisualElement pathingTestingPanel
-		)
+		private void GenerateCurrentStateType(ControlPanel controlPanel, VisualElement pathingTestingPanel)
 		{
 			if (controlPanel.Pathing == null) return;
 
-			var pathingSubcomponent = subcomponentFoldouts.Find(subcomponentFoldout =>
-				subcomponentFoldout.name == "EC.Demon.Pathing.Controller"
-			);
-
-			if (pathingSubcomponent == null) return;
-
 			var pathing = new SerializedObject(controlPanel.Pathing);
+			var stateNames = Enum.GetNames(typeof(StateType));
 
-			var currentStateTypeLabel = SolLabel(
-				"Current State Type: "
-				+ (Enum.GetNames(typeof(StateType)).Length > pathing.FindProperty("CurrentStateType").enumValueIndex
-				   && pathing.FindProperty("CurrentStateType").enumValueIndex >= 0
-					? Enum.GetNames(typeof(StateType))[pathing.FindProperty("CurrentStateType").enumValueIndex]
-					: "Undefined")
-			);
+			string StateName(int idx)
+			{
+				return idx >= 0 && idx < stateNames.Length ? stateNames[idx] : "Undefined";
+			}
+
+			var currentStateProp = pathing.FindProperty("CurrentStateType");
+
+			var currentStateTypeLabel = SolLabel("Current State Type: " + StateName(currentStateProp.enumValueIndex));
 
 			currentStateTypeLabel.TrackPropertyValue(
-				pathing.FindProperty("CurrentStateType"),
-				p => currentStateTypeLabel.text = "Current State Type: "
-												  + (Enum.GetNames(typeof(StateType)).Length > p.enumValueIndex
-													 && p.enumValueIndex >= 0
-													  ? Enum.GetNames(typeof(StateType))[p.enumValueIndex]
-													  : "Undefined")
+				currentStateProp,
+				p => currentStateTypeLabel.text = "Current State Type: " + StateName(p.enumValueIndex)
 			);
 
 			pathingTestingPanel.Add(SolDivider());
 
 			AppendSolGrid(
-				pathingTestingPanel,
-				new VisualElement[]
-				{
-					currentStateTypeLabel,
-				}
-			);
-
-			currentStateTypeLabel.Bind(pathing);
+					pathingTestingPanel,
+					new VisualElement[]
+					{
+						currentStateTypeLabel,
+					}
+				)
+			   .Bind(pathing);
 		}
 
-		private void GenerateHP(
-			ControlPanel controlPanel,
-			List<Foldout> subcomponentFoldouts,
-			VisualElement flashlightTestingPanel
-		)
+		private void GenerateHP(ControlPanel controlPanel, VisualElement flashlightTestingPanel)
 		{
 			if (controlPanel.Health == null) return;
 
-			var hpSubcomponent
-				= subcomponentFoldouts.Find(subcomponentFoldout => subcomponentFoldout.name == "EC.Demon.Health");
-
-			if (hpSubcomponent == null) return;
-
 			var health = new SerializedObject(controlPanel.Health);
-
-			var hpValueField = SolFloatField(health.FindProperty("HP").FindPropertyRelative("_value"), "HP Value");
-
-			var hpMaxField = SolFloatField(health.FindProperty("HP").FindPropertyRelative("Max"), "HP Max");
 
 			flashlightTestingPanel.Add(SolDivider());
 
 			AppendSolGrid(
-				flashlightTestingPanel,
-				new VisualElement[]
-				{
-					hpValueField,
-					hpMaxField,
-				}
-			);
-
-			hpValueField.Bind(health);
+					flashlightTestingPanel,
+					new VisualElement[]
+					{
+						SolFloatField(health.FindProperty("HP").FindPropertyRelative("_value"), false, "HP Value"),
+						SolFloatField(health.FindProperty("HP").FindPropertyRelative("Max"), false, "HP Max"),
+					}
+				)
+			   .Bind(health);
 		}
 
-		private Foldout GenerateSubcomponentFoldout(
-			SerializedObject so,
-			GameObject mainGO,
-			List<SerializedObject> subSOs,
-			VisualElement root
-		)
+		private Foldout GenerateSubcomponentFoldout(SerializedObject so, GameObject mainGO, List<SerializedObject> subSOs)
 		{
-			var foldout = SolFoldout(so.targetObject.GetType().FullName);
-			foldout.name = so.targetObject.GetType().FullName;
-			foldout.viewDataKey = $"{mainGO.GetInstanceID()}_{so.targetObject.GetType().Name}_Foldout";
+			var type = so.targetObject.GetType();
+
+			// Build a HashSet so we can check membership in one step instead of scanning the whole list each time
+			// Big O Notation: O(N) to build once, O(1) per Contains — "O" describes how work scales as collection size grows
+			var subTargets = new HashSet<Object>(subSOs.Select(s => s.targetObject));
+
+			var foldout = SolFoldout(type.FullName);
+			foldout.name = type.FullName;
+			foldout.viewDataKey = $"{mainGO.GetInstanceID()}_{type.Name}_Foldout";
 
 			so.IterateProps(
 				foldout,
 				prop => prop.name == "m_Script"
 						|| (prop.propertyType == SerializedPropertyType.ObjectReference
-							&& (subSOs.Select(subSO => subSO.targetObject).Contains(prop.objectReferenceValue)
-								|| prop.objectReferenceValue == target)),
+							&& (subTargets.Contains(prop.objectReferenceValue) || prop.objectReferenceValue == target)),
 				new[]
 				{
 					StyleHelper.VField,
 				}
 			);
-
-			root.Add(foldout);
 
 			return foldout;
 		}

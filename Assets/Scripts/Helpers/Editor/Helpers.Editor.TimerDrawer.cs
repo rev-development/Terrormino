@@ -25,10 +25,10 @@ namespace Helpers.Editor
 
 			var currentAlarmTimeFloatField = SolFloatField(property.FindPropertyRelative("_alarmTime"), true);
 
-			var initializedBoolLabel = SolBooleanLabel(property.FindPropertyRelative("_initialized"));
-			var dirtyBoolLabel = SolBooleanLabel(property.FindPropertyRelative("Dirty"));
-			var runningBoolLabel = SolBooleanLabel(property.FindPropertyRelative("_running"));
-			var ringingBoolLabel = SolBooleanLabel(property.FindPropertyRelative("_ringing"));
+			var initializedBoolLabel = SolBooleanField(property.FindPropertyRelative("_initialized"));
+			var dirtyBoolLabel = SolBooleanField(property.FindPropertyRelative("Dirty"));
+			var runningBoolLabel = SolBooleanField(property.FindPropertyRelative("_running"));
+			var ringingBoolLabel = SolBooleanField(property.FindPropertyRelative("_ringing"));
 
 			var solGrid = SolGrid(
 				property.displayName,
