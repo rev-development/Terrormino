@@ -12,10 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7c169973e1047eea5586137f16aadf4, type: 3}
   m_Name: TetrisConfig
   m_EditorClassIdentifier: 
-  <BoardWidth>k__BackingField: 0
-  <BoardHeight>k__BackingField: 0
-  <SpawnPosition>k__BackingField: {x: 0, y: 0}
+  <PlayfieldSize>k__BackingField: {x: 10, y: 20}
   <HardDropEnabled>k__BackingField: 0
   <GhostEnabled>k__BackingField: 0
   <LockDelay>k__BackingField: 0
-  <MoveDelay>k__BackingField: 0
+  <DASDelay>k__BackingField: 0.1
+  <LockResetLimit>k__BackingField: 15
+  <Shapes>k__BackingField:
+  - {fileID: 11400000, guid: 9fe58f07bf27684499b389670cb6d163, type: 2}
+  - {fileID: 11400000, guid: 5a8af7dbb54ee33488b93f8f8965b650, type: 2}
+  - {fileID: 11400000, guid: b25c3a7d39edbea41a158f1edbb184a2, type: 2}
+  - {fileID: 11400000, guid: 7376652ac48227843b01e83bd1030f40, type: 2}
+  - {fileID: 11400000, guid: 18a7fcbf77327a645804a8cfcbfbe9e8, type: 2}
+  - {fileID: 11400000, guid: ea19c6e3e42d054409c60f773ccf8eba, type: 2}
+  - {fileID: 11400000, guid: 8824e061e34463b4e9b948781840d960, type: 2}
+  <GhostTile>k__BackingField: {fileID: 11400000, guid: f3405bbebf744f44696df9fe836d1c4f, type: 2}
+  <BgTile>k__BackingField: {fileID: 11400000, guid: 66704272203b37b47aef355fdb74731c, type: 2}

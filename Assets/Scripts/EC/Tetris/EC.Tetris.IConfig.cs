@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace EC.Tetris
 {
@@ -20,5 +22,11 @@ namespace EC.Tetris
 		float DASDelay { get; set; }
 
 		int LockResetLimit { get; set; }
+
+		List<Shape> Shapes { get; set; }
+
+		TileBase GhostTile { get; set; }
+
+		TileBase BgTile { get; set; }
 	}
 }

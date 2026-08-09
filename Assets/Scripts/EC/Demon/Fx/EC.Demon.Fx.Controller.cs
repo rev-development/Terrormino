@@ -1,4 +1,6 @@
+using Helpers;
 using Helpers.Ext;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace EC.Demon.Fx
@@ -9,22 +11,23 @@ namespace EC.Demon.Fx
 	[AddComponentMenu("EC.Demon.Fx.Controller")]
 	public class Controller : MonoBehaviour
 	{
-		private static readonly int Illuminated = Animator.StringToHash("Illuminated");
+		private static readonly int _illuminated = Animator.StringToHash("Illuminated");
 
-		private static readonly int Banish = Animator.StringToHash("Banish");
+		private static readonly int _banish = Animator.StringToHash("Banish");
 
-		private static readonly int Jumpscare = Animator.StringToHash("Jumpscare");
+		private static readonly int _jumpscare = Animator.StringToHash("Jumpscare");
 
-		private static readonly int EndJumpscare = Animator.StringToHash("EndJumpscare");
+		private static readonly int _endJumpscare = Animator.StringToHash("EndJumpscare");
 
-		[Helpers.DisableInEditorAttribute] [SerializeField] private Animator _animator;
+		[DisableInEditor] [SerializeField] private Animator _animator;
 
-		[Helpers.DisableInEditorAttribute] [SerializeField] private AudioSource _audioSource;
+		[DisableInEditor] [SerializeField] [UsedImplicitly] private AudioSource _audioSource;
 
-		[Helpers.DisableInEditorAttribute] [SerializeField] private EventBus _eventBus;
+		[DisableInEditor] [SerializeField] private EventBus _eventBus;
 
-		[Helpers.DisableInEditorAttribute] [SerializeField] private ControlPanel _controlPanel;
+		[DisableInEditor] [SerializeField] private ControlPanel _controlPanel;
 
+		[UsedImplicitly]
 		public void Awake()
 		{
 			_animator = gameObject.TryFindComponent<Animator>();
@@ -54,15 +57,15 @@ namespace EC.Demon.Fx
 		/// <summary>
 		///     Only called during testing
 		/// </summary>
-		public void StopJumpscare() => _animator.SetTrigger(EndJumpscare);
+		public void StopJumpscare() => _animator.SetTrigger(_endJumpscare);
 
-		public void OnBanish(GameObject _) => _animator.SetTrigger(Banish);
+		public void OnBanish(GameObject _) => _animator.SetTrigger(_banish);
 
 		public void OnIlluminated(bool isIlluminated)
 		{
-			if (_animator.GetBool(Illuminated) != isIlluminated) _animator.SetBool(Illuminated, isIlluminated);
+			if (_animator.GetBool(_illuminated) != isIlluminated) _animator.SetBool(_illuminated, isIlluminated);
 		}
 
-		public void OnJumpscare(GameObject _) => _animator.SetTrigger(Jumpscare);
+		public void OnJumpscare(GameObject _) => _animator.SetTrigger(_jumpscare);
 	}
 }

@@ -1,6 +1,7 @@
 using Helpers;
 using Helpers.Attributes;
 using Helpers.Ext;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace EC.Tetris
@@ -15,15 +16,14 @@ namespace EC.Tetris
 	///     IsRunning is false — until some other system calls StartGame(), typically
 	///     after EventBus.ApplyConfig().
 	/// </summary>
+	[DisallowMultipleComponent]
 	[RequireComponent(typeof(EventBus))]
 	[AiGenerated("Claude", "claude-sonnet-4-6", "Reviewed by Rev 7-28-26")]
 	public class Controller : MonoBehaviour
 	{
 		[DisableInEditor] [SerializeField] private EventBus _eventBus;
 
-		[SerializeField] private Shape[] _shapes;
-
-		private RandomBag<Shape> _bag;
+		private readonly RandomBag<Shape> _bag = new();
 
 		// Manually controlled rather than auto-derived from LinesCleared — real
 		// Tetris Guideline gravity ramps too hard to let lines-cleared drive it
@@ -36,12 +36,13 @@ namespace EC.Tetris
 
 		// Gameplay stays idle until some other system (e.g. NightManager) calls
 		// StartGame() — the component itself is active from scene load as normal.
-		public bool IsRunning { get; private set; }
+		public bool IsRunning { get; private set; } = false;
 
-		private void Awake()
+		[UsedImplicitly] public void Awake() => _eventBus = gameObject.TryFindComponent<EventBus>();
+
+		private void Start()
 		{
-			_bag = new RandomBag<Shape>(_shapes);
-			_eventBus = gameObject.TryFindComponent<EventBus>();
+			if (_eventBus != null) _bag.Init(_eventBus.Config.Shapes);
 		}
 
 		private void Update()
@@ -58,6 +59,8 @@ namespace EC.Tetris
 		public void StartGame()
 		{
 			Playfield = new Playfield(_eventBus.Config.PlayfieldSize);
+			_eventBus.OnGameStart.Invoke();
+
 			IsRunning = true;
 
 			SpawnNext();
@@ -163,14 +166,14 @@ namespace EC.Tetris
 		private void LockPiece()
 		{
 			var piece = ActivePiece!.Value;
-			foreach (var cell in piece.PlayfieldCells) Playfield.SetCell(cell.x, cell.y, piece.Shape.Tile);
+			foreach (var cell in piece.PlayfieldSpaceCells) Playfield.SetCell(cell.x, cell.y, piece.Shape.Tile);
 
 			ClearActivePiece();
-			_eventBus.OnPieceLocked.Invoke(Playfield);
+			_eventBus.OnPieceLocked.Invoke();
 
 			var linesCleared = Playfield.ClearFullRows();
 
-			if (linesCleared > 0) _eventBus.OnLinesCleared.Invoke(Playfield, linesCleared);
+			if (linesCleared > 0) _eventBus.OnLinesCleared.Invoke(linesCleared);
 
 			SpawnNext();
 		}

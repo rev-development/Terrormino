@@ -1,5 +1,6 @@
 using Helpers;
 using Helpers.Ext;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -20,6 +21,7 @@ namespace EC.Demon
 
 		private NavMeshAgent _navMeshAgent;
 
+		[UsedImplicitly]
 		public void Awake()
 		{
 			_eventBus = gameObject.TryFindComponent<EventBus>();
@@ -47,11 +49,7 @@ namespace EC.Demon
 			_eventBus.JumpscareTriggered.RemoveListener(PositionForJumpscare);
 
 			if (_controlPanel)
-				_controlPanel.ListenerTracker.Remove(
-					this,
-					nameof(_eventBus.JumpscareTriggered),
-					nameof(PositionForJumpscare)
-				);
+				_controlPanel.ListenerTracker.Remove(this, nameof(_eventBus.JumpscareTriggered), nameof(PositionForJumpscare));
 		}
 
 		public void PositionForJumpscare(GameObject player)

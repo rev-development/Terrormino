@@ -1,6 +1,7 @@
 using Helpers;
 using Helpers.Events.Channels;
 using Helpers.Ext;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,7 +29,7 @@ namespace EC.Demon
 
 		[DisableInEditor] [SerializeField] private ControlPanel _controlPanel;
 
-		public void Awake() => _controlPanel = gameObject.TryFindComponent<ControlPanel>();
+		[UsedImplicitly] public void Awake() => _controlPanel = gameObject.TryFindComponent<ControlPanel>();
 
 		private void OnEnable()
 		{

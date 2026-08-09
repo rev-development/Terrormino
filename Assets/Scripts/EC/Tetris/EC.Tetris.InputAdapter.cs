@@ -12,7 +12,9 @@ namespace EC.Tetris
 	///     that action is currently allowed — that gating always belongs here.
 	/// </summary>
 	[AiGenerated("Claude", "claude-sonnet-5")]
+	[DisallowMultipleComponent]
 	[RequireComponent(typeof(EventBus))]
+	[RequireComponent(typeof(Controller))]
 	public class InputAdapter : MonoBehaviour
 	{
 		[SerializeField] private Controller _controller;
@@ -73,7 +75,7 @@ namespace EC.Tetris
 			direction.y = Mathf.Clamp(direction.y, -1, 0);
 
 			if (direction == Vector2Int.zero
-				|| direction == _heldDirection)
+					|| direction == _heldDirection)
 				return;
 
 			_heldDirection = direction;

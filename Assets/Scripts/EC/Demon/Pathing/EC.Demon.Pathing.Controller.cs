@@ -46,6 +46,7 @@ namespace EC.Demon.Pathing
 				{ StateType.Chase, () => new EC.Demon.Pathing.Chase.State().Init(this, ConfigSO.ChaseConfigSO) },
 			};
 
+		[UsedImplicitly]
 		public void Awake()
 		{
 			NavMeshAgent = gameObject.TryFindComponent<NavMeshAgent>();

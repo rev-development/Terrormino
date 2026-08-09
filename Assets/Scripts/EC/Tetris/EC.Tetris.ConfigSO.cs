@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Helpers;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace EC.Tetris
 {
@@ -17,5 +19,11 @@ namespace EC.Tetris
 		[field: SerializeField] public float DASDelay { get; set; } = 0.1f;
 
 		[field: SerializeField] public int LockResetLimit { get; set; } = 15;
+
+		[field: SerializeField] public List<Shape> Shapes { get; set; } = new();
+
+		[field: SerializeField] public TileBase GhostTile { get; set; } = null;
+
+		[field: SerializeField] public TileBase BgTile { get; set; } = null;
 	}
 }

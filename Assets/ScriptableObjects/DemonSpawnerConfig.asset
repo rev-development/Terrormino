@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <PatrolConfigSO>k__BackingField: {fileID: 11400000, guid: ebe06cf84020f1244aa1e39057c380eb, type: 2}
   <ChaseConfigSO>k__BackingField: {fileID: 11400000, guid: 70b9f07daca48064e9c18f2e30c61825, type: 2}
-  <MaxHealth>k__BackingField: 0
-  <DemonMax>k__BackingField: 0
-  <SpawnGracePeriod>k__BackingField: 0
-  <SpawnInterval>k__BackingField: 0
+  <MaxHealth>k__BackingField: 3
+  <DemonMax>k__BackingField: 1
+  <SpawnGracePeriod>k__BackingField: 30
+  <SpawnInterval>k__BackingField: 15
   <SteeringConfig>k__BackingField:
     <Speed>k__BackingField: 3.5
     <AngularSpeed>k__BackingField: 120

@@ -21,7 +21,7 @@ namespace EC.Tetris
 
 		public RotationState CurrentState => Shape.RotationStates[RotationIndex];
 
-		public Vector2Int[] PlayfieldCells
+		public Vector2Int[] PlayfieldSpaceCells
 		{
 			get
 			{

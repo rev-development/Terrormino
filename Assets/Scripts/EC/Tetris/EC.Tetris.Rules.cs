@@ -15,7 +15,7 @@ namespace EC.Tetris
 	{
 		public static bool IsValidPosition(Playfield playfield, ActivePiece piece)
 		{
-			foreach (var cell in piece.PlayfieldCells)
+			foreach (var cell in piece.PlayfieldSpaceCells)
 			{
 				if (!playfield.IsInBounds(cell.x, cell.y)) return false;
 

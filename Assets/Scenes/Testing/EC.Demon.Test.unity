@@ -495,7 +495,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 253537706936573021, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 253537706936573021, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_AutoBraking
@@ -559,7 +559,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7016050918856958138, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7845095468570277842, guid: a3548566adb47e84782b40f416631141, type: 3}
       propertyPath: PatrolState.AreaMask
@@ -1120,7 +1120,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.33333334
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 52b9379e9c58ac24caa71e3df6bfd975, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 2b663f96675621240926ef1107a9d927, type: 2}
   m_BuildHeightMesh: 0
 --- !u!114 &1993170105
 MonoBehaviour:

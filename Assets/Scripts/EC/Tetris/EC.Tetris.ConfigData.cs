@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace EC.Tetris
 {
@@ -22,5 +24,11 @@ namespace EC.Tetris
 		public float DASDelay { get; set; }
 
 		public int LockResetLimit { get; set; }
+
+		public List<Shape> Shapes { get; set; }
+
+		public TileBase GhostTile { get; set; }
+
+		public TileBase BgTile { get; set; }
 	}
 }

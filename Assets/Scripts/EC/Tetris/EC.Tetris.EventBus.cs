@@ -1,6 +1,7 @@
 using Helpers.Attributes;
 using Helpers.Events.Channels;
 using Helpers.Ext;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,6 +15,7 @@ namespace EC.Tetris
 	///     cleared, game over). Future mechanics that need to intercept or react to
 	///     these events hook directly into this bus — there is no separate stage.
 	/// </summary>
+	[DisallowMultipleComponent]
 	[AiGenerated("Claude", "claude-sonnet-5", "Reviewed by Rev 7-28-26")]
 	public class EventBus : MonoBehaviour
 	{
@@ -34,13 +36,16 @@ namespace EC.Tetris
 
 		public UnityEvent<ActivePiece> OnPieceSpawned = new();
 
-		public UnityEvent<Playfield> OnPieceLocked = new();
+		public UnityEvent OnPieceLocked = new();
 
-		public UnityEvent<Playfield, int> OnLinesCleared = new();
+		public UnityEvent<int> OnLinesCleared = new();
+
+		public UnityEvent OnGameStart = new();
 
 		public UnityEvent OnGameOver = new();
 
-		private void Awake()
+		[UsedImplicitly]
+		public void Awake()
 		{
 			gameObject.CheckIfSetInInspector(_linesClearedEC, "Lines Cleared Event Channel");
 			gameObject.CheckIfSetInInspector(_gameOverEC, "Game Over Event Channel");
@@ -65,7 +70,7 @@ namespace EC.Tetris
 
 		public void ApplyConfig(ConfigSO config) => Config = config;
 
-		private void RaiseLinesClearedEC(Playfield playfield, int lines) => _linesClearedEC.RaiseEvent(lines);
+		private void RaiseLinesClearedEC(int lines) => _linesClearedEC.RaiseEvent(lines);
 
 		private void RaiseGameOverEC() => _gameOverEC.RaiseEvent();
 	}

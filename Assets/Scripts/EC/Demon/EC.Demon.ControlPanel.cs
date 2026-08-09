@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Flashlight;
 using Helpers;
+using Helpers.Editor;
 using Helpers.Events.Channels;
 using Helpers.Ext;
 using UnityEngine;
@@ -11,7 +12,7 @@ using UnityEngine.AI;
 namespace EC.Demon
 {
 	[DisallowMultipleComponent]
-	public class ControlPanel : MonoBehaviour
+	public class ControlPanel : ControlPanelBase
 	{
 		public GameObject FlashlightPrefab;
 
@@ -41,54 +42,34 @@ namespace EC.Demon
 
 		private void Awake() => _navMeshAgent = gameObject.TryFindComponent<NavMeshAgent>();
 
-		public void TogglePathing() => _navMeshAgent.TogglePathing();
-
-		public List<Component> GetInitializedComponents()
+		protected override List<MonoBehaviour> GetComponents()
 		{
-			var components = new List<Component>();
-
-			if (string.IsNullOrEmpty(gameObject.scene.name)) return components;
-
 			EventBus = gameObject.GetComponent<EventBus>();
 			Controller = gameObject.GetComponentInChildren<EC.Demon.Fx.Controller>();
 			Health = gameObject.GetComponent<Health>();
 			Jumpscare = gameObject.GetComponent<Jumpscare>();
 			Pathing = gameObject.GetComponent<EC.Demon.Pathing.Controller>();
 
-			if (EventBus)
+			return new List<MonoBehaviour>
 			{
-				EventBus.Awake();
-				components.Add(EventBus);
-			}
+				EventBus,
+				Controller,
+				Health,
+				Jumpscare,
+				Pathing,
+			};
+		}
 
-			if (Controller)
-			{
-				Controller.Awake();
-				components.Add(Controller);
-			}
-
-			if (Health)
-			{
-				Health.Awake();
-				components.Add(Health);
-			}
-
-			if (Jumpscare)
-			{
-				Jumpscare.Awake();
-				components.Add(Jumpscare);
-			}
-
-			if (Pathing)
-			{
-				Pathing.Awake();
-				components.Add(Pathing);
-			}
+		public override List<MonoBehaviour> GetInitializedComponents()
+		{
+			var components = base.GetInitializedComponents();
 
 			if (Application.isPlaying) NavBeacons = NavBeaconEC.CollectedParams;
 
 			return components;
 		}
+
+		public void TogglePathing() => _navMeshAgent.TogglePathing();
 
 		public void SpawnAndTestFlashlight()
 		{
@@ -158,20 +139,18 @@ namespace EC.Demon
 
 		public void PositionForJumpscare()
 		{
-			if (JumpscareTarget)
-			{
-				if (CachedPositionPreJumpscare == null) CachedPositionPreJumpscare = gameObject.transform.position;
-				Jumpscare.PositionForJumpscare(JumpscareTarget);
-			}
+			if (!JumpscareTarget) return;
+
+			CachedPositionPreJumpscare ??= gameObject.transform.position;
+			Jumpscare.PositionForJumpscare(JumpscareTarget);
 		}
 
 		public void RevertPositionFromJumpscare()
 		{
-			if (CachedPositionPreJumpscare != null)
-			{
-				gameObject.transform.position = CachedPositionPreJumpscare.Value;
-				CachedPositionPreJumpscare = null;
-			}
+			if (CachedPositionPreJumpscare == null) return;
+
+			gameObject.transform.position = CachedPositionPreJumpscare.Value;
+			CachedPositionPreJumpscare = null;
 		}
 	}
 }

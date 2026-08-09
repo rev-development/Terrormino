@@ -3,22 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using EC.Demon;
 using EC.Demon.Pathing;
+using Helpers.Editor;
 using Helpers.Editor.Ext;
-using Helpers.Editor.Theming.SolarizedDark;
 using Helpers.Ext;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Helpers.Editor.Theming.SolarizedDark.Ele;
-using Object = UnityEngine.Object;
 
 namespace Editor.ControlPanels
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(ControlPanel))]
-	public class Demon : UnityEditor.Editor
+	public class Demon : ControlPanelDrawerBase<ControlPanel>
 	{
+		protected override List<Func<ControlPanel, VisualElement>> _customPanelGenerationFunctions =>
+			new()
+			{
+				GenerateFlashlightPanel,
+				GenerateJumpscarePanel,
+				GeneratePathingPanel,
+			};
+
 		public override VisualElement CreateInspectorGUI()
 		{
 			var root = SolRoot();
@@ -36,10 +43,7 @@ namespace Editor.ControlPanels
 			root.Add(SolDivider());
 			root.Add(SolLabel("Demon Components"));
 
-			subSOs
-				.Select(so => GenerateSubcomponentFoldout(so, controlPanel.gameObject, subSOs))
-				.ToList()
-				.ForEach(root.Add);
+			subSOs.Select(so => GenerateComponentFoldout(so, controlPanel.gameObject, subSOs)).ToList().ForEach(root.Add);
 
 			return root;
 		}
@@ -50,11 +54,7 @@ namespace Editor.ControlPanels
 				"Flashlight Testing",
 				new VisualElement[]
 				{
-					SolButton(
-						_ => controlPanel.SpawnAndTestFlashlight(),
-						"Spawn & Test Flashlight",
-						Application.isPlaying
-					),
+					SolButton(_ => controlPanel.SpawnAndTestFlashlight(), "Spawn & Test Flashlight", Application.isPlaying),
 					SolButton(_ => controlPanel.DestroyFlashlight(), "Destroy Flashlight", Application.isPlaying),
 				}
 			);
@@ -64,16 +64,12 @@ namespace Editor.ControlPanels
 			return panel;
 		}
 
-		private static VisualElement GenerateJumpscarePanel(ControlPanel controlPanel) =>
+		private VisualElement GenerateJumpscarePanel(ControlPanel controlPanel) =>
 			SolGrid(
 				"Jumpscare Testing",
 				new VisualElement[]
 				{
-					SolButton(
-						_ => controlPanel.PathToJumpscareTarget(),
-						"Path to Jumpscare Target",
-						Application.isPlaying
-					),
+					SolButton(_ => controlPanel.PathToJumpscareTarget(), "Path to Jumpscare Target", Application.isPlaying),
 					SolButton(_ => controlPanel.ResetJumpscare(), "Fully Reset Jumpscare", Application.isPlaying),
 				},
 				new VisualElement[]
@@ -95,11 +91,7 @@ namespace Editor.ControlPanels
 						"Enter State: Patrol",
 						Application.isPlaying
 					),
-					SolButton(
-						_ => controlPanel.Pathing.EnterState(StateType.Chase),
-						"Enter State: Chase",
-						Application.isPlaying
-					),
+					SolButton(_ => controlPanel.Pathing.EnterState(StateType.Chase), "Enter State: Chase", Application.isPlaying),
 				}
 			);
 
@@ -108,19 +100,6 @@ namespace Editor.ControlPanels
 
 			return panel;
 		}
-
-		private static VisualElement GenerateConfigPanel(ControlPanel controlPanel) =>
-			SolGrid(
-				"Config",
-				new VisualElement[]
-				{
-					SolButton(
-						_ => controlPanel.GetInitializedComponents(),
-						"Initialize Components",
-						!Application.isPlaying
-					),
-				}
-			);
 
 		private void GenerateNavBeacons(ControlPanel controlPanel, VisualElement pathingTestingGroup)
 		{
@@ -215,7 +194,7 @@ namespace Editor.ControlPanels
 						currentStateTypeLabel,
 					}
 				)
-			   .Bind(pathing);
+			 .Bind(pathing);
 		}
 
 		private void GenerateHP(ControlPanel controlPanel, VisualElement flashlightTestingPanel)
@@ -234,33 +213,7 @@ namespace Editor.ControlPanels
 						SolFloatField(health.FindProperty("HP").FindPropertyRelative("Max"), false, "HP Max"),
 					}
 				)
-			   .Bind(health);
-		}
-
-		private Foldout GenerateSubcomponentFoldout(SerializedObject so, GameObject mainGO, List<SerializedObject> subSOs)
-		{
-			var type = so.targetObject.GetType();
-
-			// Build a HashSet so we can check membership in one step instead of scanning the whole list each time
-			// Big O Notation: O(N) to build once, O(1) per Contains — "O" describes how work scales as collection size grows
-			var subTargets = new HashSet<Object>(subSOs.Select(s => s.targetObject));
-
-			var foldout = SolFoldout(type.FullName);
-			foldout.name = type.FullName;
-			foldout.viewDataKey = $"{mainGO.GetInstanceID()}_{type.Name}_Foldout";
-
-			so.IterateProps(
-				foldout,
-				prop => prop.name == "m_Script"
-						|| (prop.propertyType == SerializedPropertyType.ObjectReference
-							&& (subTargets.Contains(prop.objectReferenceValue) || prop.objectReferenceValue == target)),
-				new[]
-				{
-					StyleHelper.VField,
-				}
-			);
-
-			return foldout;
+			 .Bind(health);
 		}
 	}
 }
