@@ -29,7 +29,7 @@ namespace EC.Demon
 
 		public GameObjectEC NavBeaconEC;
 
-		public UnityEventPlus ListenerTracker = new();
+		public NonPersistentListenerTracker ListenerTracker = new();
 
 		[HideInInspector] public EC.Demon.Pathing.Controller Pathing;
 
