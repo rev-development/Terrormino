@@ -1,64 +1,43 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Helpers
 {
 	[Serializable]
-	public class UnityEventPlus<TEvent>
-		where TEvent : UnityEventBase, new()
+	public class NonPersistentListenerTracker
 	{
-		[SerializeField] private List<NonPersistentListener> _listeners = new();
+		[SerializeField] public List<NonPersistentListenerDisplay> NonPersistentListeners = new();
 
-		private TEvent _unityEvent = new();
+		public void Add(Component component, string unityEvent, string unityAction) =>
+			NonPersistentListeners.Add(new NonPersistentListenerDisplay(component, unityEvent, unityAction));
 
-		public virtual UnityEvent UnityEvent => _unityEvent;
-
-		public List<NonPersistentListener> NonPersistentListeners => _listeners;
-
-		public void AddListener(Component component, UnityAction unityAction)
+		public void Remove(Component component, string unityEvent, string unityAction)
 		{
-			_unityEvent.AddListener(unityAction);
-			NonPersistentListeners.Add(new NonPersistentListener(component, unityAction));
-		}
+			var match = NonPersistentListeners.Find(nonPersistentListener =>
+				nonPersistentListener.Component == component
+				&& nonPersistentListener.UnityEvent == unityEvent
+				&& nonPersistentListener.UnityAction == unityAction
+			);
 
-		public void RemoveListener(UnityAction unityAction)
-		{
-			var match = NonPersistentListeners.Find(listener => listener.UnityAction == unityAction);
-			NonPersistentListeners.Remove(match);
-
-			_unityEvent.RemoveListener(unityAction);
-		}
-
-		public void RemoveAllListeners() => _unityEvent.RemoveAllListeners();
-
-		public void RemoveAllListenersAddedByThisComponent(Component component)
-		{
-			foreach (var nonPersistentListener in NonPersistentListeners.Where(listener => listener.Component == component))
-				_unityEvent.RemoveListener(nonPersistentListener.UnityAction);
+			if (match != null) NonPersistentListeners.Remove(match);
 		}
 
 		[Serializable]
-		public class NonPersistentListener
+		public class NonPersistentListenerDisplay
 		{
 			[SerializeField] public Component Component;
 
-			[SerializeField] public UnityAction UnityAction;
+			[SerializeField] public string UnityEvent;
 
-			public NonPersistentListener(Component component, UnityAction unityAction)
+			[SerializeField] public string UnityAction;
+
+			public NonPersistentListenerDisplay(Component component, string unityEvent, string unityAction)
 			{
 				Component = component;
+				UnityEvent = unityEvent;
 				UnityAction = unityAction;
 			}
 		}
-	}
-
-	[Serializable]
-	public class UnityEventPlus<TEvent, T0> : UnityEventPlus<TEvent>
-		where TEvent : UnityEvent<T0>, new()
-	{
-		public override UnityEvent _unityEvent { get; } = new T0();
 	}
 }
