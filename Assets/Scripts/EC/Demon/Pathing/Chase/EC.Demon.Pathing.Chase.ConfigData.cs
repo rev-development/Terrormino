@@ -7,6 +7,6 @@ namespace EC.Demon.Pathing.Chase
 	[Serializable]
 	public class ConfigData : IConfig
 	{
-		[field: NavMeshAreaMask] [field: SerializeField] public int AreaMask { get; set; } = 0;
+		[field: NavMeshAreaMask] [field: SerializeField] public int AreaMask { get; set; } = 1;
 	}
 }

@@ -14,7 +14,7 @@ namespace EC.Demon.Pathing.Patrol
 
 		public override StateType StateType => StateType.Patrol;
 
-		public override IConfig Config { get; protected set; }
+		[field: SerializeField] public override IConfig Config { get; protected set; }
 
 		public override void Start()
 		{
@@ -41,15 +41,15 @@ namespace EC.Demon.Pathing.Patrol
 			_idleTimer.Tick(Time.deltaTime);
 
 			if (Controller.NavMeshAgent.IsAtDestination()
-				&& !_idleTimer.Active)
+					&& !_idleTimer.Active)
 			{
 				_idleTimer.StartNewTimer();
 				Controller.NavMeshAgent.TogglePathing(false);
 			}
 
 			if (Controller.NavMeshAgent.IsAtDestination()
-				&& _idleTimer.Running
-				&& !_idleTimer.Ringing)
+					&& _idleTimer.Running
+					&& !_idleTimer.Ringing)
 				LookAtPlayer();
 
 			if (_idleTimer.Ringing)
