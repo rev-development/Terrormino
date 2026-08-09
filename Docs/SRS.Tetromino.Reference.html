@@ -1,0 +1,433 @@
+<title>SRS Tetromino Reference</title>
+<style>
+  :root {
+    --bg: #0c1016;
+    --surface: #131920;
+    --card: #1a2230;
+    --cell-off: #1e2938;
+    --cell-border: #252f40;
+    --text: #a8b4c4;
+    --text-dim: #4e5f73;
+    --text-label: #6b7f95;
+    --tab-active-bg: #1a2230;
+    --divider: #1e2938;
+    --piece-color: #2aa198;
+    font-size: 13px;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f0f4f8;
+      --surface: #e4eaf2;
+      --card: #fff;
+      --cell-off: #dde4ee;
+      --cell-border: #c8d2e0;
+      --text: #2a3a4e;
+      --text-dim: #9aaabb;
+      --text-label: #5a6f85;
+      --divider: #d0dae8;
+      --tab-active-bg: #fff;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0c1016; --surface: #131920; --card: #1a2230;
+    --cell-off: #1e2938; --cell-border: #252f40;
+    --text: #a8b4c4; --text-dim: #4e5f73; --text-label: #6b7f95;
+    --tab-active-bg: #1a2230; --divider: #1e2938;
+  }
+  :root[data-theme="light"] {
+    --bg: #f0f4f8; --surface: #e4eaf2; --card: #fff;
+    --cell-off: #dde4ee; --cell-border: #c8d2e0;
+    --text: #2a3a4e; --text-dim: #9aaabb; --text-label: #5a6f85;
+    --divider: #d0dae8; --tab-active-bg: #fff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Courier New', 'Menlo', 'Consolas', monospace;
+    min-height: 100vh;
+    padding: 0 0 48px;
+  }
+
+  header {
+    padding: 20px 24px 0;
+    border-bottom: 1px solid var(--divider);
+  }
+
+  .header-top {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-label);
+  }
+
+  .header-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    padding: 8px 16px 7px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.12s, border-color 0.12s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    color: var(--piece-color);
+    border-color: var(--piece-color);
+  }
+
+  .content {
+    padding: 24px;
+  }
+
+  .piece-panel { display: none; }
+  .piece-panel.active { display: block; }
+
+  .states-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  @media (max-width: 800px) {
+    .states-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .states-grid { grid-template-columns: 1fr; }
+  }
+
+  .state-card {
+    background: var(--card);
+    border-radius: 6px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid var(--cell-border);
+  }
+
+  .state-name {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-label);
+    font-weight: 700;
+  }
+
+  .mini-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 14px);
+    grid-template-rows: repeat(5, 14px);
+    gap: 2px;
+  }
+
+  .mini-cell {
+    width: 14px;
+    height: 14px;
+    background: var(--cell-off);
+    border-radius: 2px;
+  }
+  .mini-cell.on {
+    background: var(--piece-color);
+  }
+
+  .data-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .data-label {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    font-weight: 700;
+  }
+
+  .coord-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+
+  .coord {
+    font-size: 10.5px;
+    color: var(--text);
+    background: var(--cell-off);
+    padding: 2px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .coord.accent {
+    color: var(--piece-color);
+    background: color-mix(in srgb, var(--piece-color) 12%, var(--cell-off));
+  }
+
+  .kick-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .kick-row {
+    font-size: 10.5px;
+    color: var(--text-label);
+    font-variant-numeric: tabular-nums;
+  }
+  .kick-row span { color: var(--text-dim); }
+
+  .note {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+  }
+</style>
+
+<header>
+  <div class="header-top">
+    <h1>SRS Tetromino Reference</h1>
+    <span class="header-sub">// Y+ up · origin bottom-left · 5×5 grid · 4 rotation states per piece</span>
+  </div>
+  <div class="tabs" id="tabs"></div>
+</header>
+
+<div class="content" id="content"></div>
+
+<script>
+const PIECES = [
+  {
+    id: 'I', color: '#2aa198', label: 'I — Cyan',
+    states: [
+      { name: 'State 0', cells: [[0,2],[1,2],[2,2],[3,2]], cw: [[0,0],[-2,0],[1,0],[-2,-1],[1,2]], ccw: [[0,0],[-1,0],[2,0],[-1,2],[2,-1]] },
+      { name: 'State R', cells: [[2,0],[2,1],[2,2],[2,3]], cw: [[0,0],[-1,0],[2,0],[-1,2],[2,-1]], ccw: [[0,0],[2,0],[-1,0],[2,1],[-1,-2]] },
+      { name: 'State 2', cells: [[0,1],[1,1],[2,1],[3,1]], cw: [[0,0],[2,0],[-1,0],[2,1],[-1,-2]], ccw: [[0,0],[1,0],[-2,0],[1,-2],[-2,1]] },
+      { name: 'State L', cells: [[1,0],[1,1],[1,2],[1,3]], cw: [[0,0],[1,0],[-2,0],[1,-2],[-2,1]], ccw: [[0,0],[-2,0],[1,0],[-2,-1],[1,2]] },
+    ]
+  },
+  {
+    id: 'O', color: '#b58900', label: 'O — Yellow',
+    states: [
+      { name: 'State 0', cells: [[1,1],[2,1],[1,2],[2,2]], cw: [[0,0],[0,0],[0,0],[0,0],[0,0]], ccw: [[0,0],[0,0],[0,0],[0,0],[0,0]] },
+      { name: 'State R', cells: [[1,1],[2,1],[1,2],[2,2]], cw: [[0,0],[0,0],[0,0],[0,0],[0,0]], ccw: [[0,0],[0,0],[0,0],[0,0],[0,0]] },
+      { name: 'State 2', cells: [[1,1],[2,1],[1,2],[2,2]], cw: [[0,0],[0,0],[0,0],[0,0],[0,0]], ccw: [[0,0],[0,0],[0,0],[0,0],[0,0]] },
+      { name: 'State L', cells: [[1,1],[2,1],[1,2],[2,2]], cw: [[0,0],[0,0],[0,0],[0,0],[0,0]], ccw: [[0,0],[0,0],[0,0],[0,0],[0,0]] },
+    ]
+  },
+  {
+    id: 'T', color: '#6c71c4', label: 'T — Purple',
+    states: [
+      { name: 'State 0', cells: [[1,2],[2,2],[3,2],[2,3]], cw: [[0,0],[-1,0],[-1,1],[0,-2],[-1,-2]], ccw: [[0,0],[1,0],[1,1],[0,-2],[1,-2]] },
+      { name: 'State R', cells: [[2,1],[2,2],[3,2],[2,3]], cw: [[0,0],[1,0],[1,-1],[0,2],[1,2]],   ccw: [[0,0],[1,0],[1,-1],[0,2],[1,2]] },
+      { name: 'State 2', cells: [[1,2],[2,2],[3,2],[2,1]], cw: [[0,0],[1,0],[1,1],[0,-2],[1,-2]],  ccw: [[0,0],[-1,0],[-1,1],[0,-2],[-1,-2]] },
+      { name: 'State L', cells: [[1,2],[2,1],[2,2],[2,3]], cw: [[0,0],[-1,0],[-1,-1],[0,2],[-1,2]], ccw: [[0,0],[-1,0],[-1,-1],[0,2],[-1,2]] },
+    ]
+  },
+  {
+    id: 'S', color: '#859900', label: 'S — Green',
+    states: [
+      { name: 'State 0', cells: [[1,2],[2,2],[2,3],[3,3]], cw: [[0,0],[-1,0],[-1,1],[0,-2],[-1,-2]], ccw: [[0,0],[1,0],[1,1],[0,-2],[1,-2]] },
+      { name: 'State R', cells: [[2,2],[3,2],[2,3],[3,1]], cw: [[0,0],[1,0],[1,-1],[0,2],[1,2]],   ccw: [[0,0],[1,0],[1,-1],[0,2],[1,2]] },
+      { name: 'State 2', cells: [[1,1],[2,1],[2,2],[3,2]], cw: [[0,0],[1,0],[1,1],[0,-2],[1,-2]],  ccw: [[0,0],[-1,0],[-1,1],[0,-2],[-1,-2]] },
+      { name: 'State L', cells: [[1,2],[1,3],[2,1],[2,2]], cw: [[0,0],[-1,0],[-1,-1],[0,2],[-1,2]], ccw: [[0,0],[-1,0],[-1,-1],[0,2],[-1,2]] },
+    ]
+  },
+  {
+    id: 'Z', color: '#dc322f', label: 'Z — Red',
+    states: [
+      { name: 'State 0', cells: [[1,3],[2,3],[2,2],[3,2]], cw: [[0,0],[-1,0],[-1,1],[0,-2],[-1,-2]], ccw: [[0,0],[1,0],[1,1],[0,-2],[1,-2]] },
+      { name: 'State R', cells: [[2,1],[2,2],[3,2],[3,3]], cw: [[0,0],[1,0],[1,-1],[0,2],[1,2]],   ccw: [[0,0],[1,0],[1,-1],[0,2],[1,2]] },
+      { name: 'State 2', cells: [[1,2],[2,2],[2,1],[3,1]], cw: [[0,0],[1,0],[1,1],[0,-2],[1,-2]],  ccw: [[0,0],[-1,0],[-1,1],[0,-2],[-1,-2]] },
+      { name: 'State L', cells: [[1,1],[1,2],[2,2],[2,3]], cw: [[0,0],[-1,0],[-1,-1],[0,2],[-1,2]], ccw: [[0,0],[-1,0],[-1,-1],[0,2],[-1,2]] },
+    ]
+  },
+  {
+    id: 'J', color: '#268bd2', label: 'J — Blue',
+    states: [
+      { name: 'State 0', cells: [[1,2],[1,3],[2,2],[3,2]], cw: [[0,0],[-1,0],[-1,1],[0,-2],[-1,-2]], ccw: [[0,0],[1,0],[1,1],[0,-2],[1,-2]] },
+      { name: 'State R', cells: [[2,1],[2,2],[2,3],[3,3]], cw: [[0,0],[1,0],[1,-1],[0,2],[1,2]],   ccw: [[0,0],[1,0],[1,-1],[0,2],[1,2]] },
+      { name: 'State 2', cells: [[1,2],[2,2],[3,1],[3,2]], cw: [[0,0],[1,0],[1,1],[0,-2],[1,-2]],  ccw: [[0,0],[-1,0],[-1,1],[0,-2],[-1,-2]] },
+      { name: 'State L', cells: [[1,1],[2,1],[2,2],[2,3]], cw: [[0,0],[-1,0],[-1,-1],[0,2],[-1,2]], ccw: [[0,0],[-1,0],[-1,-1],[0,2],[-1,2]] },
+    ]
+  },
+  {
+    id: 'L', color: '#cb4b16', label: 'L — Orange',
+    states: [
+      { name: 'State 0', cells: [[1,2],[2,2],[3,2],[3,3]], cw: [[0,0],[-1,0],[-1,1],[0,-2],[-1,-2]], ccw: [[0,0],[1,0],[1,1],[0,-2],[1,-2]] },
+      { name: 'State R', cells: [[2,1],[2,2],[2,3],[3,1]], cw: [[0,0],[1,0],[1,-1],[0,2],[1,2]],   ccw: [[0,0],[1,0],[1,-1],[0,2],[1,2]] },
+      { name: 'State 2', cells: [[1,1],[1,2],[2,2],[3,2]], cw: [[0,0],[1,0],[1,1],[0,-2],[1,-2]],  ccw: [[0,0],[-1,0],[-1,1],[0,-2],[-1,-2]] },
+      { name: 'State L', cells: [[1,3],[2,1],[2,2],[2,3]], cw: [[0,0],[-1,0],[-1,-1],[0,2],[-1,2]], ccw: [[0,0],[-1,0],[-1,-1],[0,2],[-1,2]] },
+    ]
+  },
+];
+
+const STATE_NAMES = ['0 (Spawn)', 'R (CW)', '2 (180°)', 'L (CCW)'];
+
+function fmtCoord([x, y]) {
+  const xs = x < 0 ? x : ` ${x}`;
+  const ys = y < 0 ? y : ` ${y}`;
+  return `(${xs},${ys})`;
+}
+
+function buildGrid(cells, color) {
+  const set = new Set(cells.map(([x,y]) => `${x},${y}`));
+  const el = document.createElement('div');
+  el.className = 'mini-grid';
+  // Render row 4 down to row 0 (Y+ up)
+  for (let row = 4; row >= 0; row--) {
+    for (let col = 0; col < 5; col++) {
+      const cell = document.createElement('div');
+      cell.className = 'mini-cell' + (set.has(`${col},${row}`) ? ' on' : '');
+      el.appendChild(cell);
+    }
+  }
+  return el;
+}
+
+function buildCoordList(coords, accent) {
+  const el = document.createElement('div');
+  el.className = 'coord-list';
+  coords.forEach(c => {
+    const span = document.createElement('span');
+    span.className = 'coord' + (accent ? ' accent' : '');
+    span.textContent = fmtCoord(c);
+    el.appendChild(span);
+  });
+  return el;
+}
+
+function buildKickList(kicks) {
+  const el = document.createElement('div');
+  el.className = 'kick-list';
+  kicks.forEach((k, i) => {
+    const row = document.createElement('div');
+    row.className = 'kick-row';
+    row.innerHTML = `<span>${i+1}.</span> ${fmtCoord(k)}`;
+    el.appendChild(row);
+  });
+  return el;
+}
+
+function buildCard(state, color) {
+  const card = document.createElement('div');
+  card.className = 'state-card';
+
+  const nameEl = document.createElement('div');
+  nameEl.className = 'state-name';
+  nameEl.textContent = state.name;
+  card.appendChild(nameEl);
+
+  card.appendChild(buildGrid(state.cells, color));
+
+  const cellsBlock = document.createElement('div');
+  cellsBlock.className = 'data-block';
+  const cellsLabel = document.createElement('div');
+  cellsLabel.className = 'data-label';
+  cellsLabel.textContent = 'Cells';
+  cellsBlock.appendChild(cellsLabel);
+  cellsBlock.appendChild(buildCoordList(state.cells, true));
+  card.appendChild(cellsBlock);
+
+  const cwBlock = document.createElement('div');
+  cwBlock.className = 'data-block';
+  const cwLabel = document.createElement('div');
+  cwLabel.className = 'data-label';
+  cwLabel.textContent = 'CW Kicks';
+  cwBlock.appendChild(cwLabel);
+  cwBlock.appendChild(buildKickList(state.cw));
+  card.appendChild(cwBlock);
+
+  const ccwBlock = document.createElement('div');
+  ccwBlock.className = 'data-block';
+  const ccwLabel = document.createElement('div');
+  ccwLabel.className = 'data-label';
+  ccwLabel.textContent = 'CCW Kicks';
+  ccwBlock.appendChild(ccwLabel);
+  ccwBlock.appendChild(buildKickList(state.ccw));
+  card.appendChild(ccwBlock);
+
+  return card;
+}
+
+function activate(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.id === id));
+  document.querySelectorAll('.piece-panel').forEach(p => p.classList.toggle('active', p.dataset.id === id));
+  const piece = PIECES.find(p => p.id === id);
+  document.documentElement.style.setProperty('--piece-color', piece.color);
+}
+
+const tabsEl = document.getElementById('tabs');
+const contentEl = document.getElementById('content');
+
+PIECES.forEach(piece => {
+  // Tab
+  const tab = document.createElement('button');
+  tab.className = 'tab';
+  tab.dataset.id = piece.id;
+  tab.textContent = piece.id;
+  tab.style.setProperty('--tab-color', piece.color);
+  tab.addEventListener('click', () => activate(piece.id));
+  tabsEl.appendChild(tab);
+
+  // Panel
+  const panel = document.createElement('div');
+  panel.className = 'piece-panel';
+  panel.dataset.id = piece.id;
+
+  const grid = document.createElement('div');
+  grid.className = 'states-grid';
+  piece.states.forEach(state => grid.appendChild(buildCard(state, piece.color)));
+  panel.appendChild(grid);
+
+  if (piece.id === 'O') {
+    const note = document.createElement('p');
+    note.className = 'note';
+    note.textContent = '// O piece does not kick — all 4 states share identical cell positions.';
+    panel.appendChild(note);
+  }
+
+  contentEl.appendChild(panel);
+});
+
+// Also override tab active color dynamically
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('mouseenter', () => {
+    const piece = PIECES.find(p => p.id === tab.dataset.id);
+    if (!tab.classList.contains('active')) tab.style.color = piece.color + '99';
+  });
+  tab.addEventListener('mouseleave', () => {
+    if (!tab.classList.contains('active')) tab.style.color = '';
+  });
+});
+
+activate('I');
+</script>

@@ -6,12 +6,12 @@ using UnityEngine;
 namespace EC.Tetris
 {
 	/// <summary>
-	///     Owns Tetris gameplay state (Board, ActivePiece, Level, LinesCleared) and the
+	///     Owns Tetris gameplay state (Playfield, ActivePiece, Level, LinesCleared) and the
 	///     per-frame gravity/lock timing loop. Executes whatever action it's told to
 	///     (Move/Rotate/HardDrop) without deciding whether that action should currently
 	///     be allowed — gating input (DAS, HardDropEnabled) is InputAdapter's job, not
 	///     this class's. The component itself is alive from scene load like any other
-	///     (Awake builds the piece bag), but gameplay stays idle — Board is null and
+	///     (Awake builds the piece bag), but gameplay stays idle — Playfield is null and
 	///     IsRunning is false — until some other system calls StartGame(), typically
 	///     after EventBus.ApplyConfig().
 	/// </summary>
@@ -163,7 +163,7 @@ namespace EC.Tetris
 		private void LockPiece()
 		{
 			var piece = ActivePiece!.Value;
-			foreach (var cell in piece.BoardSpaceCells) Playfield.SetCell(cell.x, cell.y, piece.Shape.Tile);
+			foreach (var cell in piece.PlayfieldCells) Playfield.SetCell(cell.x, cell.y, piece.Shape.Tile);
 
 			ClearActivePiece();
 			_eventBus.OnPieceLocked.Invoke(Playfield);

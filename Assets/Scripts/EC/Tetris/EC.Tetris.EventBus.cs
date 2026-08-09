@@ -9,7 +9,7 @@ namespace EC.Tetris
 	/// <summary>
 	///     Single instance in the scene — the event surface for internal listeners
 	///     (renderer, audio, animation) and the config holder Controller, InputAdapter,
-	///     and BoardRenderer all read through, rather than through each other. Also
+	///     and PlayfieldRenderer all read through, rather than through each other. Also
 	///     raises EventChannels for the two events external systems care about (lines
 	///     cleared, game over). Future mechanics that need to intercept or react to
 	///     these events hook directly into this bus — there is no separate stage.

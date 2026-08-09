@@ -103,7 +103,6 @@ namespace Helpers.Editor.AttributeDrawers
 
 			void Refresh()
 			{
-				// Off state falls back to VBtn's own Base02 background.
 				grid.Query<Button>()
 						.ForEach(btn => btn.EnableInClassList(
 								 StyleHelper.BgCyan,
@@ -124,9 +123,8 @@ namespace Helpers.Editor.AttributeDrawers
 		private static bool ContainsCoord(SerializedProperty arrayProp, Vector2Int coord)
 		{
 			for (var i = 0; i < arrayProp.arraySize; i++)
-			{
-				if (arrayProp.GetArrayElementAtIndex(i).vector2IntValue == coord) return true;
-			}
+				if (arrayProp.GetArrayElementAtIndex(i).vector2IntValue == coord)
+					return true;
 
 			return false;
 		}

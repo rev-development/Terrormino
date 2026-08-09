@@ -16,13 +16,13 @@ namespace EC.Tetris
 	[AiGenerated("Claude", "claude-sonnet-4-6", "Reviewed by Rev 7-28-26")]
 	[RequireComponent(typeof(EventBus))]
 	[RequireComponent(typeof(Controller))]
-	public class BoardRenderer : MonoBehaviour
+	public class PlayfieldRenderer : MonoBehaviour
 	{
 		[DisableInEditor] [SerializeField] private Controller _controller;
 
 		[DisableInEditor] [SerializeField] private EventBus _eventBus;
 
-		[SerializeField] private Tilemap _boardTilemap;
+		[SerializeField] private Tilemap _playfieldTilemap;
 
 		[SerializeField] private Tilemap _activePieceTilemap;
 
@@ -32,7 +32,7 @@ namespace EC.Tetris
 		{
 			_controller = gameObject.TryFindComponent<Controller>();
 			_eventBus = gameObject.TryFindComponent<EventBus>();
-			gameObject.CheckIfSetInInspector(_boardTilemap, "Board Tilemap");
+			gameObject.CheckIfSetInInspector(_playfieldTilemap, "Playfield Tilemap");
 			gameObject.CheckIfSetInInspector(_activePieceTilemap, "Active Piece Tilemap");
 			gameObject.CheckIfSetInInspector(_ghostTilemap, "Ghost Tilemap");
 		}
@@ -66,19 +66,18 @@ namespace EC.Tetris
 		private void RenderPlayfield()
 		{
 			var board = _controller.Playfield;
-			_boardTilemap.ClearAllTiles();
+			_playfieldTilemap.ClearAllTiles();
 
 			for (var x = 0; x < board.Width; x++)
 			{
 				for (var y = 0; y < board.Height; y++)
-				{
-					if (board.IsOccupied(x, y)) _boardTilemap.SetTile(new Vector3Int(x, y), board.GetTile(x, y));
-				}
+					if (board.IsOccupied(x, y))
+						_playfieldTilemap.SetTile(new Vector3Int(x, y), board.GetTile(x, y));
 			}
 		}
 
 		// Typed listener shims — C# method group resolution picks the right overload
-		// per event so RenderBoard can be added directly without lambdas.
+		// per event so RenderPlayfield can be added directly without lambdas.
 		private void RenderPlayfield(Vector2Int _) => RenderPlayfield();
 		private void RenderPlayfield(int _) => RenderPlayfield();
 		private void RenderPlayfield(ActivePiece _) => RenderPlayfield();
@@ -93,7 +92,7 @@ namespace EC.Tetris
 
 			var tile = piece.Shape.Tile;
 
-			foreach (var cell in piece.BoardSpaceCells) _activePieceTilemap.SetTile(new Vector3Int(cell.x, cell.y), tile);
+			foreach (var cell in piece.PlayfieldCells) _activePieceTilemap.SetTile(new Vector3Int(cell.x, cell.y), tile);
 
 			RenderGhost();
 		}
@@ -109,7 +108,7 @@ namespace EC.Tetris
 			var ghostDistance = Rules.GetGhostDistance(_controller.Playfield, piece);
 			var tile = piece.Shape.Tile;
 
-			foreach (var cell in piece.BoardSpaceCells)
+			foreach (var cell in piece.PlayfieldCells)
 				_ghostTilemap.SetTile(new Vector3Int(cell.x, cell.y - ghostDistance), tile);
 		}
 

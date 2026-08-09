@@ -8,7 +8,7 @@ namespace Helpers.Attributes
 	///     fields (that carry [CellGrid]) with a toggleable grid instead of the default
 	///     array foldout.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
+	[AttributeUsage(AttributeTargets.Field)]
 	public class CellGridContainerAttribute : PropertyAttribute
 	{ }
 }

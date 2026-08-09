@@ -1,3 +1,4 @@
+using Helpers.Attributes;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -13,13 +14,13 @@ namespace EC.Tetris
 	{
 		[SerializeField] private TileBase _tile;
 
-		[SerializeField] private RotationState _orientationZero = new();
+		[SerializeField] [CellGridContainer] private RotationState _orientationZero = new();
 
-		[SerializeField] private RotationState _orientationRight = new();
+		[SerializeField] [CellGridContainer] private RotationState _orientationRight = new();
 
-		[SerializeField] private RotationState _orientationTwo = new();
+		[SerializeField] [CellGridContainer] private RotationState _orientationTwo = new();
 
-		[SerializeField] private RotationState _orientationLeft = new();
+		[SerializeField] [CellGridContainer] private RotationState _orientationLeft = new();
 
 		public RotationState[] RotationStates =>
 			new[]

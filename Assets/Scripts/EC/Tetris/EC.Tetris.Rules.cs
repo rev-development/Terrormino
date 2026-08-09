@@ -5,7 +5,7 @@ namespace EC.Tetris
 {
 	/// <summary>
 	///     The only place Tetris movement/rotation/collision/gravity math lives. Pure
-	///     and stateless — every method takes the Board/ActivePiece it needs and either
+	///     and stateless — every method takes the Playfield/ActivePiece it needs and either
 	///     returns a result or mutates via `ref`; nothing here fires events, touches
 	///     Unity lifecycle, or holds state of its own. If a calculation belongs to
 	///     "the rules of Tetris" rather than "this specific game's state," it goes here.
@@ -15,7 +15,7 @@ namespace EC.Tetris
 	{
 		public static bool IsValidPosition(Playfield playfield, ActivePiece piece)
 		{
-			foreach (var cell in piece.BoardSpaceCells)
+			foreach (var cell in piece.PlayfieldCells)
 			{
 				if (!playfield.IsInBounds(cell.x, cell.y)) return false;
 

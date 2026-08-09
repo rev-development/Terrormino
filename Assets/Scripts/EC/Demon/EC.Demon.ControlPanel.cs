@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using EC.Demon.Fx;
 using Flashlight;
 using Helpers;
 using Helpers.Events.Channels;
@@ -22,7 +21,7 @@ namespace EC.Demon
 
 		[HideInInspector] public EventBus EventBus;
 
-		[HideInInspector] public Controller Controller;
+		[HideInInspector] public EC.Demon.Fx.Controller Controller;
 
 		[HideInInspector] public Jumpscare Jumpscare;
 
@@ -30,9 +29,9 @@ namespace EC.Demon
 
 		public GameObjectEC NavBeaconEC;
 
-		public NonPersistentListenerTracker ListenerTracker = new();
+		public UnityEventPlus ListenerTracker = new();
 
-		[HideInInspector] public Pathing.Controller Pathing;
+		[HideInInspector] public EC.Demon.Pathing.Controller Pathing;
 
 		private NavMeshAgent _navMeshAgent;
 
@@ -51,10 +50,10 @@ namespace EC.Demon
 			if (string.IsNullOrEmpty(gameObject.scene.name)) return components;
 
 			EventBus = gameObject.GetComponent<EventBus>();
-			Controller = gameObject.GetComponentInChildren<Controller>();
+			Controller = gameObject.GetComponentInChildren<EC.Demon.Fx.Controller>();
 			Health = gameObject.GetComponent<Health>();
 			Jumpscare = gameObject.GetComponent<Jumpscare>();
-			Pathing = gameObject.GetComponent<Pathing.Controller>();
+			Pathing = gameObject.GetComponent<EC.Demon.Pathing.Controller>();
 
 			if (EventBus)
 			{
@@ -99,11 +98,7 @@ namespace EC.Demon
 
 			var flashlightSpawnPoint = new Vector3(0, 3, -5);
 
-			SpawnedFlashlight = Instantiate(
-				FlashlightPrefab,
-				transform.position + flashlightSpawnPoint,
-				Quaternion.identity
-			);
+			SpawnedFlashlight = Instantiate(FlashlightPrefab, transform.position + flashlightSpawnPoint, Quaternion.identity);
 
 			if (SpawnedFlashlight.TryGetComponent<Rigidbody>(out var rb))
 			{
@@ -142,8 +137,8 @@ namespace EC.Demon
 		public void PathToJumpscareTarget()
 		{
 			if (_navMeshAgent
-				&& Camera.main != null
-				&& JumpscareTarget)
+					&& Camera.main != null
+					&& JumpscareTarget)
 				Pathing.NavMeshAgent.GoTo(JumpscareTarget.gameObject);
 		}
 

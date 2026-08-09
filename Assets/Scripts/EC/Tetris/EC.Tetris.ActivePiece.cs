@@ -7,7 +7,7 @@ namespace EC.Tetris
 	///     A snapshot of one in-play piece: which Shape, where, and which rotation.
 	///     Pure value data with no identity — passed by value through Controller,
 	///     Rules, and events so listeners get what they need without reaching back
-	///     into the controller. Computed properties (CurrentState, BoardSpaceCells)
+	///     into the controller. Computed properties (CurrentState, PlayfieldSpaceCells)
 	///     derive only from these three fields, nothing external.
 	/// </summary>
 	[AiGenerated("Claude", "claude-sonnet-4-6", "Reviewed by Rev 7-28-26")]
@@ -21,7 +21,7 @@ namespace EC.Tetris
 
 		public RotationState CurrentState => Shape.RotationStates[RotationIndex];
 
-		public Vector2Int[] BoardSpaceCells
+		public Vector2Int[] PlayfieldCells
 		{
 			get
 			{
