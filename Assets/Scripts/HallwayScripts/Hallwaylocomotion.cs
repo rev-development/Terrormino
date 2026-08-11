@@ -1,78 +1,91 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Controls
-{
-    // Attach to the player/XR rig root in the hallway scene only.
-    // Since walking isn't grab-gated like InputRouter's other inputs,
-    // this listens to the thumbstick action directly.
-    //
-    // Setup in Inspector:
-    //   - MoveAction      -> your thumbstick/move Input Action Reference
-    //   - HallwayForward  -> an empty GameObject placed in the scene, rotated
-    //                       to face down the hallway. Its forward (blue arrow)
-    //                       defines the only direction the player can walk.
-    public class HallwayLocomotion : MonoBehaviour
-    {
-        [Tooltip("The thumbstick/move Input Action Reference (Vector2).")]
+namespace Controls {
+
+    public class HallwayLocomotion : MonoBehaviour {
+        [Header("Movement")]
+        [Tooltip("Left thumbstick/move Input Action Reference (Vector2).")]
         public InputActionReference MoveAction;
 
-        [Tooltip("Empty Transform placed in the scene, rotated to face down the hallway. Only its forward direction is used.")]
+        [Tooltip("Empty Transform rotated to face down the hallway. Only its forward direction is used.")]
         public Transform HallwayForward;
 
         [Tooltip("Movement speed in units per second.")]
         public float MoveSpeed = 1.5f;
 
         [Tooltip("Minimum thumbstick push (0-1) required to start moving. Filters out drift/noise.")]
-        public float InputDeadzone = 0.15f;
+        public float MoveDeadzone = 0.15f;
 
-        private CharacterController _characterController;
+        // The hallway rail origin -- set once on Start() from the HallwayForward position.
+        // All lateral correction is projected back onto the line through this point.
+        private Vector3 _railOrigin;
 
-        private void Awake()
-        {
-            // Optional - if you're using a CharacterController for collision handling.
-            // If not present, falls back to direct transform movement.
-            _characterController = GetComponent<CharacterController>();
+        private void Start() {
+            if (HallwayForward != null)
+                _railOrigin = HallwayForward.position;
         }
 
-        private void OnEnable()
-        {
+        private void OnEnable() {
             if (MoveAction != null)
                 MoveAction.action.Enable();
         }
 
-        private void OnDisable()
-        {
+        private void OnDisable() {
             if (MoveAction != null)
                 MoveAction.action.Disable();
         }
 
-        private void Update()
-        {
-            if (MoveAction == null || HallwayForward == null) return;
+        private void Update() {
+            HandleMovement();
+
+        }
+
+        private void LateUpdate() {
+            ConstrainToRail();
+        }
+
+        private void HandleMovement() {
+            if (MoveAction == null || HallwayForward == null)
+                return;
 
             Vector2 input = MoveAction.action.ReadValue<Vector2>();
 
-            // Only the forward push (positive Y) counts - pulling back does nothing.
-            // This enforces "forward only, no backing up."
+            // Clamp out any backward push -- forward only
             float forwardAmount = Mathf.Max(0f, input.y);
-
-            if (forwardAmount < InputDeadzone) return;
+            if (forwardAmount < MoveDeadzone)
+                return;
 
             Vector3 direction = HallwayForward.forward;
-            direction.y = 0f; // keep movement flat, ignore any tilt on the forward transform
+            direction.y = 0f;
             direction.Normalize();
 
-            Vector3 motion = direction * forwardAmount * MoveSpeed * Time.deltaTime;
+            transform.position += direction * forwardAmount * MoveSpeed * Time.deltaTime;
+        }
 
-            if (_characterController != null)
-            {
-                _characterController.Move(motion);
-            }
-            else
-            {
-                transform.position += motion;
-            }
+        private void ConstrainToRail() {
+            if (HallwayForward == null)
+                return;
+
+            // Project current position onto the hallway axis line.
+            // This corrects any lateral drift introduced by snap turn pivot offset
+            // without affecting Y (height) or forward progress.
+            Vector3 railDirection = HallwayForward.forward;
+            railDirection.y = 0f;
+            railDirection.Normalize();
+
+            Vector3 toPlayer = transform.position - _railOrigin;
+
+            // Scalar distance along the rail
+            float distanceAlongRail = Vector3.Dot(toPlayer, railDirection);
+
+            // Reconstruct position strictly on the rail, keeping current Y
+            Vector3 constrainedPosition = _railOrigin + railDirection * distanceAlongRail;
+            constrainedPosition.y = transform.position.y;
+
+
+
+            transform.position = constrainedPosition;
         }
     }
 }

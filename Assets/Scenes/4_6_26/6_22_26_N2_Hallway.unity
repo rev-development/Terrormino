@@ -2563,6 +2563,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5991990858734363968, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1410660219}
+    - targetCorrespondingSourceObject: {fileID: 5991990858734363968, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1410660230}
+    - targetCorrespondingSourceObject: {fileID: 5991990858734363968, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1410660231}
   m_SourcePrefab: {fileID: 100100000, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
 --- !u!1 &1410660217 stripped
 GameObject:
@@ -2589,7 +2595,78 @@ MonoBehaviour:
   MoveAction: {fileID: -6721611377718397955, guid: e120b2e44cc38bd4facc36f05330f81e, type: 3}
   HallwayForward: {fileID: 1201473604}
   MoveSpeed: 1.5
-  InputDeadzone: 0.15
+  MoveDeadzone: 0.15
+--- !u!114 &1410660229 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4440467150026392142, guid: 10e19931f1f0a9a499ca133d01752a0f, type: 3}
+  m_PrefabInstance: {fileID: 1410660216}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410660217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0cb9aa70a22847b5925ee5f067c10a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1410660230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410660217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919e39492806b334982b6b84c90dd927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_System: {fileID: 1410660231}
+  m_TurnSpeed: 60
+  m_LeftHandTurnAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Left Hand Turn
+      m_Type: 0
+      m_ExpectedControlType: Vector2
+      m_Id: cb9dc8af-5bb6-433d-b238-c54f82500c92
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  m_RightHandTurnAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Right Hand Turn
+      m_Type: 0
+      m_ExpectedControlType: Vector2
+      m_Id: cff307ca-054c-4b53-98ed-4efc00bc145c
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 6c735171-cace-42bd-8526-d4c69a760493
+        m_Path: <XRController>{RightHand}/{Primary2DAxis}
+        m_Interactions: Hold
+        m_Processors: 
+        m_Groups: 
+        m_Action: Right Hand Turn
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+--- !u!114 &1410660231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410660217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03a5df2202a8b96488c744be3bd0c33e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Timeout: 10
+  m_XROrigin: {fileID: 1410660229}
 --- !u!1 &1433108349
 GameObject:
   m_ObjectHideFlags: 0
@@ -2757,7 +2834,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8530946292041847583, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
       propertyPath: Routes.Array.data[2].Outputs.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: VelocityCheck
+      value: OnControllerPositionInput
       objectReference: {fileID: 0}
     - target: {fileID: -8530946292041847583, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
       propertyPath: Routes.Array.data[3].Outputs.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -2773,7 +2850,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8530946292041847583, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
       propertyPath: Routes.Array.data[2].Outputs.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FlashlightShake, Assembly-CSharp
+      value: Flashlight.Shake, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: -8530946292041847583, guid: cf2d1a2b446eacc4c807e00cc6fdb1ad, type: 3}
       propertyPath: Routes.Array.data[3].Outputs.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
