@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Night4
   m_EditorClassIdentifier: 
   Label: Night 4
-  LinesRequired: 25
+  LinesRequired: 15
   CutsceneName: Cutscene4
   <DemonSpeed>k__BackingField: 2.5
   <DemonPatrolDuration>k__BackingField: 15

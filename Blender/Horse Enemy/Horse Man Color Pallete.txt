@@ -1,0 +1,11 @@
+Bone Color - E3DAC9
+Bone Color Accent/Detail - #D3CBBB / #C7BFB0 0.453 Strength 86 Radius
+Bone Detail 2(Splotches) - #E7DECD 1 Strength 180 Radius (Bottom Skull is 107 Radius)
+
+Cloak:
+Base Color: #272727
+
+Blood Red Color: #3E2628 with rake brush
+
+
+Hook & Needle Metal: #909090
