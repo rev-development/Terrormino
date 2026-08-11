@@ -1724,9 +1724,6 @@ MonoBehaviour:
   GameOver:
     m_PersistentCalls:
       m_Calls: []
-  TrueGameOver:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &7560898925152426385
 MonoBehaviour:
   m_ObjectHideFlags: 0
