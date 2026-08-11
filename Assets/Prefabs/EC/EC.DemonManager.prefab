@@ -47,8 +47,9 @@ MonoBehaviour:
   _demonPrefab: {fileID: 7016050918856958138, guid: a3548566adb47e84782b40f416631141, type: 3}
   _removeDemon: {fileID: 11400000, guid: 7df8db95bd0b2084ea0725e89cf89b09, type: 2}
   _gameOver: {fileID: 11400000, guid: cfcdf534d691df64d90d7722a7a3991f, type: 2}
-  _spawnAreaMask: 31
-  _spawnColliders: []
+  _spawnAreaMask: 15
+  _spawnColliders:
+  - {fileID: 0}
   _demons: []
   _graceTimer:
     Dirty: 0
@@ -68,20 +69,4 @@ MonoBehaviour:
     _initialized: 1
     _running: 0
     _ringing: 0
-  <Config>k__BackingField:
-    <ChaseConfig>k__BackingField:
-      <AreaMask>k__BackingField: 17
-    <DemonMax>k__BackingField: 1
-    <PatrolConfig>k__BackingField:
-      <PatrolDuration>k__BackingField: 40
-      <IdleDuration>k__BackingField: 3
-      <AreaMask>k__BackingField: 1
-    <SteeringConfig>k__BackingField:
-      <Speed>k__BackingField: 2
-      <AngularSpeed>k__BackingField: 120
-      <Acceleration>k__BackingField: 2
-      <StoppingDistance>k__BackingField: 0
-      <AutoBraking>k__BackingField: 0
-    <MaxHealth>k__BackingField: 3
-    <SpawnGracePeriod>k__BackingField: 3
-    <SpawnInterval>k__BackingField: 3
+  <ConfigSO>k__BackingField: {fileID: 11400000, guid: ecc7d8c15d88406448e1998d57fc643c, type: 2}

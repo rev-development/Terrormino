@@ -12,6 +12,8 @@ namespace EC.Demon
 	[AddComponentMenu("EC.Demon.Manager")]
 	public class Manager : SingletonMonoBehaviour<Manager>
 	{
+		[field: SerializeField] public ConfigSO ConfigSO { get; private set; }
+
 		[SerializeField] private GameObject _demonPrefab;
 
 		[SerializeField] private GameObjectEC _removeDemon;
@@ -22,13 +24,11 @@ namespace EC.Demon
 
 		[SerializeField] private List<Collider> _spawnColliders = new();
 
-		[DisableInEditor] [SerializeField] private List<GameObject> _demons = new();
-
 		[SerializeField] private Timer _graceTimer = new();
 
 		[SerializeField] private Timer _spawnTimer = new();
 
-		[field: SerializeField] public ConfigSO ConfigSO { get; private set; }
+		[DisableInEditor] [SerializeField] private List<GameObject> _demons = new();
 
 		private int _startFrame;
 
@@ -52,15 +52,15 @@ namespace EC.Demon
 			_spawnTimer.Tick(Time.deltaTime);
 
 			if (Time.frameCount != _startFrame
-				&& !_graceTimer.Dirty)
+					&& !_graceTimer.Dirty)
 				_graceTimer.StartNewTimer();
 
 			if (_graceTimer.Ringing
-				&& !_spawnTimer.Active)
+					&& !_spawnTimer.Active)
 				_spawnTimer.StartNewTimer();
 
 			if (_graceTimer.Ringing
-				&& _spawnTimer.Ringing)
+					&& _spawnTimer.Ringing)
 			{
 				SpawnDemon();
 				_spawnTimer.StartNewTimer();
@@ -86,11 +86,11 @@ namespace EC.Demon
 
 			// 3. NavMesh.SamplePosition is just a RayCast down that detects NavMesh Areas
 			if (!NavMesh.SamplePosition(
-					spawnBounds.SampleRandom2DPosition(),
-					out var hit,
-					10f,
-					_spawnAreaMask
-				))
+						spawnBounds.SampleRandom2DPosition(),
+						out var hit,
+						10f,
+						_spawnAreaMask
+					))
 			{
 #if UNITY_EDITOR
 				Debug.LogError("NavMesh.SamplePosition failed, no valid NavMesh near spawn collider.", gameObject);
