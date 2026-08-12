@@ -1,8 +1,10 @@
+using Helpers.Attributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Controls {
 
+    [AiGenerated("Claude", "claude-sonnet-4-6")]
     public class HallwayLocomotion : MonoBehaviour {
         [Header("Movement")]
         [Tooltip("Left thumbstick/move Input Action Reference (Vector2).")]
@@ -17,13 +19,13 @@ namespace Controls {
         [Tooltip("Minimum thumbstick push (0-1) required to start moving. Filters out drift/noise.")]
         public float MoveDeadzone = 0.15f;
 
-        // The hallway rail origin -- set once on Start() from the HallwayForward position.
-        // All lateral correction is projected back onto the line through this point.
-        private Vector3 _railOrigin;
+        // The fixed X position on the rail -- locked in at Start()
+        // and enforced every LateUpdate regardless of what moved the rig.
+        // Hallway runs along world Z so X is always the lateral axis to lock.
+        private float _railX;
 
         private void Start() {
-            if (HallwayForward != null)
-                _railOrigin = HallwayForward.position;
+            _railX = transform.position.x;
         }
 
         private void OnEnable() {
@@ -38,11 +40,12 @@ namespace Controls {
 
         private void Update() {
             HandleMovement();
-
         }
 
+        // LateUpdate runs after XR Toolkit's turn provider has already moved the rig,
+        // so snapping back here is guaranteed to be the last word on position this frame
         private void LateUpdate() {
-            ConstrainToRail();
+            EnforceRail();
         }
 
         private void HandleMovement() {
@@ -51,7 +54,6 @@ namespace Controls {
 
             Vector2 input = MoveAction.action.ReadValue<Vector2>();
 
-            // Clamp out any backward push -- forward only
             float forwardAmount = Mathf.Max(0f, input.y);
             if (forwardAmount < MoveDeadzone)
                 return;
@@ -63,29 +65,10 @@ namespace Controls {
             transform.position += direction * forwardAmount * MoveSpeed * Time.deltaTime;
         }
 
-        private void ConstrainToRail() {
-            if (HallwayForward == null)
-                return;
-
-            // Project current position onto the hallway axis line.
-            // This corrects any lateral drift introduced by snap turn pivot offset
-            // without affecting Y (height) or forward progress.
-            Vector3 railDirection = HallwayForward.forward;
-            railDirection.y = 0f;
-            railDirection.Normalize();
-
-            Vector3 toPlayer = transform.position - _railOrigin;
-
-            // Scalar distance along the rail
-            float distanceAlongRail = Vector3.Dot(toPlayer, railDirection);
-
-            // Reconstruct position strictly on the rail, keeping current Y
-            Vector3 constrainedPosition = _railOrigin + railDirection * distanceAlongRail;
-            constrainedPosition.y = transform.position.y;
-
-
-
-            transform.position = constrainedPosition;
+        private void EnforceRail() {
+            Vector3 pos = transform.position;
+            pos.x = _railX;
+            transform.position = pos;
         }
     }
 }
