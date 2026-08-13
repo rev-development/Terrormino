@@ -1,30 +1,27 @@
 using UnityEngine;
 
-namespace Player
-{
-	public class Reachable : MonoBehaviour
-	{
-		private Collider _playerReach;
+namespace Player {
+    public class Reachable : MonoBehaviour {
+        private Collider _playerReach;
 
-		private Vector3 _startingPosition;
+        private Vector3 _startingPosition;
 
-		private Quaternion _startingRotation;
+        private Quaternion _startingRotation;
 
-		// Start is called before the first frame update
-		private void Start()
-		{
-			_playerReach = GameObject.Find("Player.ReachableArea").GetComponent<Collider>();
-			_startingPosition = gameObject.transform.position;
-			_startingRotation = gameObject.transform.rotation;
-		}
+        // Start is called before the first frame update
+        private void Start() {
 
-		public void OnTriggerExit(Collider other)
-		{
-			if (other == _playerReach)
-			{
-				gameObject.transform.position = _startingPosition;
-				gameObject.transform.rotation = _startingRotation;
-			}
-		}
-	}
+            _playerReach = GameObject.Find("Player.ReachableArea").GetComponent<Collider>();
+            _startingPosition = gameObject.transform.position;
+            _startingRotation = gameObject.transform.rotation;
+        }
+
+        public void OnTriggerExit(Collider other) {
+
+            if (other == _playerReach) {
+                gameObject.transform.position = _startingPosition;
+                gameObject.transform.rotation = _startingRotation;
+            }
+        }
+    }
 }

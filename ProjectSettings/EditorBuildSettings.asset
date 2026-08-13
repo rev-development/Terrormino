@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/4_6_26/4_6_26_N2_Animation.unity
     guid: fb117f75c28e3914eba3772b012e9300
   - enabled: 1
+    path: Assets/Scenes/4_6_26/6_22_26_N2_Hallway.unity
+    guid: 9559f2955f64456488f6b1974471c4a5
+  - enabled: 1
     path: Assets/Scenes/4_6_26/4_6_26_N2.unity
     guid: ca992441b5e3bfe4aac0df0623e63214
   - enabled: 1

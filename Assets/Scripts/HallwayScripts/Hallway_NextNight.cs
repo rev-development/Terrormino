@@ -6,6 +6,7 @@ public class Hallway_NextNight : MonoBehaviour {
 
     private void Start() {
         if (TryGetComponent(out Helpers.ScenePicker scenePicker)) {
+            Debug.Log($"[Hallway_NextNight] Scene loaded: {_sceneName}");
             _sceneName = scenePicker.ScenePath;
         } else {
             Debug.LogWarning($"[Hallway_NextNight] No ScenePicker component found on {gameObject.name}.", gameObject);
@@ -13,11 +14,11 @@ public class Hallway_NextNight : MonoBehaviour {
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Player")) {
+        if (other.GetComponentInParent<Player.Manager>() != null) {
             if (!string.IsNullOrEmpty(_sceneName))
                 SceneManager.LoadScene(_sceneName);
             else
-                Debug.LogError("[Hallway_NextNight] No scene assigned -- add a ScenePicker component and drag in a scene.", gameObject);
+                Debug.LogError("[Hallway_NextNight] No scene assigned.", gameObject);
         }
     }
 }
