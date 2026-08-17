@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Helpers.Attributes;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -13,18 +14,23 @@ namespace Helpers
 	///     immediate repeat at the reshuffle boundary unless the source list has 1 element.
 	/// </summary>
 	[Serializable]
-	[Helpers.Attributes.AiGeneratedAttribute("Claude", "Sonnet 4.6")]
+	[AiGenerated("Claude", "Sonnet 4.6")]
 	public class RandomBag<T>
 	{
+		public const string NotInitializedMessage = "RandomBag.Next called before Init().";
+
+		public const string InitializedMessage = "RandomBag Initialized";
+
 		public bool AutoRefillOnExhaustion = true;
 
 		[field: SerializeField] public List<T> Bag { get; protected set; }
 
 		[field: SerializeField] public List<T> Source { get; protected set; }
 
+		public bool Verbose = false;
+
 		public RandomBag()
-		{
-		}
+		{ }
 
 		public RandomBag(IEnumerable<T> source) => Init(source);
 
@@ -45,6 +51,8 @@ namespace Helpers
 			Bag = new List<T>();
 			IsInitialized = true;
 			Refill();
+
+			if (Verbose) Debug.Log(InitializedMessage);
 		}
 
 		public T Next()
@@ -64,7 +72,7 @@ namespace Helpers
 		{
 			if (!IsInitialized)
 			{
-				Debug.LogWarning("RandomBag.Next called before Init().");
+				Debug.LogWarning(NotInitializedMessage);
 				result = default;
 
 				return false;
@@ -109,9 +117,7 @@ namespace Helpers
 					return true;
 				}
 
-				Debug.LogWarning(
-					"RandomBag skipped a destroyed/null entry. Consider calling RemoveItem to clean it up."
-				);
+				Debug.LogWarning("RandomBag skipped a destroyed/null entry. Consider calling RemoveItem to clean it up.");
 
 				Source.Remove(candidate);
 			}

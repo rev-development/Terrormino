@@ -1,10 +1,9 @@
 using System;
 using UnityEngine;
 
-namespace Helpers
+namespace Helpers.Attributes
 {
 	[AttributeUsage(AttributeTargets.Field)]
 	public class DisableInEditorAttribute : PropertyAttribute
-	{
-	}
+	{ }
 }

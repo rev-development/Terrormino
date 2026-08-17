@@ -4,7 +4,7 @@ namespace Player
 {
 	public class Reachable : MonoBehaviour
 	{
-		private Collider _playerReach;
+		[SerializeField] private Collider _playerReach;
 
 		private Vector3 _startingPosition;
 
@@ -13,7 +13,6 @@ namespace Player
 		// Start is called before the first frame update
 		private void Start()
 		{
-			_playerReach = GameObject.Find("Player.ReachableArea").GetComponent<Collider>();
 			_startingPosition = gameObject.transform.position;
 			_startingRotation = gameObject.transform.rotation;
 		}

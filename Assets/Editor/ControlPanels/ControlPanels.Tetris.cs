@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
-using EC.Tetris;
-using Helpers.Editor;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Helpers.Editor.Theming.SolarizedDark.Ele;
+#if UNITY_EDITOR
+using EC.Tetris;
+using Helpers.Editor;
 
 namespace Editor.ControlPanels
 {
@@ -33,3 +34,4 @@ namespace Editor.ControlPanels
 		}
 	}
 }
+#endif

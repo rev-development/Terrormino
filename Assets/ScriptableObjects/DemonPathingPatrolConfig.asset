@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6e9ab54496d4721a6419bd587a649ae, type: 3}
   m_Name: DemonPathingPatrolConfig
   m_EditorClassIdentifier: 
-  <AreaMask>k__BackingField: 0
-  <PatrolDuration>k__BackingField: 0
-  <IdleDuration>k__BackingField: 0
+  <AreaMask>k__BackingField: 33
+  <PatrolDuration>k__BackingField: 40
+  <IdleDuration>k__BackingField: 3

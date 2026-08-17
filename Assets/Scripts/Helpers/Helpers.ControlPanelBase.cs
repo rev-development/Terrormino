@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-namespace Helpers.Editor
+namespace Helpers
 {
 	[DisallowMultipleComponent]
 	public abstract class ControlPanelBase : MonoBehaviour

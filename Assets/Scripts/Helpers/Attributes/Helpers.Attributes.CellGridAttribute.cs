@@ -7,6 +7,7 @@ namespace Helpers.Attributes
 	public class CellGridAttribute : PropertyAttribute
 	{
 		public readonly int Columns;
+
 		public readonly int Rows;
 
 		public CellGridAttribute(int columns, int rows)

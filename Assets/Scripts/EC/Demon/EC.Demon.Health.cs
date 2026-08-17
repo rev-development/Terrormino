@@ -1,5 +1,6 @@
-using Flashlight;
+using EC.Flashlight;
 using Helpers;
+using Helpers.Attributes;
 using Helpers.Ext;
 using JetBrains.Annotations;
 using UnityEngine;

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35b327a2c94448aebeaaeb250e6c2388, type: 3}
   m_Name: DemonPathingChaseConfig
   m_EditorClassIdentifier: 
-  <AreaMask>k__BackingField: 0
+  <AreaMask>k__BackingField: 63

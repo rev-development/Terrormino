@@ -15,8 +15,9 @@ MonoBehaviour:
   <PlayfieldSize>k__BackingField: {x: 10, y: 20}
   <HardDropEnabled>k__BackingField: 0
   <GhostEnabled>k__BackingField: 0
-  <LockDelay>k__BackingField: 0
-  <DASDelay>k__BackingField: 0.1
+  <LockDelay>k__BackingField: 0.5
+  <DASDelay>k__BackingField: 0.167
+  <AutoRepeatRate>k__BackingField: 0.033
   <LockResetLimit>k__BackingField: 15
   <Shapes>k__BackingField:
   - {fileID: 11400000, guid: 9fe58f07bf27684499b389670cb6d163, type: 2}

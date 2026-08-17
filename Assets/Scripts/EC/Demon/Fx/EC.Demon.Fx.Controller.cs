@@ -1,4 +1,4 @@
-using Helpers;
+using Helpers.Attributes;
 using Helpers.Ext;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -25,7 +25,7 @@ namespace EC.Demon.Fx
 
 		[DisableInEditor] [SerializeField] private EventBus _eventBus;
 
-		[DisableInEditor] [SerializeField] private ControlPanel _controlPanel;
+		// [DisableInEditor] [SerializeField] private ControlPanel _controlPanel;
 
 		[UsedImplicitly]
 		public void Awake()
@@ -34,10 +34,8 @@ namespace EC.Demon.Fx
 			_audioSource = gameObject.TryFindComponent<AudioSource>();
 
 			if (gameObject.transform.parent.gameObject.activeInHierarchy)
-			{
 				_eventBus = gameObject.TryFindComponentInParent<EventBus>();
-				_controlPanel = gameObject.TryFindComponentInParent<ControlPanel>();
-			}
+			// _controlPanel = gameObject.TryFindComponentInParent<ControlPanel>();
 		}
 
 		public void OnEnable()
@@ -46,12 +44,12 @@ namespace EC.Demon.Fx
 			_eventBus.Illuminated.AddListener(OnIlluminated);
 			_eventBus.BanishTriggered.AddListener(OnBanish);
 
-			if (_controlPanel)
-			{
-				_controlPanel.ListenerTracker.Add(this, nameof(_eventBus.JumpscareTriggered), nameof(OnJumpscare));
-				_controlPanel.ListenerTracker.Add(this, nameof(_eventBus.Illuminated), nameof(OnIlluminated));
-				_controlPanel.ListenerTracker.Add(this, nameof(_eventBus.BanishTriggered), nameof(OnBanish));
-			}
+			// if (_controlPanel)
+			// {
+			// 	_controlPanel.ListenerTracker.Add(this, nameof(_eventBus.JumpscareTriggered), nameof(OnJumpscare));
+			// 	_controlPanel.ListenerTracker.Add(this, nameof(_eventBus.Illuminated), nameof(OnIlluminated));
+			// 	_controlPanel.ListenerTracker.Add(this, nameof(_eventBus.BanishTriggered), nameof(OnBanish));
+			// }
 		}
 
 		/// <summary>

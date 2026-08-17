@@ -1,7 +1,4 @@
-using Helpers;
 using Helpers.Events.Channels;
-using Helpers.Ext;
-using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -27,21 +24,21 @@ namespace EC.Demon
 
 		[field: SerializeField] public ConfigSO ConfigSO { get; private set; }
 
-		[DisableInEditor] [SerializeField] private ControlPanel _controlPanel;
+		// [DisableInEditor] [SerializeField] private ControlPanel _controlPanel;
 
-		[UsedImplicitly] public void Awake() => _controlPanel = gameObject.TryFindComponent<ControlPanel>();
+		// [UsedImplicitly] public void Awake() => _controlPanel = gameObject.TryFindComponent<ControlPanel>();
 
 		private void OnEnable()
 		{
 			BanishFxCompleted.AddListener(OnBanishFxCompleted);
 			JumpscareFxCompleted.AddListener(OnJumpscareFxCompleted);
 
-			if (_controlPanel)
-			{
-				_controlPanel.ListenerTracker.Add(this, nameof(BanishFxCompleted), nameof(OnBanishFxCompleted));
-
-				_controlPanel.ListenerTracker.Add(this, nameof(JumpscareFxCompleted), nameof(OnJumpscareFxCompleted));
-			}
+			// if (_controlPanel)
+			// {
+			// 	_controlPanel.ListenerTracker.Add(this, nameof(BanishFxCompleted), nameof(OnBanishFxCompleted));
+			//
+			// 	_controlPanel.ListenerTracker.Add(this, nameof(JumpscareFxCompleted), nameof(OnJumpscareFxCompleted));
+			// }
 		}
 
 		private void OnDisable()

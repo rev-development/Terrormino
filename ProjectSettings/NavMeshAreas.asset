@@ -15,7 +15,7 @@ NavMeshProjectSettings:
     cost: 1
   - name: Bed
     cost: 1
-  - name: 
+  - name: DemonSpawn
     cost: 1
   - name: 
     cost: 1

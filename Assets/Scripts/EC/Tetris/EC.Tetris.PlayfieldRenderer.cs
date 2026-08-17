@@ -1,4 +1,3 @@
-using Helpers;
 using Helpers.Attributes;
 using Helpers.Ext;
 using JetBrains.Annotations;
@@ -18,6 +17,7 @@ namespace EC.Tetris
 	[DisallowMultipleComponent]
 	[RequireComponent(typeof(EventBus))]
 	[RequireComponent(typeof(Controller))]
+	[AddComponentMenu("EC.Tetris.PlayfieldRenderer")]
 	public class PlayfieldRenderer : MonoBehaviour
 	{
 		[DisableInEditor] [SerializeField] private Controller _controller;
@@ -47,33 +47,33 @@ namespace EC.Tetris
 
 		private void OnEnable()
 		{
-			_eventBus.OnGameStart.AddListener(RenderBackground);
+			_eventBus.GameStart.AddListener(RenderBackground);
 
-			_eventBus.OnPieceMoved.AddListener(Render);
+			_eventBus.Moved.AddListener(Render);
 
-			_eventBus.OnPieceRotated.AddListener(Render);
+			_eventBus.Rotated.AddListener(Render);
 
-			_eventBus.OnHardDrop.AddListener(Render);
+			_eventBus.HardDropped.AddListener(Render);
 
-			_eventBus.OnPieceSpawned.AddListener(Render);
+			_eventBus.Spawned.AddListener(Render);
 
-			_eventBus.OnPieceLocked.AddListener(Render);
+			_eventBus.Locked.AddListener(Render);
 
-			_eventBus.OnLinesCleared.AddListener(Render);
+			_eventBus.LinesCleared.AddListener(Render);
 		}
 
 		private void OnDisable()
 		{
-			_eventBus.OnGameStart.RemoveListener(RenderBackground);
-			_eventBus.OnPieceMoved.RemoveListener(Render);
+			_eventBus.GameStart.RemoveListener(RenderBackground);
+			_eventBus.Moved.RemoveListener(Render);
 
-			_eventBus.OnPieceRotated.RemoveListener(Render);
+			_eventBus.Rotated.RemoveListener(Render);
 
-			_eventBus.OnPieceSpawned.RemoveListener(Render);
+			_eventBus.Spawned.RemoveListener(Render);
 
-			_eventBus.OnPieceLocked.RemoveListener(Render);
+			_eventBus.Locked.RemoveListener(Render);
 
-			_eventBus.OnLinesCleared.RemoveListener(Render);
+			_eventBus.LinesCleared.RemoveListener(Render);
 		}
 
 		private void RenderBackground()
@@ -82,7 +82,7 @@ namespace EC.Tetris
 
 			for (var x = 0; x < _playfield.Width; x++)
 			{
-				for (var y = 0; y < _playfield.Height; y++)
+				for (var y = 0; y < _playfield.VisibleHeight; y++)
 					_backgroundTilemap.SetTile(new Vector3Int(x, y), _eventBus.Config.BgTile);
 			}
 		}
@@ -93,7 +93,7 @@ namespace EC.Tetris
 
 			for (var x = 0; x < _playfield.Width; x++)
 			{
-				for (var y = 0; y < _playfield.Height; y++)
+				for (var y = 0; y < _playfield.VisibleHeight; y++)
 				{
 					if (_playfield.IsOccupied(x, y)) _playfieldTilemap.SetTile(new Vector3Int(x, y), _playfield.GetTile(x, y));
 				}
@@ -108,7 +108,9 @@ namespace EC.Tetris
 
 			var tile = piece.Shape.Tile;
 
-			foreach (var cell in piece.PlayfieldSpaceCells) _activePieceTilemap.SetTile(new Vector3Int(cell.x, cell.y), tile);
+			foreach (var cell in piece.PlayfieldSpaceCells)
+				if (!_playfield.IsInSpawnBuffer(cell.x, cell.y))
+					_activePieceTilemap.SetTile(new Vector3Int(cell.x, cell.y), tile);
 		}
 
 		private void RenderGhost()
@@ -128,6 +130,7 @@ namespace EC.Tetris
 
 		private void Render()
 		{
+			// Logger.LogCode(Logger.Code.RenderTriggered);
 			RenderActivePiece();
 			RenderGhost();
 			RenderPlayfield();

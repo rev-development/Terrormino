@@ -17,6 +17,7 @@ namespace EC.Tetris
 	/// </summary>
 	[DisallowMultipleComponent]
 	[AiGenerated("Claude", "claude-sonnet-5", "Reviewed by Rev 7-28-26")]
+	[AddComponentMenu("EC.Tetris.EventBus")]
 	public class EventBus : MonoBehaviour
 	{
 		// EventChannels for the outward-facing audience of these two events
@@ -26,52 +27,84 @@ namespace EC.Tetris
 
 		[SerializeField] private VoidEC _gameOverEC;
 
+		[SerializeField] private VoidEC _gameStartEC;
+
 		[field: SerializeField] public ConfigSO Config { get; private set; }
 
-		public UnityEvent<Vector2Int> OnPieceMoved = new();
+		public UnityEvent<Vector2Int> HorizontalMoveInput = new();
 
-		public UnityEvent<int> OnPieceRotated = new();
+		public UnityEvent HorizontalMoveInputCancel = new();
 
-		public UnityEvent OnHardDrop = new();
+		public UnityEvent<Vector2Int> DownMoveInput = new();
 
-		public UnityEvent<ActivePiece> OnPieceSpawned = new();
+		public UnityEvent DownMoveInputCancel = new();
 
-		public UnityEvent OnPieceLocked = new();
+		public UnityEvent HardDropInput = new();
 
-		public UnityEvent<int> OnLinesCleared = new();
+		public UnityEvent<int> RotateInput = new();
 
-		public UnityEvent OnGameStart = new();
+		public UnityEvent<Vector2Int> Moved = new();
 
-		public UnityEvent OnGameOver = new();
+		public UnityEvent<int> Rotated = new();
+
+		public UnityEvent HardDropped = new();
+
+		public UnityEvent<ActivePiece> Spawned = new();
+
+		public UnityEvent Locked = new();
+
+		public UnityEvent<int> LinesCleared = new();
+
+		public UnityEvent GameStart = new();
+
+		public UnityEvent GameStarted = new();
+
+		public UnityEvent GameOver = new();
 
 		[UsedImplicitly]
 		public void Awake()
 		{
 			gameObject.CheckIfSetInInspector(_linesClearedEC, "Lines Cleared Event Channel");
 			gameObject.CheckIfSetInInspector(_gameOverEC, "Game Over Event Channel");
+			gameObject.CheckIfSetInInspector(_gameStartEC, "Game Start Event Channel");
 		}
 
 		private void OnEnable()
 		{
-			OnLinesCleared.AddListener(RaiseLinesClearedEC);
-			OnGameOver.AddListener(RaiseGameOverEC);
+			LinesCleared.AddListener(RaiseLinesClearedEC);
+			GameOver.AddListener(RaiseGameOverEC);
+
+			if (_gameStartEC) _gameStartEC.OnEventRaised += GameStart.Invoke;
 		}
 
 		private void OnDisable()
 		{
-			OnPieceMoved.RemoveAllListeners();
-			OnPieceRotated.RemoveAllListeners();
-			OnHardDrop.RemoveAllListeners();
-			OnPieceSpawned.RemoveAllListeners();
-			OnPieceLocked.RemoveAllListeners();
-			OnLinesCleared.RemoveAllListeners();
-			OnGameOver.RemoveAllListeners();
+			_gameStartEC.OnEventRaised -= GameStart.Invoke;
+			Moved.RemoveAllListeners();
+			HorizontalMoveInput.RemoveAllListeners();
+			HorizontalMoveInputCancel.RemoveAllListeners();
+			Rotated.RemoveAllListeners();
+			RotateInput.RemoveAllListeners();
+			HardDropped.RemoveAllListeners();
+			HardDropInput.RemoveAllListeners();
+			Spawned.RemoveAllListeners();
+			Locked.RemoveAllListeners();
+			LinesCleared.RemoveAllListeners();
+			GameStart.RemoveAllListeners();
+			GameStarted.RemoveAllListeners();
+			GameOver.RemoveAllListeners();
 		}
 
 		public void ApplyConfig(ConfigSO config) => Config = config;
 
-		private void RaiseLinesClearedEC(int lines) => _linesClearedEC.RaiseEvent(lines);
+		private void RaiseLinesClearedEC(int lines)
+		{
+			if (_linesClearedEC) _linesClearedEC.RaiseEvent(lines);
+		}
 
-		private void RaiseGameOverEC() => _gameOverEC.RaiseEvent();
+		private void RaiseGameOverEC()
+		{
+			if (_gameOverEC) _gameOverEC.RaiseEvent();
+		}
 	}
 }

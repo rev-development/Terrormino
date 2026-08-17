@@ -1,3 +1,4 @@
+using System.Linq;
 using Helpers;
 using Helpers.Attributes;
 using Helpers.Ext;
@@ -19,11 +20,14 @@ namespace EC.Tetris
 	[DisallowMultipleComponent]
 	[RequireComponent(typeof(EventBus))]
 	[AiGenerated("Claude", "claude-sonnet-4-6", "Reviewed by Rev 7-28-26")]
+	[AddComponentMenu("EC.Tetris.Controller")]
 	public class Controller : MonoBehaviour
 	{
 		[DisableInEditor] [SerializeField] private EventBus _eventBus;
 
-		private readonly RandomBag<Shape> _bag = new();
+		[SerializeField] private readonly RandomBag<Shape> _bag = new();
+
+		public ConfigSO Config => _eventBus.Config;
 
 		// Manually controlled rather than auto-derived from LinesCleared — real
 		// Tetris Guideline gravity ramps too hard to let lines-cleared drive it
@@ -39,6 +43,12 @@ namespace EC.Tetris
 		public bool IsRunning { get; private set; } = false;
 
 		[UsedImplicitly] public void Awake() => _eventBus = gameObject.TryFindComponent<EventBus>();
+
+		public void OnEnable()
+		{
+			_eventBus.GameStart.AddListener(StartGame);
+			_eventBus.GameOver.AddListener(OnGameOver);
+		}
 
 		private void Start()
 		{
@@ -59,14 +69,15 @@ namespace EC.Tetris
 		public void StartGame()
 		{
 			Playfield = new Playfield(_eventBus.Config.PlayfieldSize);
-			_eventBus.OnGameStart.Invoke();
 
 			IsRunning = true;
 
-			SpawnNext();
+			SpawnNext(true);
+
+			_eventBus.GameStarted.Invoke();
 		}
 
-		private void SpawnNext()
+		private void SpawnNext(bool enableLogging = false)
 		{
 			var next = new ActivePiece
 			{
@@ -75,11 +86,9 @@ namespace EC.Tetris
 				RotationIndex = 0,
 			};
 
-			if (!Rules.IsValidPosition(Playfield, next))
+			if (!Rules.IsValidPosition(Playfield, next, enableLogging))
 			{
-				Playfield.Clear();
-				IsRunning = false;
-				_eventBus.OnGameOver.Invoke();
+				_eventBus.GameOver.Invoke();
 
 				return;
 			}
@@ -88,8 +97,12 @@ namespace EC.Tetris
 			_gravityAccumulator = 0f;
 			ResetGrounding();
 
-			_eventBus.OnPieceSpawned.Invoke(next);
+			_eventBus.Spawned.Invoke(next);
 		}
+
+		private void OnGameOver() =>
+			// Playfield.Clear();
+			IsRunning = false;
 
 #region Locking
 
@@ -166,14 +179,22 @@ namespace EC.Tetris
 		private void LockPiece()
 		{
 			var piece = ActivePiece!.Value;
+
+			if (piece.PlayfieldSpaceCells.Any(cell => Playfield.IsInSpawnBuffer(cell.x, cell.y)))
+			{
+				_eventBus.GameOver.Invoke();
+
+				return;
+			}
+
 			foreach (var cell in piece.PlayfieldSpaceCells) Playfield.SetCell(cell.x, cell.y, piece.Shape.Tile);
 
 			ClearActivePiece();
-			_eventBus.OnPieceLocked.Invoke();
+			_eventBus.Locked.Invoke();
 
 			var linesCleared = Playfield.ClearFullRows();
 
-			if (linesCleared > 0) _eventBus.OnLinesCleared.Invoke(linesCleared);
+			if (linesCleared > 0) _eventBus.LinesCleared.Invoke(linesCleared);
 
 			SpawnNext();
 		}
@@ -184,7 +205,7 @@ namespace EC.Tetris
 
 		// These values should reset with each new ActivePiece
 
-		public ActivePiece? ActivePiece { get; private set; }
+		public ActivePiece? ActivePiece { get; private set; } = null;
 
 		private float _gravityAccumulator;
 
@@ -220,7 +241,7 @@ namespace EC.Tetris
 
 			ExtendLockWindow();
 
-			_eventBus.OnPieceMoved.Invoke(direction);
+			_eventBus.Moved.Invoke(direction);
 			HandleLock();
 
 			return true;
@@ -237,7 +258,7 @@ namespace EC.Tetris
 			UpdateGrounding();
 			ExtendLockWindow();
 
-			_eventBus.OnPieceRotated.Invoke(direction);
+			_eventBus.Rotated.Invoke(direction);
 			HandleLock();
 		}
 
@@ -255,7 +276,7 @@ namespace EC.Tetris
 
 			ActivePiece = candidate;
 
-			_eventBus.OnHardDrop.Invoke();
+			_eventBus.HardDropped.Invoke();
 			LockPiece(); // Calls LockPiece instead of HandleLock because HardDrops skip delay
 		}
 

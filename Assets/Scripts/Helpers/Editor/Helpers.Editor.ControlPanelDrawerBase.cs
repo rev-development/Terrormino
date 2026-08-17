@@ -6,7 +6,6 @@ using Helpers.Editor.Ext;
 using Helpers.Editor.Theming.SolarizedDark;
 using JetBrains.Annotations;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Helpers.Editor.Theming.SolarizedDark.Ele;
@@ -81,7 +80,9 @@ namespace Helpers.Editor
 			var controlPanelSO = new SerializedObject(controlPanel);
 
 			// 6. Generate the regular fields
-			InspectorElement.FillDefaultInspector(root, controlPanelSO, this);
+			// InspectorElement.FillDefaultInspector(root, controlPanelSO, this);
+
+			controlPanelSO.IterateProps(root, prop => prop.name == "m_Script");
 
 			// 7. Generate foldouts to contain the default inspectors of the related components (this is a QoL thing so you don't have to root around in child objects).
 			root.Add(SolDivider());

@@ -1,3 +1,4 @@
+using Helpers.Attributes;
 using Helpers.Ext;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ namespace EC.Demon.Fx
 {
 	public class BanishSMB : StateMachineBehaviour
 	{
-		[Helpers.DisableInEditorAttribute]
+		[DisableInEditor]
 		private EventBus
 			_eventBus; // Do not assign in Editor, it will create a global reference to a single Demon's component
 

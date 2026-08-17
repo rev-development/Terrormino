@@ -1,6 +1,6 @@
 using Helpers.Attributes;
+using Helpers.Ext;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace EC.Tetris
 {
@@ -15,84 +15,113 @@ namespace EC.Tetris
 	[DisallowMultipleComponent]
 	[RequireComponent(typeof(EventBus))]
 	[RequireComponent(typeof(Controller))]
+	[AddComponentMenu("EC.Tetris.InputAdapter")]
 	public class InputAdapter : MonoBehaviour
 	{
-		[SerializeField] private Controller _controller;
+		[DisableInEditor] [SerializeField] private Controller _controller;
 
-		[SerializeField] private EventBus _eventBus;
+		[DisableInEditor] [SerializeField] private EventBus _eventBus;
 
-		private float _dasTimer;
+		[SerializeField] private float _arrTimer = 0f;
 
-		// DAS (Delayed Auto Shift) state: the direction currently held and how long
-		// it's been held. Config.MoveDelay is reused as both the initial hold delay
-		// and the repeat interval — a single-knob simplification, not a separate ARR.
-		private Vector2Int _heldDirection;
+		[SerializeField] private Vector2Int _dasInput = new();
+
+		[SerializeField] private float _dasTimer = 0f;
+
+		[SerializeField] private Vector2Int _softDropInput = new();
+
+		[SerializeField] private float _softDropTimer = 0f;
+
+		public ConfigSO Config => _eventBus.Config;
+
+		public void Awake()
+		{
+			_controller = gameObject.TryFindComponent<Controller>();
+			_eventBus = gameObject.TryFindComponent<EventBus>();
+		}
+
+		private void OnEnable()
+		{
+			_eventBus.HorizontalMoveInput.AddListener(OnHorizontalMoveInput);
+			_eventBus.HorizontalMoveInputCancel.AddListener(OnHorizontalMoveInputCancel);
+			_eventBus.DownMoveInput.AddListener(OnDownMoveInput);
+			_eventBus.DownMoveInputCancel.AddListener(OnDownMoveInputCancel);
+			_eventBus.RotateInput.AddListener(OnRotateInput);
+			_eventBus.HardDropInput.AddListener(OnHardDropInput);
+		}
 
 		private void Update()
 		{
-			if (!_controller.IsRunning) return;
+			if (_controller.IsRunning)
+			{
+				HandleDAS();
+				HandleSoftDrop();
+			}
+		}
 
-			if (_heldDirection == Vector2Int.zero) return;
+		private void OnDisable()
+		{
+			_eventBus.HorizontalMoveInput.RemoveListener(OnHorizontalMoveInput);
+			_eventBus.HorizontalMoveInputCancel.RemoveListener(OnHorizontalMoveInputCancel);
+			_eventBus.DownMoveInput.RemoveListener(OnDownMoveInput);
+			_eventBus.DownMoveInputCancel.RemoveListener(OnDownMoveInputCancel);
+			_eventBus.RotateInput.RemoveListener(OnRotateInput);
+			_eventBus.HardDropInput.RemoveListener(OnHardDropInput);
+		}
+
+		private void HandleSoftDrop()
+		{
+			if (_softDropInput == default) return;
+
+			_softDropTimer += Time.deltaTime;
+
+			if (!(_softDropTimer >= Config.SoftDropRate)) return;
+
+			_controller.Move(_softDropInput);
+			_softDropTimer = 0;
+		}
+
+		public void HandleDAS()
+		{
+			if (_dasInput == default) return;
 
 			_dasTimer += Time.deltaTime;
+			_arrTimer += Time.deltaTime;
 
-			if (_dasTimer < _eventBus.Config.DASDelay) return;
-
-			_dasTimer -= _eventBus.Config.DASDelay;
-
-			_controller.Move(_heldDirection);
-		}
-
-		public void OnHardDrop(InputAction.CallbackContext ctx)
-		{
-			if (!ctx.performed) return;
-
-			if (!_eventBus.Config.HardDropEnabled) return;
-
-			_controller.HardDrop();
-		}
-
-		public void OnMove(InputAction.CallbackContext ctx)
-		{
-			// Gate at the recording point, not with a reset — while the game isn't
-			// running, a held direction is never logged into _heldDirection at all,
-			// so there's nothing for DAS to have "pre-charged" once it does start.
-			if (!_controller.IsRunning) return;
-
-			if (ctx.canceled)
-			{
-				_heldDirection = Vector2Int.zero;
-
-				return;
-			}
-
-			if (!ctx.performed) return;
-
-			var raw = ctx.ReadValue<Vector2>();
-			var direction = new Vector2Int(Mathf.RoundToInt(raw.x), Mathf.RoundToInt(raw.y));
-
-			// Clamp vertical to down-only — upward movement is not a valid Tetris input
-			direction.y = Mathf.Clamp(direction.y, -1, 0);
-
-			if (direction == Vector2Int.zero
-					|| direction == _heldDirection)
+			if (!(_dasTimer >= Config.DASDelay)
+					|| !(_arrTimer >= Config.AutoRepeatRate))
 				return;
 
-			_heldDirection = direction;
-			_dasTimer = 0f;
-
-			_controller.Move(direction);
+			_controller.Move(_dasInput);
+			_arrTimer = 0;
 		}
 
-		public void OnRotate(InputAction.CallbackContext ctx)
+		public void OnDownMoveInput(Vector2Int input)
 		{
-			if (!ctx.performed) return;
-
-			var direction = Mathf.RoundToInt(ctx.ReadValue<float>());
-
-			if (direction == 0) return;
-
-			_controller.Rotate(direction);
+			_controller.Move(input);
+			_softDropInput = input;
 		}
+
+		private void OnDownMoveInputCancel() => _softDropInput = default;
+
+		[FeatureNotImplemented] public void OnHardDropInput() => _controller.HardDrop();
+
+		public void OnHorizontalMoveInput(Vector2Int input)
+		{
+			_controller.Move(input);
+
+			if (input != _dasInput) OnHorizontalMoveInputCancel();
+
+			_dasInput = input;
+		}
+
+		public void OnHorizontalMoveInputCancel()
+		{
+			_dasInput = default;
+			_dasTimer = 0;
+			_arrTimer = 0;
+		}
+
+		public void OnRotateInput(int input) => _controller.Rotate(input);
 	}
 }

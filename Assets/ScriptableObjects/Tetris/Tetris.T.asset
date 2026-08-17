@@ -11,8 +11,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd53914636bf47788bafae544f9e89bc, type: 3}
   m_Name: Tetris.T
-  m_EditorClassIdentifier:
-  _tile: {fileID: 0}
+  m_EditorClassIdentifier: 
+  _tile: {fileID: 11400000, guid: 3a4429c75a4808f40928f0edc79027a0, type: 2}
   _orientationZero:
     Cells:
     - {x: 1, y: 2}

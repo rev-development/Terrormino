@@ -21,6 +21,10 @@ namespace EC.Tetris
 
 		float DASDelay { get; set; }
 
+		float AutoRepeatRate { get; set; }
+
+		float SoftDropRate { get; set; }
+
 		int LockResetLimit { get; set; }
 
 		List<Shape> Shapes { get; set; }

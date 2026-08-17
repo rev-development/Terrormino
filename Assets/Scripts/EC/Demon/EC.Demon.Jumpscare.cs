@@ -1,4 +1,4 @@
-using Helpers;
+using Helpers.Attributes;
 using Helpers.Ext;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -15,7 +15,7 @@ namespace EC.Demon
 
 		[SerializeField] private float _jumpscareFrameFitPercent = 0.8f;
 
-		[DisableInEditor] private ControlPanel _controlPanel;
+		// [DisableInEditor] [SerializeField] private ControlPanel _controlPanel;
 
 		private Camera _mainCamera;
 
@@ -25,33 +25,27 @@ namespace EC.Demon
 		public void Awake()
 		{
 			_eventBus = gameObject.TryFindComponent<EventBus>();
-			_controlPanel = gameObject.TryFindComponent<ControlPanel>();
+
+			// _controlPanel = gameObject.TryFindComponent<ControlPanel>();
+
 			_navMeshAgent = gameObject.TryFindComponent<NavMeshAgent>();
 
 			if (Camera.main != null) _mainCamera = Camera.main;
 		}
 
-		private void OnEnable()
-		{
-			_eventBus.JumpscareTriggered.AddListener(PrepJumpscare);
+		private void OnEnable() => _eventBus.JumpscareTriggered.AddListener(PrepJumpscare);
 
-			if (_controlPanel)
-				_controlPanel.ListenerTracker.Add(this, nameof(_eventBus.JumpscareTriggered), nameof(PrepJumpscare));
-		}
-
+		// if (_controlPanel)
+		// 	_controlPanel.ListenerTracker.Add(this, nameof(_eventBus.JumpscareTriggered), nameof(PrepJumpscare));
 		private void OnTriggerEnter(Collider other)
 		{
 			if (other.CompareTag("Player")) _eventBus.JumpscareTriggered.Invoke(other.gameObject);
 		}
 
-		private void RemoveJumpscareListeners()
-		{
-			_eventBus.JumpscareTriggered.RemoveListener(PositionForJumpscare);
+		private void RemoveJumpscareListeners() => _eventBus.JumpscareTriggered.RemoveListener(PositionForJumpscare);
 
-			if (_controlPanel)
-				_controlPanel.ListenerTracker.Remove(this, nameof(_eventBus.JumpscareTriggered), nameof(PositionForJumpscare));
-		}
-
+		// if (_controlPanel)
+		// _controlPanel.ListenerTracker.Remove(this, nameof(_eventBus.JumpscareTriggered), nameof(PositionForJumpscare));
 		public void PositionForJumpscare(GameObject player)
 		{
 			var bounds = gameObject.TryFindComponentsInChildren<Collider>().GetAllBounds();

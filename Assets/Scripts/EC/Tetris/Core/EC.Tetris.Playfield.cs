@@ -16,22 +16,28 @@ namespace EC.Tetris
 		// null = empty, non-null = occupied (stores the tile for rendering).
 		private readonly TileBase[,] _grid;
 
+		public int SpawnHeightBuffer = 4;
+
 		public Playfield(Vector2Int size)
 		{
 			Width = size.x;
-			Height = size.y;
-			_grid = new TileBase[size.x, size.y];
+			Height = size.y + SpawnHeightBuffer;
+			_grid = new TileBase[Width, Height];
 		}
 
 		public int Width { get; }
 
 		public int Height { get; }
 
+		public int VisibleHeight => Height - SpawnHeightBuffer;
+
 		public bool IsOccupied(int x, int y) => _grid[x, y] != null;
 
 		public TileBase GetTile(int x, int y) => _grid[x, y];
 
 		public bool IsInBounds(int x, int y) => x >= 0 && x < Width && y >= 0 && y < Height;
+
+		public bool IsInSpawnBuffer(int x, int y) => x >= 0 && x < Width && y >= Height - SpawnHeightBuffer && y < Height;
 
 		public void SetCell(int x, int y, TileBase tile) => _grid[x, y] = tile;
 
@@ -62,9 +68,8 @@ namespace EC.Tetris
 		private bool IsRowFull(int row)
 		{
 			for (var x = 0; x < Width; x++)
-			{
-				if (_grid[x, row] == null) return false;
-			}
+				if (_grid[x, row] == null)
+					return false;
 
 			return true;
 		}

@@ -13,14 +13,30 @@ namespace EC.Tetris
 	[AiGenerated("Claude", "claude-sonnet-5")]
 	public static class Rules
 	{
-		public static bool IsValidPosition(Playfield playfield, ActivePiece piece)
+		public static bool IsValidPosition(Playfield playfield, ActivePiece piece, bool enableLogging = false)
 		{
 			foreach (var cell in piece.PlayfieldSpaceCells)
 			{
-				if (!playfield.IsInBounds(cell.x, cell.y)) return false;
+				if (!playfield.IsInBounds(cell.x, cell.y))
+				{
+					if (enableLogging) Logger.LogCode(Logger.Code.IsNOTInBounds);
 
-				if (playfield.IsOccupied(cell.x, cell.y)) return false;
+					return false;
+				}
+
+				if (enableLogging) Logger.LogCode(Logger.Code.IsInBounds);
+
+				if (playfield.IsOccupied(cell.x, cell.y))
+				{
+					if (enableLogging) Logger.LogCode(Logger.Code.IsOccupied);
+
+					return false;
+				}
+
+				if (enableLogging) Logger.LogCode(Logger.Code.IsNOTOccupied);
 			}
+
+			if (enableLogging) Logger.LogCode(Logger.Code.IsValidPosition);
 
 			return true;
 		}
@@ -91,7 +107,7 @@ namespace EC.Tetris
 		// the top so pieces spawn fully visible. Reproduces (4,18) on a standard 10×20.
 		[AiGenerated("Claude", "claude-sonnet-4-6", "Reviewed by Rev 7-29-26")]
 		public static Vector2Int GetSpawnPosition(int boardWidth, int boardHeight) =>
-			new(boardWidth / 2 - 1, boardHeight - 2);
+			new(boardWidth / 2 - 2, boardHeight - 4);
 
 		public static Vector2Int GetSpawnPosition(Playfield playfield) =>
 			GetSpawnPosition(playfield.Width, playfield.Height);

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd53914636bf47788bafae544f9e89bc, type: 3}
   m_Name: Tetris.S
   m_EditorClassIdentifier: 
-  _tile: {fileID: 11400000, guid: 2a0cbe9e04c779c44848ba4387fddfce, type: 2}
+  _tile: {fileID: 11400000, guid: 910068c2bc0a463499a9c453a2c06111, type: 2}
   _orientationZero:
     Cells:
     - {x: 1, y: 2}

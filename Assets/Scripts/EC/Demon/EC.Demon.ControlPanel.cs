@@ -1,9 +1,10 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Flashlight;
+using EC.Flashlight;
 using Helpers;
-using Helpers.Editor;
+using Helpers.Attributes;
 using Helpers.Events.Channels;
 using Helpers.Ext;
 using UnityEngine;
@@ -14,25 +15,25 @@ namespace EC.Demon
 	[DisallowMultipleComponent]
 	public class ControlPanel : ControlPanelBase
 	{
-		public GameObject FlashlightPrefab;
-
-		[DisableInEditor] public GameObject SpawnedFlashlight;
-
-		public GameObject JumpscareTarget;
+		[HideInInspector] public EC.Demon.Fx.Controller Controller;
 
 		[HideInInspector] public EventBus EventBus;
 
-		[HideInInspector] public EC.Demon.Fx.Controller Controller;
-
-		[HideInInspector] public Jumpscare Jumpscare;
+		public GameObject FlashlightPrefab;
 
 		[HideInInspector] public Health Health;
 
-		public GameObjectEC NavBeaconEC;
+		[HideInInspector] public Jumpscare Jumpscare;
+
+		public GameObject JumpscareTarget;
 
 		public NonPersistentListenerTracker ListenerTracker = new();
 
+		public GameObjectEC NavBeaconEC;
+
 		[HideInInspector] public EC.Demon.Pathing.Controller Pathing;
+
+		[DisableInEditor] public GameObject SpawnedFlashlight;
 
 		private NavMeshAgent _navMeshAgent;
 
@@ -154,3 +155,4 @@ namespace EC.Demon
 		}
 	}
 }
+#endif
